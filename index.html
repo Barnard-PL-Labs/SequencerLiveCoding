@@ -1,0 +1,43 @@
+<html>
+ <head>
+  <title>website title</title>
+<script src="https://cdn.jsdelivr.net/npm/webmidi"></script>
+
+  <script>
+WebMidi.enable(function (err) {
+    console.log(WebMidi.inputs);
+    console.log(WebMidi.outputs);
+    var output = WebMidi.outputs[1];
+    output.playNote("C4",1,{duration:100});
+    output.playNote("C3",1,{duration:100});
+
+    var input = WebMidi.inputs[1];
+ 
+    input.addListener('noteon', "all", function(e) {
+       console.log("Pitch value: " + e.note.number);
+    });
+
+    var deltas = new Array(100);
+    var last = 0
+    input.addListener('clock', "all", function(e) {
+       delta = e.timestamp - last
+       last = e.timestamp  
+       deltas.push(delta);
+       deltas.shift();
+       console.log("time: " + (Math.max(...deltas) - Math.min(...deltas)));
+    });
+
+    input.addListener('controlchange', "all", function(e) {
+       console.log("tempo: " + e.controller.name);
+       console.log("tempo: " + e.value);
+    });
+
+});
+
+  </script>
+ </head>
+ <body>
+  content of website ...
+ </body>
+</html>
+
