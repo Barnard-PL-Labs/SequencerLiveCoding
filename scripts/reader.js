@@ -1,4 +1,10 @@
 
+//-----
+//
+// Conenct devices and play a "connected" sound
+//
+// TODO: if no devices found, use virtual sequencer
+//-----
 WebMidi.enable(function (err) {
     console.log(WebMidi.inputs);
     console.log(WebMidi.outputs);
@@ -6,10 +12,18 @@ WebMidi.enable(function (err) {
     output.playNote("C5",1,{duration:100});
     output.playNote("E5",1,{duration:100});
     output.playNote("G5",1,{duration:100,time:"+100"});
+}
 
+//-----
+//
+// setup listener on input that will reconstruct pattern from sequencer
+// TODO, with the right firmware, it should be possible to pull this off directly and remove this code
+//
+//-----
+function startReader(){
     var input = WebMidi.inputs[1];
     
-    var pattern = new Array(4*4);
+    var pattern = new Array(4*4); //beats * quantization level
  
     var queuedEvents = [];
     input.addListener('noteon', "all", function(e) {
@@ -21,7 +35,8 @@ WebMidi.enable(function (err) {
       return Array.from(s.values()).some(m => m.note.number == midiNote.note.number && m.velocity == m.velocity);
     }
 
-    //add the note if we dont already have it
+    // part of clock callback 
+    // adds the note if we dont already have it
     function addToPattern(midiEvent, patternIndex) {
       thisBeat = pattern[patternIndex];
       midiNote = {note: midiEvent.note, channel:midiEvent.channel, velocity:midiEvent.velocity, rawVelocity: midiEvent.rawVelocity}
@@ -33,6 +48,7 @@ WebMidi.enable(function (err) {
       }
       else {
       }
+      //TODO send updated pattern to synthesis engine
     }
 
     var deltas = new Array(24*4); //24 clocks per quarter note, 4 beat patterns on circuit

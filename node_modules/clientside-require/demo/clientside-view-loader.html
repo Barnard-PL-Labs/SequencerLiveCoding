@@ -1,0 +1,10 @@
+<script src = "bundle.js"></script> <!-- path to the clientside-view-loader main file -->
+<script>
+    var view_loader = load("clientside-view-loader")
+        .then(view => view.load("clientside-view-modal-login_signup"))
+        .then(compiler => compiler.generate())
+        .then((modal)=>{
+            document.body.appendChild(modal);
+            modal.show("login");
+        })
+</script>

@@ -1,12 +1,28 @@
 <html>
  <head>
   <title>website title</title>
-<script src="https://cdn.jsdelivr.net/npm/webmidi"></script>
-
-  <script src="reader.js"></script>
  </head>
- <body>
-Some javascript is running...
- </body>
+			<body>
+<textarea id="codingWindow" rows="10" cols="80" style="border:1px solid black;">
+</textarea>
+			</body>
+  <footer>
+				<script src="https://cdn.jsdelivr.net/npm/webmidi"></script>
+				<script src="synthCompiled.js"></script>
+				<!-- <script src="reader.js"></script> -->
+
+				<link rel="stylesheet" href="css/codemirror.css">
+				<script src="scripts/codemirror.js"></script>
+    <script src="scripts/javascript.js"></script>
+				<script>
+var myCodeMirror = CodeMirror.fromTextArea(codingWindow,
+						{
+								value: "function myScript(){return 100;}\n",
+								lineNumbers: true, 
+								mode:  "javascript"
+						});
+				</script>
+
+  </footer>
 </html>
 

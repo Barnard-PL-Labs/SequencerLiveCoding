@@ -1,0 +1,8 @@
+<script src = "bundle.js"></script> <!-- path to the clientside-view-loader main file -->
+<script>
+    var promise_color_name = load("color-name");
+    promise_color_name
+        .then((color_name)=>{
+            console.log(color_name.blue); // outputs  [0, 0, 255]
+        })
+</script>
