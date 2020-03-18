@@ -11,6 +11,7 @@ function genNote(p){
     return null;
   }
   else {
+    //WRONG, a note is an obgject as well
     return midiNote = {note: p, channel:1, velocity:100, rawVelocity: 127};
   }
 }
@@ -20,17 +21,13 @@ function genPattern() {
   return [null,64,null,65].map(x => genNote(x));
 }
 
-function synth(pattern) {
-  pattern = genPattern()
-  console.log(pattern);
-  code = "";
+exports.synth = function(pattern) {
 
   rhythm = pattern.map(x => x == null ? 0 : 1);
-  console.log(rhythm);
   
   //collect indicies that have notes
-  rhythmIndicies = []
-  ctr = 0;
+  var rhythmIndicies = []
+  var ctr = 0;
   for (i=0; i<rhythm.length; i++) {
     if (rhythm[i] == 1) { 
       rhythmIndicies.push([ctr,i]);
@@ -38,22 +35,52 @@ function synth(pattern) {
   }
 
 		const result = regression.linear(rhythmIndicies);
-		const gradient = result.equation[0];
-		const yIntercept = result.equation[1];   
-
-  console.log(gradient);
-  console.log(yIntercept);
-  //check if note happens every n beats
+		const rGradient = result.equation[0]; //every n beats
+		const rYIntercept = result.equation[1]; //which beat do we start on 
 
   pitchPattern = []
+  ctr = 0
   pattern.forEach (x => {
     if (x != null) {
-      console.log(x)
-      pitchPattern.push(x.note);
+      console.log(Array.from(x)[0])
+      pitchPattern.push([ctr,Array.from(x)[0].note.number]);
+      ctr++;
     } 
   });
-  console.log(pitchPattern);
+		const resultP = regression.linear(pitchPattern);
+		const pGradient = resultP.equation[0];
+		const pYIntercept = resultP.equation[1];   
+
+  //---
+  // generate a rhythm array, 0 reps a beat, null for nothing
+  //---
+  function every(spacing, offset = 0, length = 16) {
+    var x = new Array(length);
+    for (i=offset; i < length; i = i+spacing) {
+      x[i] = 0;
+    }
+    return x;
+  }
+ 
+  //---
+  // apply the function f over the rhythm
+  //---
+  function applyPitch(f, rhythm) {
+    var pattern = new Array(rhythm.length);
+    var ctr = 0;
+    for (i=0; i<rhythm.length; i++) {
+      if (rhythm[i] != null) {
+        pattern[i] = f(ctr);
+        ctr++;
+      }
+    }
+    return pattern;
+  }
+
+  console.log(pattern);
+  console.log(pGradient);
+  console.log(pYIntercept);
+  var code = "applyPitch((x => "+pGradient+"*x + "+pYIntercept+"), every("+rGradient+", "+rYIntercept+"))"
+  //console.log(code);
   return code;
 }
-
-synth([]);

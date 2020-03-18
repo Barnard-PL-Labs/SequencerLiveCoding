@@ -1,18 +1,5 @@
-
-//-----
-//
-// Conenct devices and play a "connected" sound
-//
-// TODO: if no devices found, use virtual sequencer
-//-----
-WebMidi.enable(function (err) {
-    console.log(WebMidi.inputs);
-    console.log(WebMidi.outputs);
-    var output = WebMidi.outputs[1];
-    output.playNote("C5",1,{duration:100});
-    output.playNote("E5",1,{duration:100});
-    output.playNote("G5",1,{duration:100,time:"+100"});
-}
+const synthesizer = require('./synthesizer');
+const synthEvent = require('./synthEvent');
 
 //-----
 //
@@ -20,7 +7,7 @@ WebMidi.enable(function (err) {
 // TODO, with the right firmware, it should be possible to pull this off directly and remove this code
 //
 //-----
-function startReader(){
+exports.startReader = function() {
     var input = WebMidi.inputs[1];
     
     var pattern = new Array(4*4); //beats * quantization level
@@ -40,15 +27,25 @@ function startReader(){
     function addToPattern(midiEvent, patternIndex) {
       thisBeat = pattern[patternIndex];
       midiNote = {note: midiEvent.note, channel:midiEvent.channel, velocity:midiEvent.velocity, rawVelocity: midiEvent.rawVelocity}
+   
+      var changed = false
       if (thisBeat == undefined){
         pattern[patternIndex] = new Set([midiNote]);
+        changed = true
       }
       else if (!setHasNote(thisBeat, midiNote)) {
         (pattern[patternIndex]).add(midiNote);
+        changed = true
       }
       else {
       }
-      //TODO send updated pattern to synthesis engine
+      // send updated pattern to synthesis engine if we have a new pattern
+      // then send updated code to frontend
+      if (changed) {
+        var code = synthesizer.synth(pattern);
+        synthEvent.newSynthEmit.emit("synth", code);
+      }
+      
     }
 
     var deltas = new Array(24*4); //24 clocks per quarter note, 4 beat patterns on circuit
@@ -73,6 +70,4 @@ function startReader(){
        queuedEvents = []
        
     });
-
-});
-
+}
