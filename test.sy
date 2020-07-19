@@ -1,0 +1,32 @@
+(set-logic NIA)
+(synth-fun patternGen ((i Int)) Int
+((ITE Int) (I Int) (B Bool))
+( (ITE Int (
+    (ite (<= i 4) I 0)
+  ))
+  (I Int (i 0 1 2 3 4 5 6 7 8 9 10 11 12 
+  (+ I I) (- I I) (* I I) (mod I I)
+  ;; (div I I)
+  ))
+  
+  (B Bool (  
+    (<= I I) (< I I) (>= I I) (> I I)  ))
+))
+(declare-var i Int)
+(constraint (= (patternGen 0) 1))
+(constraint (= (patternGen 1) 0))
+(constraint (= (patternGen 2) 1))
+(constraint (= (patternGen 3) 0))
+(constraint (= (patternGen 4) 1))
+(constraint (= (patternGen 5) 0))
+(constraint (= (patternGen 6) 0))
+(constraint (= (patternGen 7) 0))
+(constraint (= (patternGen 8) 0))
+(constraint (= (patternGen 9) 0))
+(constraint (= (patternGen 10) 0))
+(constraint (= (patternGen 11) 0))
+(constraint (= (patternGen 12) 0))
+(constraint (= (patternGen 13) 0))
+(constraint (= (patternGen 14) 0))
+(constraint (= (patternGen 15) 0))
+(check-synth)
