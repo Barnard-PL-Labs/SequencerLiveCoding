@@ -72,17 +72,6 @@ function cloneBeat(source) {
 
 function isValidBeat(beat) {
     
-/*    beat.kitIndex = source.kitIndex;
-    beat.effectIndex = source.effectIndex;
-    beat.tempo = source.tempo;
-    beat.swingFactor = source.swingFactor;
-    beat.effectMix = source.effectMix;
-    beat.kickPitchVal = source.kickPitchVal;
-    beat.snarePitchVal = source.snarePitchVal;
-    beat.hihatPitchVal = source.hihatPitchVal;
-    beat.tom1PitchVal = source.tom1PitchVal;
-    beat.tom2PitchVal = source.tom2PitchVal;
-    beat.tom3PitchVal = source.tom3PitchVal;*/
     var valid = true;
     for (i = 1; i <= 6; i++) {
         valid = valid &&
@@ -607,6 +596,9 @@ function updatePatternFromCode(){
         //TODO if(codeChanged) {
         let f = new Function("theBeat", "rhythmIndex", '"use strict"; ' + updatedCode + ' return (genBeat(theBeat, rhythmIndex));');
         let newBeat = f(cloneBeat(theBeat), rhythmIndex);
+        for (i = 1; i <= 6; i++) {
+            newBeat['rhythm'+i.toString()] = newBeat['rhythm'+i.toString()].map((note) => {if (Number.isNaN(note)) {return 0;} else {return note}});
+        }
         if (isValidBeat(newBeat)) { // && theBeat != newBeat){
             theBeat = newBeat;
             redrawAllNotes();

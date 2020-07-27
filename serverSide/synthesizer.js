@@ -61,16 +61,20 @@ exports.simplifyCode = function(codeAndBeat) {
             
         }
     });
-    console.log(parsedCode)
+    console.log(parsedCode);
 
-    var newCode = "";
+    var newCode = arrayOfLines.slice(1,-2).join("\n")+"\n";
+    console.log(newCode);
+
     //remove large subsequences of common vals to make synthesis a bit easier
     //that subseq can then be added with templated code
     //TODO, do this for all patterns & refactor to fxn
     for (whichPattern = 1; whichPattern<= 6; whichPattern++) {
         if (hasPatternEdit(parsedCode, whichPattern)) {
             console.log(whichPattern)
-            var sygusSolution = sygusOnePattern(codeAndBeat, whichPattern);
+            var synthSolution = sygusOnePattern(codeAndBeat, whichPattern);
+            var sygusSolution = synthSolution["code"]
+            var subseq = synthSolution["subseq"]
             //turn sygus sol'n to JS code
             //TODO refactor to fxn
             if (sygusSolution != "unknown") {
@@ -80,7 +84,9 @@ exports.simplifyCode = function(codeAndBeat) {
                 var fxnName = sygusSolution.split(" ")[1];
                 var newFxn = fxnDefs[0];
                 var newNewJsFxnBody = astToJs(smt_parser(newFxn));
-                newCode += "  b.rhythm"+whichPattern+" = new Array(16).fill(0).map((val,i) => {"+newNewJsFxnBody+" });\n";
+                newCode = newCode.replace(new RegExp(".*rhythm"+whichPattern+".*\n", "g"), '')
+                newCode += "  b.rhythm" + whichPattern + " = new Array(16).fill(0).map((val,i) => {"+newNewJsFxnBody+" });\n";
+                newCode += "  b.rhythm" + whichPattern + ".splice(" + subseq['startMaxSubseq'] + "," + subseq['lengthMaxSubseq'] + ",...Array(" + subseq['lengthMaxSubseq'] + ").fill(" + subseq['valMaxSubseq'] + "));\n"
             }
         }
     }
@@ -94,8 +100,8 @@ exports.simplifyCode = function(codeAndBeat) {
 function sygusOnePattern(codeAndBeat, whichPattern) {
     var arrayToSynth = zipWithIndex(codeAndBeat["beat"]["rhythm" + whichPattern]);
     var subseq = findMaxSubseq(codeAndBeat["beat"]["rhythm" + whichPattern]);
-    arrayToSynth.splice(subseq['startMaxSubseq'], subseq['endMaxSubseq'] - subseq['startMaxSubseq'] + 1);
+    arrayToSynth.splice(subseq['startMaxSubseq'], subseq['lengthMaxSubseq']);
 
     var sygusSolution = callPBE(arrayToSynth);
-    return sygusSolution;
+    return {"code": sygusSolution, "subseq":subseq};
 }

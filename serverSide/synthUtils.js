@@ -32,7 +32,7 @@ function findMaxSubseq(xs) {
     }
     return {
         "startMaxSubseq": startMaxSubseq,
-        "endMaxSubseq": endMaxSubseq,
+        "lengthMaxSubseq": endMaxSubseq - startMaxSubseq + 1,
         "valMaxSubseq": valMaxSubseq
     };
 
