@@ -1,5 +1,8 @@
 const { callPBE } = require("./cvc4");
 const { findMaxSubseq, zipWithIndex } = require("./synthUtils");
+const { smt_parser } = require("./parsers/smt_parser");
+const { astToJs } = require("./parsers/astToJS");
+
 
 class ParseError extends Error {
     constructor(message) {
@@ -39,9 +42,14 @@ function parseCodeLine(line) {
     
 }
 
+function hasPatternEdit(parsedCode, whichPattern) {
+    const matchesP = (codeLine) => codeLine["instIndex"] == whichPattern-1;
+    return parsedCode.some(matchesP);
+}
+
 exports.simplifyCode = function(codeAndBeat) {
-    updatedCode = codeAndBeat["code"]
-    var arrayOfLines = updatedCode.match(/[^\r\n]+/g);
+    var code = codeAndBeat["code"]
+    var arrayOfLines = code.match(/[^\r\n]+/g);
     //TODO merge multiline commands (e.g. .map w/ fxn over multiple lines) into a single line
 
     var parsedCode = []
@@ -55,9 +63,39 @@ exports.simplifyCode = function(codeAndBeat) {
     });
     console.log(parsedCode)
 
-    var subseq = findMaxSubseq(codeAndBeat["beat"]["rhythm5"]);
-    arrayToSynth = zipWithIndex(codeAndBeat["beat"]["rhythm5"])
-    arrayToSynth.splice(subseq['startMaxSubseq'], subseq['endMaxSubseq'] - subseq['startMaxSubseq']+1);
-    callPBE(arrayToSynth);
+    var newCode = "";
+    //remove large subsequences of common vals to make synthesis a bit easier
+    //that subseq can then be added with templated code
+    //TODO, do this for all patterns & refactor to fxn
+    for (whichPattern = 1; whichPattern<= 6; whichPattern++) {
+        if (hasPatternEdit(parsedCode, whichPattern)) {
+            console.log(whichPattern)
+            var sygusSolution = sygusOnePattern(codeAndBeat, whichPattern);
+            //turn sygus sol'n to JS code
+            //TODO refactor to fxn
+            if (sygusSolution != "unknown") {
+                var fxnDefs = sygusSolution.split("\n").slice(1);
+                var extractDef = new RegExp(/\(.*?\)\) [^ ]* /);
+                fxnDefs = fxnDefs.map(f => f.replace(extractDef,"").slice(0,-1));
+                var fxnName = sygusSolution.split(" ")[1];
+                var newFxn = fxnDefs[0];
+                var newNewJsFxnBody = astToJs(smt_parser(newFxn));
+                newCode += "  b.rhythm"+whichPattern+" = new Array(16).fill(0).map((val,i) => {"+newNewJsFxnBody+" });\n";
+            }
+        }
+    }
 
+    //TODO merge newNewJsFxnBody with parsedCode and code
+
+    return newCode;
+
+}
+
+function sygusOnePattern(codeAndBeat, whichPattern) {
+    var arrayToSynth = zipWithIndex(codeAndBeat["beat"]["rhythm" + whichPattern]);
+    var subseq = findMaxSubseq(codeAndBeat["beat"]["rhythm" + whichPattern]);
+    arrayToSynth.splice(subseq['startMaxSubseq'], subseq['endMaxSubseq'] - subseq['startMaxSubseq'] + 1);
+
+    var sygusSolution = callPBE(arrayToSynth);
+    return sygusSolution;
 }

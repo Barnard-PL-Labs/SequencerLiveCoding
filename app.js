@@ -16,9 +16,11 @@ io.on('connection', (socket) => {
     socket.on('disconnect', () => {
         console.log('user disconnected');
       });
+    
+    //When a client asks for new code, we run synthesis and send the result back
     socket.on('code', (c) => {
-        simplifyCode(c);
-      });
+      socket.emit('newCode', simplifyCode(c));
+    });
   });
 
   
