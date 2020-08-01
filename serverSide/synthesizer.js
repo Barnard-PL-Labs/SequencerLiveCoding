@@ -1,5 +1,5 @@
 const { callPBE } = require("./cvc4");
-const { findMaxSubseq, zipWithIndex } = require("./synthUtils");
+const { findMaxSubseq, zipWithIndex, checkForSingleEdit } = require("./synthUtils");
 const { smt_parser } = require("./parsers/smt_parser");
 const { astToJs } = require("./parsers/astToJS");
 
@@ -42,6 +42,7 @@ function parseCodeLine(line) {
     
 }
 
+//check if we have inserted a array index manipulation line of code 
 function hasPatternEdit(parsedCode, whichPattern) {
     const matchesP = (codeLine) => codeLine["instIndex"] == whichPattern-1;
     return parsedCode.some(matchesP);
@@ -69,9 +70,15 @@ exports.simplifyCode = function(codeAndBeat) {
     //remove large subsequences of common vals to make synthesis a bit easier
     //that subseq can then be added with templated code
     //TODO, do this for all patterns & refactor to fxn
-    for (whichPattern = 1; whichPattern<= 6; whichPattern++) {
-        if (hasPatternEdit(parsedCode, whichPattern)) {
-            console.log(whichPattern)
+    for (whichPattern = 1; whichPattern <= 6; whichPattern++) {
+        var singleEditInfo = checkForSingleEdit(codeAndBeat["beat"]["rhythm" + whichPattern])
+        if (singleEditInfo["hasOneChangedIndex"]) {
+            newCode = newCode.replace(new RegExp(".*rhythm"+whichPattern+".*\n", "g"), '')
+            newCode += "  b.rhythm" + whichPattern + " = new Array(16).fill(" + singleEditInfo["fillVal"] + ")\n"
+            newCode += "  b.rhythm" + whichPattern + "[" + singleEditInfo["editLoc"] + "] = " + singleEditInfo["editVal"] + ";\n"
+
+        }
+        else if (hasPatternEdit(parsedCode, whichPattern)) {
             var synthSolution = sygusOnePattern(codeAndBeat, whichPattern);
             var sygusSolution = synthSolution["code"]
             var subseq = synthSolution["subseq"]

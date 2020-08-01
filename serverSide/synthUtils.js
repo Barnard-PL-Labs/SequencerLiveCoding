@@ -47,3 +47,22 @@ function findMaxSubseq(xs) {
     }
 }
 exports.findMaxSubseq = findMaxSubseq;
+
+function countElem(v, xs) {
+    return xs.filter((x) => x==v).length
+}
+exports.checkForSingleEdit = function(xs) {
+    var counts = [0,1,2].map((x) => countElem(x, xs))
+    
+    if (counts.some((x) => x == 15)) {
+        var hasOneChangedIndex = true;
+        var fillVal = counts.indexOf(15);
+        var editVal = counts.indexOf(1);
+        var editLoc = xs.indexOf(editVal);
+        return {"hasOneChangedIndex" : hasOneChangedIndex,
+                "fillVal" : fillVal, 
+                "editVal" : editVal, 
+                "editLoc" : editLoc}
+    }
+    return {"hasOneChangedIndex": false};
+}

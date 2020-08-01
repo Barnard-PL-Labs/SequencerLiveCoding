@@ -17,7 +17,7 @@ function generateSygus(examples) {
         "(synth-fun patternGen ((i Int)) Int\n"+
         "  ((I Int) (ITE Int) (B Bool))\n"+
         ""+
-        "(  (I Int (i 0 1 2\n"+
+        "(  (I Int (i 0 1 2 3 4 5 6\n"+
         "    (+ I I) (- I I) (* I I) (mod I I) \n"+
         "  ))\n"+
         " (ITE Int (\n"+
