@@ -11,13 +11,24 @@ The implementation so far is using a software sequencer that can be controlled w
 Synthesis uses an SyGuS solver called CVC4 (which is more generally an SMT solver). This allows us to automatically construct code that fits the pattern at any given time.
 
 # install
-to build, first
+The app uses node, you will need to install that first
 
+   sudo apt install nodejs
+
+We need some extra stuff to run client-side, to make sure the system doesnt completely crash, even if you lose your connection to the internet in the middle of a set.
+
+   npm install -g browserify
    browserify public/js/main.js -o public/js/compiled.js
 
-this turns the js file into one that can run client-side in-browser by inlining all the necessary npm modules.
-Synthesis uses the SMT solver CVC4 (which is a crazy optimized behemoth of C code), so needs to run server side.
-First download the latest copy of CVC4, put the executable in your path, then to start the server
+Synthesis uses the SMT solver CVC4 (which is a crazy optimized behemoth of C code), so needs to run server side. You can download using below commands, then change permissions. Make sure the cvc4 executable is in the root directory of this repo.
+   
+   wget https://cvc4.cs.stanford.edu/downloads/builds/x86_64-linux-opt/unstable/cvc4-2020-08-09-x86_64-linux-opt
+   mv cvc4-2020-08-09-x86_64-linux-opt cvc4
+   chmod u+x cvc4
 
+Then install everything and get playing!
+
+   npm install
    node app.js
+   nohup node app.js &
 
