@@ -600,6 +600,8 @@ function synthCode(newNoteValue, rhythmIndex, instrumentIndex) {
     var currentCode = codeMirrorInstance.getValue()
     
     var updatedCode = addLineForPointChange(currentCode,newNoteValue, rhythmIndex, instrumentIndex)
+    console.log ("!")
+
     socket.emit('code', {"code":updatedCode, "beat":theBeat});
     // TODO if we get new code any time, put it in the "proposed" box (or just replace existing code)
      

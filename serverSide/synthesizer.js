@@ -25,6 +25,13 @@ const MapOp = (instIndex, fxnParams, fxnBody) => ({
     'val' : fxnBody
 })
 
+process.on('message', (data) => {
+    simplifyCode(data["code"]).then((x) => {
+        x["localToken"] = data["token"]; 
+        process.send(x)
+    });
+})
+    
 function parseCodeLine(line) {
     var indexOperation = new RegExp(/b\.rhythm([1-6])\[(1?[0-9])\] ?= ?([0-2])[;,\n]/);
     //TODO, relax assumption that all maps are of the form "b.rhythm1 = b.rhythm1.map"
@@ -48,8 +55,9 @@ function hasPatternEdit(parsedCode, whichPattern) {
     return parsedCode.some(matchesP);
 }
 
-exports.simplifyCode = function(codeAndBeat) {
+simplifyCode = async function(codeAndBeat) {
     var code = codeAndBeat["code"]
+    console.log("test")
     var arrayOfLines = code.match(/[^\r\n]+/g);
     //TODO merge multiline commands (e.g. .map w/ fxn over multiple lines) into a single line
 
@@ -62,10 +70,8 @@ exports.simplifyCode = function(codeAndBeat) {
             
         }
     });
-    console.log(parsedCode);
 
     var newCode = arrayOfLines.slice(1,-2).join("\n")+"\n";
-    console.log(newCode);
 
     //remove large subsequences of common vals to make synthesis a bit easier
     //that subseq can then be added with templated code
@@ -99,8 +105,7 @@ exports.simplifyCode = function(codeAndBeat) {
     }
 
     //TODO merge newNewJsFxnBody with parsedCode and code
-
-    return newCode;
+    return {"newCode": newCode};
 
 }
 

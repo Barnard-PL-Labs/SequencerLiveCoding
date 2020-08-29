@@ -53,12 +53,12 @@ exports.callPBE = function(examples){ //examples :: [[Int]]
     //console.log(examples);
     cvc4Query = generateSygus(examples);
     //for this to work on mac, might need timeout like https://github.com/santolucito/liveprogramming/blob/ba690f1354abe2580fb5e0ce7484eb1379a3ed6a/lib/javascript/eval_pbe_helpers.js#L46
-    var cvc4Command = 'timeout 1 bash -c \"echo \\"'+cvc4Query + '\\" | ./cvc4 --lang sygus2\"';
+    var cvc4Command = 'timeout 3 bash -c \"echo \\"'+cvc4Query + '\\" | ./cvc4 --lang sygus2\"';
     try {
       var sygusOutput = execSync(cvc4Command).toString();
     }
     catch (e) {
-      console.error("CVC4 call failed: "+e);
+      console.error("CVC4 call failed (probably timeout)");
       return "unknown";
     }
     if (sygusOutput.trim() == "unknown") {

@@ -29,6 +29,5 @@ Synthesis uses the SMT solver CVC4 (which is a crazy optimized behemoth of C cod
 Then install everything and get playing!
 
    npm install
-   node app.js
-   nohup node app.js &
+   node app.js # or, on a server, nohup node app.js &
 
