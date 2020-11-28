@@ -2,7 +2,13 @@
 var kMinTempo = 53;
 var kMaxTempo = 180;
 
+var loopLength = 16;
+var rhythmIndex = 0;
 
+function setRhythmIndex(idx) {
+    rhythmIndex = idx;
+    exports.rhythmIndex = rhythmIndex;
+}
 
 var beatReset = {"kitIndex":0,"effectIndex":0,"tempo":100,"swingFactor":0,"effectMix":0.25,"kickPitchVal":0.5,"snarePitchVal":0.5,"hihatPitchVal":0.5,"tom1PitchVal":0.5,"tom2PitchVal":0.5,"tom3PitchVal":0.5,"rhythm1":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"rhythm2":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"rhythm3":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"rhythm4":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"rhythm5":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"rhythm6":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]};
 var beatDemo = [
@@ -128,7 +134,7 @@ exports.setBeatSwingFactor = setBeatSwingFactor
 
 exports.setBeatKitIndex = setBeatKitIndex
 exports.setBeatEffectIndex = setBeatEffectIndex
-
+exports.setRhythmIndex = setRhythmIndex
 
 exports.cloneBeat = cloneBeat
 exports.tempoIncrease = tempoIncrease
@@ -138,3 +144,5 @@ exports.tempoDecrease = tempoDecrease
 exports.theBeat = theBeat
 exports.beatReset = beatReset
 exports.beatDemo = beatDemo
+exports.loopLength = loopLength
+exports.rhythmIndex = rhythmIndex

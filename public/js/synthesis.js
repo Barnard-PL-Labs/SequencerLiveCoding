@@ -48,7 +48,7 @@ function updatePatternFromCode(){
     try {
         //TODO if(codeChanged) {
         let f = new Function("theBeat", "rhythmIndex", '"use strict"; ' + updatedCode + ' return (genBeat(theBeat, rhythmIndex));');
-        let newBeat = f(beatMod.cloneBeat(beatMod.theBeat), rhythmIndex);
+        let newBeat = f(beatMod.cloneBeat(beatMod.theBeat), beatMod.rhythmIndex);
         for (i = 1; i <= 6; i++) {
             newBeat['rhythm'+i.toString()] = newBeat['rhythm'+i.toString()].map((note) => {if (Number.isNaN(note)) {return 0;} else {return note}});
         }

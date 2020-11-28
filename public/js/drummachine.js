@@ -38,9 +38,6 @@ kickPitch = snarePitch = hihatPitch = tom1Pitch = tom2Pitch = tom3Pitch = 0;
 var mouseCapture = null;
 var mouseCaptureOffset = 0;
 
-var loopLength = 16;
-var rhythmIndex = 0;
-
 var noteTime = 0.0;
 
 var instruments = ['Kick', 'Snare', 'HiHat', 'Tom1', 'Tom2', 'Tom3'];
@@ -464,7 +461,7 @@ function initControls() {
 function initButtons() {
     var elButton;
 
-    for (i = 0; i < loopLength; ++i) {
+    for (i = 0; i < beatMod.loopLength; ++i) {
         for (j = 0; j < kNumInstruments; j++) {
                 elButton = document.getElementById(instruments[j] + '_' + i);
                 elButton.addEventListener("mousedown", handleButtonMouseDown, true);
@@ -509,13 +506,13 @@ function advanceNote() {
     // Advance time by a 16th note...
     var secondsPerBeat = 60.0 / beatMod.theBeat.tempo;
 
-    rhythmIndex++;
-    if (rhythmIndex == loopLength) {
-        rhythmIndex = 0;
+    beatMod.setRhythmIndex(beatMod.rhythmIndex + 1);
+    if (beatMod.rhythmIndex == beatMod.loopLength) {
+        beatMod.setRhythmIndex(0);
     }
 
         // apply swing
-    if (rhythmIndex % 2) {
+    if (beatMod.rhythmIndex % 2) {
         noteTime += (0.25 + kMaxSwing * beatMod.theBeat.swingFactor) * secondsPerBeat;
     } else {
         noteTime += (0.25 - kMaxSwing * beatMod.theBeat.swingFactor) * secondsPerBeat;
@@ -566,39 +563,39 @@ function schedule() {
         var contextPlayTime = noteTime + startTime;
 
         // Kick
-        if (beatMod.theBeat.rhythm1[rhythmIndex] && instrumentActive[0]) {
-            playNote(currentKit.kickBuffer, false, 0,0,-2, 0.5, volumes[beatMod.theBeat.rhythm1[rhythmIndex]] * 1.0, kickPitch, contextPlayTime);
+        if (beatMod.theBeat.rhythm1[beatMod.rhythmIndex] && instrumentActive[0]) {
+            playNote(currentKit.kickBuffer, false, 0,0,-2, 0.5, volumes[beatMod.theBeat.rhythm1[beatMod.rhythmIndex]] * 1.0, kickPitch, contextPlayTime);
         }
 
         // Snare
-        if (beatMod.theBeat.rhythm2[rhythmIndex] && instrumentActive[1]) {
-            playNote(currentKit.snareBuffer, false, 0,0,-2, 1, volumes[beatMod.theBeat.rhythm2[rhythmIndex]] * 0.6, snarePitch, contextPlayTime);
+        if (beatMod.theBeat.rhythm2[beatMod.rhythmIndex] && instrumentActive[1]) {
+            playNote(currentKit.snareBuffer, false, 0,0,-2, 1, volumes[beatMod.theBeat.rhythm2[beatMod.rhythmIndex]] * 0.6, snarePitch, contextPlayTime);
         }
 
         // Hihat
-        if (beatMod.theBeat.rhythm3[rhythmIndex] && instrumentActive[2]) {
+        if (beatMod.theBeat.rhythm3[beatMod.rhythmIndex] && instrumentActive[2]) {
             // Pan the hihat according to sequence position.
-            playNote(currentKit.hihatBuffer, true, 0.5*rhythmIndex - 4, 0, -1.0, 1, volumes[beatMod.theBeat.rhythm3[rhythmIndex]] * 0.7, hihatPitch, contextPlayTime);
+            playNote(currentKit.hihatBuffer, true, 0.5*beatMod.rhythmIndex - 4, 0, -1.0, 1, volumes[beatMod.theBeat.rhythm3[beatMod.rhythmIndex]] * 0.7, hihatPitch, contextPlayTime);
         }
 
         // Toms
-        if (beatMod.theBeat.rhythm4[rhythmIndex] && instrumentActive[3]) {
-            playNote(currentKit.tom1, false, 0,0,-2, 1, volumes[beatMod.theBeat.rhythm4[rhythmIndex]] * 0.6, tom1Pitch, contextPlayTime);
+        if (beatMod.theBeat.rhythm4[beatMod.rhythmIndex] && instrumentActive[3]) {
+            playNote(currentKit.tom1, false, 0,0,-2, 1, volumes[beatMod.theBeat.rhythm4[beatMod.rhythmIndex]] * 0.6, tom1Pitch, contextPlayTime);
         }
 
-        if (beatMod.theBeat.rhythm5[rhythmIndex] && instrumentActive[4]) {
-            playNote(currentKit.tom2, false, 0,0,-2, 1, volumes[beatMod.theBeat.rhythm5[rhythmIndex]] * 0.6, tom2Pitch, contextPlayTime);
+        if (beatMod.theBeat.rhythm5[beatMod.rhythmIndex] && instrumentActive[4]) {
+            playNote(currentKit.tom2, false, 0,0,-2, 1, volumes[beatMod.theBeat.rhythm5[beatMod.rhythmIndex]] * 0.6, tom2Pitch, contextPlayTime);
         }
 
-        if (beatMod.theBeat.rhythm6[rhythmIndex] && instrumentActive[5]) {
-            playNote(currentKit.tom3, false, 0,0,-2, 1, volumes[beatMod.theBeat.rhythm6[rhythmIndex]] * 0.6, tom3Pitch, contextPlayTime);
+        if (beatMod.theBeat.rhythm6[beatMod.rhythmIndex] && instrumentActive[5]) {
+            playNote(currentKit.tom3, false, 0,0,-2, 1, volumes[beatMod.theBeat.rhythm6[beatMod.rhythmIndex]] * 0.6, tom3Pitch, contextPlayTime);
         }
 
 
         // Attempt to synchronize drawing time with sound
         if (noteTime != drawMod.lastDrawTime) {
             drawMod.setLastDrawTime(noteTime);
-            drawMod.drawPlayhead((rhythmIndex + 15) % 16);
+            drawMod.drawPlayhead((beatMod.rhythmIndex + 15) % 16);
         }
 
         advanceNote();
@@ -961,12 +958,12 @@ function handlePlay(event) {
 function handleStop(event) {
     timerWorker.postMessage("stop");
 
-    var elOld = document.getElementById('LED_' + (rhythmIndex + 14) % 16);
+    var elOld = document.getElementById('LED_' + (beatMod.rhythmIndex + 14) % 16);
     elOld.src = 'images/LED_off.png';
 
-    hideBeat( (rhythmIndex + 14) % 16 );
+    hideBeat( (beatMod.rhythmIndex + 14) % 16 );
 
-    rhythmIndex = 0;
+    beatMod.setRhythmIndex(0);
 
     document.getElementById('play').classList.remove('playing');
     document.getElementById('stop').classList.remove('playing');
@@ -1074,7 +1071,7 @@ function loadBeat(beat) {
 }
 
 function updateControls() {
-    for (i = 0; i < loopLength; ++i) {
+    for (i = 0; i < beatMod.loopLength; ++i) {
         for (j = 0; j < kNumInstruments; j++) {
             switch (j) {
                 case 0: notes = beatMod.theBeat.rhythm1; break;

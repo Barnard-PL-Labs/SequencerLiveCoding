@@ -1,4 +1,5 @@
 drums = require('./drummachine')
+beatMod = require('./beat')
 
 var lastDrawTime = -1;
 
