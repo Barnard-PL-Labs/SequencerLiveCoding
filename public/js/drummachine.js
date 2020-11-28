@@ -877,7 +877,7 @@ function handleEffectMouseDown(event) {
 
             // Hack - if effect is turned all the way down - turn up effect slider.
             // ... since they just explicitly chose an effect from the list.
-            if (theBeat.effectMix == 0)
+            if (beatMod.theBeat.effectMix == 0)
                 beatMod.setBeatEffectMix(0.5);
 
             setEffect(i);
@@ -900,7 +900,6 @@ function setEffect(index) {
   // Hack - if the effect is meant to be entirely wet (not unprocessed signal)
   // then put the effect level all the way up.
     if (effectDryMix == 0)
-        // theBeat.effectMix = 1;
         beatMod.setBeatEffectMix(1);
 
     setEffectLevel(beatMod.theBeat);
