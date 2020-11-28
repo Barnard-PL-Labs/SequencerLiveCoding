@@ -1,4 +1,6 @@
 const beatMod = require('./beat.js')
+const drawMod = require('./draw.js')
+
 
 //We pull this in on init, which allows us to grab code as the drum machine runs
 var codeMirrorInstance = null
@@ -52,11 +54,12 @@ function updatePatternFromCode(){
         }
         if (isValidBeat(newBeat)) { // && theBeat != newBeat){
             beatMod.setBeat(newBeat)
-            redrawAllNotes();
+            drawMod.redrawAllNotes();
         }
     }
     catch(err) {
-
+      console.log("updatePatternFromCode error")
+      console.log(err)
     }
 }
 
