@@ -1,4 +1,4 @@
-
+const beatMod = require('./beat.js')
 
 //We pull this in on init, which allows us to grab code as the drum machine runs
 var codeMirrorInstance = null
@@ -32,7 +32,7 @@ function synthCode(newNoteValue, rhythmIndex, instrumentIndex) {
 
     var updatedCode = addLineForPointChange(currentCode,newNoteValue, rhythmIndex, instrumentIndex)
 
-    socket.emit('code', {"code":updatedCode, "beat":theBeat});
+    socket.emit('code', {"code":updatedCode, "beat":beatMod.theBeat});
     // TODO if we get new code any time, put it in the "proposed" box (or just replace existing code)
 
     socket.on('newCode', function(c) {
@@ -46,12 +46,12 @@ function updatePatternFromCode(){
     try {
         //TODO if(codeChanged) {
         let f = new Function("theBeat", "rhythmIndex", '"use strict"; ' + updatedCode + ' return (genBeat(theBeat, rhythmIndex));');
-        let newBeat = f(cloneBeat(theBeat), rhythmIndex);
+        let newBeat = f(beatMod.cloneBeat(beatMod.theBeat), rhythmIndex);
         for (i = 1; i <= 6; i++) {
             newBeat['rhythm'+i.toString()] = newBeat['rhythm'+i.toString()].map((note) => {if (Number.isNaN(note)) {return 0;} else {return note}});
         }
         if (isValidBeat(newBeat)) { // && theBeat != newBeat){
-            theBeat = newBeat;
+            beatMod.setBeat(newBeat)
             redrawAllNotes();
         }
     }
