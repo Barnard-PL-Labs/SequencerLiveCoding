@@ -1,5 +1,5 @@
-drums = require('./drummachine')
-beatMod = require('./beat')
+const kitMod = require('./kit')
+const beatMod = require('./beat')
 
 var lastDrawTime = -1;
 
@@ -10,7 +10,7 @@ function setLastDrawTime(time) {
 
 
 function drawNote(draw, xindex, yindex) {
-    var elButton = document.getElementById(drums.instruments[yindex] + '_' + xindex);
+    var elButton = document.getElementById(kitMod.instruments[yindex] + '_' + xindex);
     switch (draw) {
         case 0: elButton.src = 'images/button_off.png'; break;
         case 1: elButton.src = 'images/button_half.png'; break;

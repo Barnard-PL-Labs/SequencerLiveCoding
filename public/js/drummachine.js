@@ -1,13 +1,14 @@
 const beatMod = require('./beat')
 const synthMod = require('./synthesis')
 const drawMod = require('./draw.js')
+const kitMod = require('./kit')
 
 // Events
 // init() once the page has finished loading.
 //window.onload = init;
 
 var timerWorker = null; // Worker thread to send us scheduling messages.
-var context;
+var context; exports.context = context;
 var convolver;
 var compressor;
 var masterGainNode;
@@ -23,13 +24,8 @@ var timeoutId;
 
 var startTime;
 
-var kits;
 
-var kNumInstruments = 6;
-var kInitialKitIndex = 10;
 var kMaxSwing = .08;
-
-var currentKit;
 
 
 
@@ -40,130 +36,6 @@ var mouseCaptureOffset = 0;
 
 var noteTime = 0.0;
 
-var instruments = ['Kick', 'Snare', 'HiHat', 'Tom1', 'Tom2', 'Tom3'];
-exports.instruments = instruments //TODO, REFACTOR THIS TO SOMEWHERE
-
-
-var volumes = [0, 0.3, 1];
-
-var kitCount = 0;
-
-var kitName = [
-    "R8",
-    "CR78",
-    "KPR77",
-    "LINN",
-    "Kit3",
-    "Kit8",
-    "Techno",
-    "Stark",
-    "breakbeat8",
-    "breakbeat9",
-    "breakbeat13",
-    "acoustic-kit",
-    "4OP-FM",
-    "TheCheebacabra1",
-    "TheCheebacabra2"
-    ];
-
-var kitNamePretty = [
-    "Roland R-8",
-    "Roland CR-78",
-    "Korg KPR-77",
-    "LinnDrum",
-    "Kit 3",
-    "Kit 8",
-    "Techno",
-    "Stark",
-    "Breakbeat 8",
-    "Breakbeat 9",
-    "Breakbeat 13",
-    "Acoustic Kit",
-    "4OP-FM",
-    "The Cheebacabra 1",
-    "The Cheebacabra 2"
-    ];
-
-function Kit(name) {
-    this.name = name;
-
-    this.pathName = function() {
-        var pathName = "sounds/drum-samples/" + this.name + "/";
-        return pathName;
-    };
-
-    this.kickBuffer = 0;
-    this.snareBuffer = 0;
-    this.hihatBuffer = 0;
-
-    this.instrumentCount = kNumInstruments;
-    this.instrumentLoadCount = 0;
-
-    this.startedLoading = false;
-    this.isLoaded = false;
-
-    this.demoIndex = -1;
-}
-
-Kit.prototype.setDemoIndex = function(index) {
-    this.demoIndex = index;
-}
-
-Kit.prototype.load = function() {
-    if (this.startedLoading)
-        return;
-
-    this.startedLoading = true;
-
-    var pathName = this.pathName();
-
-    var kickPath = pathName + "kick.wav";
-    var snarePath = pathName + "snare.wav";
-    var hihatPath = pathName + "hihat.wav";
-    var tom1Path = pathName + "tom1.wav";
-    var tom2Path = pathName + "tom2.wav";
-    var tom3Path = pathName + "tom3.wav";
-
-    this.loadSample(0, kickPath, false);
-    this.loadSample(1, snarePath, false);
-    this.loadSample(2, hihatPath, true);  // we're panning only the hihat
-    this.loadSample(3, tom1Path, false);
-    this.loadSample(4, tom2Path, false);
-    this.loadSample(5, tom3Path, false);
-}
-
-var decodedFunctions = [
-function (buffer) { this.kickBuffer = buffer; },
-function (buffer) { this.snareBuffer = buffer; },
-function (buffer) { this.hihatBuffer = buffer; },
-function (buffer) { this.tom1 = buffer; },
-function (buffer) { this.tom2 = buffer; },
-function (buffer) { this.tom3 = buffer; } ];
-
-Kit.prototype.loadSample = function(sampleID, url, mixToMono) {
-    // Load asynchronously
-
-    var request = new XMLHttpRequest();
-    request.open("GET", url, true);
-    request.responseType = "arraybuffer";
-
-    var kit = this;
-
-    request.onload = function() {
-        context.decodeAudioData(request.response, decodedFunctions[sampleID].bind(kit));
-
-        kit.instrumentLoadCount++;
-        if (kit.instrumentLoadCount == kit.instrumentCount) {
-            kit.isLoaded = true;
-
-            if (kit.demoIndex != -1) {
-                beatMod.beatDemo[kit.demoIndex].setKitLoaded();
-            }
-        }
-    }
-
-    request.send();
-}
 
 var impulseResponseInfoList = [
     // Impulse responses - each one represents a unique linear effect.
@@ -249,16 +121,17 @@ function startLoadingAssets() {
     }
 
     // Initialize drum kits
-    var numKits = kitName.length;
-    kits = new Array(numKits);
+    var numKits = kitMod.kitName.length;
+    let tmp = new Array(numKits);
     for (var i  = 0; i < numKits; i++) {
-        kits[i] = new Kit(kitName[i]);
+        tmp[i] = new kitMod.Kit(kitMod.kitName[i]);
     }
+    kitMod.setKits(tmp)
 
     // Start loading the assets used by the presets first, in order of the presets.
     for (var demoIndex = 0; demoIndex < 5; ++demoIndex) {
         var effect = impulseResponseList[beatMod.beatDemo[demoIndex].effectIndex];
-        var kit = kits[beatMod.beatDemo[demoIndex].kitIndex];
+        var kit = kitMod.kits[beatMod.beatDemo[demoIndex].kitIndex];
 
         // These effects and kits will keep track of a particular demo, so we can change
         // the loading status in the UI.
@@ -272,7 +145,7 @@ function startLoadingAssets() {
     // Then load the remaining assets.
     // Note that any assets which have previously started loading will be skipped over.
     for (var i  = 0; i < numKits; i++) {
-        kits[i].load();
+        kitMod.kits[i].load();
     }
 
     // Start at 1 to skip "No Effect"
@@ -281,7 +154,7 @@ function startLoadingAssets() {
     }
 
     // Setup initial drumkit
-    currentKit = kits[kInitialKitIndex];
+    kitMod.setCurrentKit(kitMod.kits[kitMod.kInitialKitIndex]);
 }
 
 function demoButtonURL(demoIndex) {
@@ -350,7 +223,7 @@ exports.initDrums = function(cmInstance) {
 
     // NOTE: THIS NOW RELIES ON THE MONKEYPATCH LIBRARY TO LOAD
     // IN CHROME AND SAFARI (until they release unprefixed)
-    context = new AudioContext();
+    context = new AudioContext(); exports.context = context;
 
     var finalMixNode;
     if (context.createDynamicsCompressor) {
@@ -462,8 +335,8 @@ function initButtons() {
     var elButton;
 
     for (i = 0; i < beatMod.loopLength; ++i) {
-        for (j = 0; j < kNumInstruments; j++) {
-                elButton = document.getElementById(instruments[j] + '_' + i);
+        for (j = 0; j < kitMod.kNumInstruments; j++) {
+                elButton = document.getElementById(kitMod.instruments[j] + '_' + i);
                 elButton.addEventListener("mousedown", handleButtonMouseDown, true);
         }
     }
@@ -488,11 +361,11 @@ function makeEffectList() {
 
 function makeKitList() {
     var elList = document.getElementById('kitlist');
-    var numKits = kitName.length;
+    var numKits = kitMod.kitName.length;
 
     for (var i = 0; i < numKits; i++) {
         var elItem = document.createElement('li');
-        elItem.innerHTML = kitNamePretty[i];
+        elItem.innerHTML = kitMod.kitNamePretty[i];
         elList.appendChild(elItem);
         elItem.addEventListener("mousedown", handleKitMouseDown, true);
     }
@@ -564,31 +437,31 @@ function schedule() {
 
         // Kick
         if (beatMod.theBeat.rhythm1[beatMod.rhythmIndex] && instrumentActive[0]) {
-            playNote(currentKit.kickBuffer, false, 0,0,-2, 0.5, volumes[beatMod.theBeat.rhythm1[beatMod.rhythmIndex]] * 1.0, kickPitch, contextPlayTime);
+            playNote(kitMod.currentKit.kickBuffer, false, 0,0,-2, 0.5, kitMod.volumes[beatMod.theBeat.rhythm1[beatMod.rhythmIndex]] * 1.0, kickPitch, contextPlayTime);
         }
 
         // Snare
         if (beatMod.theBeat.rhythm2[beatMod.rhythmIndex] && instrumentActive[1]) {
-            playNote(currentKit.snareBuffer, false, 0,0,-2, 1, volumes[beatMod.theBeat.rhythm2[beatMod.rhythmIndex]] * 0.6, snarePitch, contextPlayTime);
+            playNote(kitMod.currentKit.snareBuffer, false, 0,0,-2, 1, kitMod.volumes[beatMod.theBeat.rhythm2[beatMod.rhythmIndex]] * 0.6, snarePitch, contextPlayTime);
         }
 
         // Hihat
         if (beatMod.theBeat.rhythm3[beatMod.rhythmIndex] && instrumentActive[2]) {
             // Pan the hihat according to sequence position.
-            playNote(currentKit.hihatBuffer, true, 0.5*beatMod.rhythmIndex - 4, 0, -1.0, 1, volumes[beatMod.theBeat.rhythm3[beatMod.rhythmIndex]] * 0.7, hihatPitch, contextPlayTime);
+            playNote(kitMod.currentKit.hihatBuffer, true, 0.5*beatMod.rhythmIndex - 4, 0, -1.0, 1, kitMod.volumes[beatMod.theBeat.rhythm3[beatMod.rhythmIndex]] * 0.7, hihatPitch, contextPlayTime);
         }
 
         // Toms
         if (beatMod.theBeat.rhythm4[beatMod.rhythmIndex] && instrumentActive[3]) {
-            playNote(currentKit.tom1, false, 0,0,-2, 1, volumes[beatMod.theBeat.rhythm4[beatMod.rhythmIndex]] * 0.6, tom1Pitch, contextPlayTime);
+            playNote(kitMod.currentKit.tom1, false, 0,0,-2, 1, kitMod.volumes[beatMod.theBeat.rhythm4[beatMod.rhythmIndex]] * 0.6, tom1Pitch, contextPlayTime);
         }
 
         if (beatMod.theBeat.rhythm5[beatMod.rhythmIndex] && instrumentActive[4]) {
-            playNote(currentKit.tom2, false, 0,0,-2, 1, volumes[beatMod.theBeat.rhythm5[beatMod.rhythmIndex]] * 0.6, tom2Pitch, contextPlayTime);
+            playNote(kitMod.currentKit.tom2, false, 0,0,-2, 1, kitMod.volumes[beatMod.theBeat.rhythm5[beatMod.rhythmIndex]] * 0.6, tom2Pitch, contextPlayTime);
         }
 
         if (beatMod.theBeat.rhythm6[beatMod.rhythmIndex] && instrumentActive[5]) {
-            playNote(currentKit.tom3, false, 0,0,-2, 1, volumes[beatMod.theBeat.rhythm6[beatMod.rhythmIndex]] * 0.6, tom3Pitch, contextPlayTime);
+            playNote(kitMod.currentKit.tom3, false, 0,0,-2, 1, kitMod.volumes[beatMod.theBeat.rhythm6[beatMod.rhythmIndex]] * 0.6, tom3Pitch, contextPlayTime);
         }
 
 
@@ -605,22 +478,22 @@ function schedule() {
 function playDrum(noteNumber, velocity) {
     switch (noteNumber) {
         case 0x24:
-            playNote(currentKit.kickBuffer,  false, 0,0,-2,  0.5, (velocity / 127), kickPitch,  0);
+            playNote(kitMod.currentKit.kickBuffer,  false, 0,0,-2,  0.5, (velocity / 127), kickPitch,  0);
             break;
         case 0x26:
-            playNote(currentKit.snareBuffer, false, 0,0,-2,  1,   (velocity / 127), snarePitch, 0);
+            playNote(kitMod.currentKit.snareBuffer, false, 0,0,-2,  1,   (velocity / 127), snarePitch, 0);
             break;
         case 0x28:
-            playNote(currentKit.hihatBuffer, true,  0,0,-1.0,1,   (velocity / 127), hihatPitch, 0);
+            playNote(kitMod.currentKit.hihatBuffer, true,  0,0,-1.0,1,   (velocity / 127), hihatPitch, 0);
             break;
         case 0x2d:
-            playNote(currentKit.tom1,        false, 0,0,-2,  1,   (velocity / 127), tom1Pitch,  0);
+            playNote(kitMod.currentKit.tom1,        false, 0,0,-2,  1,   (velocity / 127), tom1Pitch,  0);
             break;
         case 0x2f:
-            playNote(currentKit.tom2,        false, 0,0,-2,  1,   (velocity / 127), tom2Pitch,  0);
+            playNote(kitMod.currentKit.tom2,        false, 0,0,-2,  1,   (velocity / 127), tom2Pitch,  0);
             break;
         case 0x32:
-            playNote(currentKit.tom3,        false, 0,0,-2,  1,   (velocity / 127), tom3Pitch,  0);
+            playNote(kitMod.currentKit.tom3,        false, 0,0,-2,  1,   (velocity / 127), tom3Pitch,  0);
             break;
         default:
             console.log("note:0x" + noteNumber.toString(16) );
@@ -770,7 +643,7 @@ function handleButtonMouseDown(event) {
 
     var elId = event.target.id;
     rhythmIndex = elId.substr(elId.indexOf('_') + 1, 2);
-    instrumentIndex = instruments.indexOf(elId.substr(0, elId.indexOf('_')));
+    instrumentIndex = kitMod.instruments.indexOf(elId.substr(0, elId.indexOf('_')));
 
     switch (instrumentIndex) {
         case 0: notes = beatMod.theBeat.rhythm1; break;
@@ -793,28 +666,28 @@ function handleButtonMouseDown(event) {
     if (newNoteValue) {
         switch(instrumentIndex) {
         case 0:  // Kick
-          playNote(currentKit.kickBuffer, false, 0,0,-2, 0.5 * beatMod.theBeat.effectMix, volumes[newNoteValue] * 1.0, kickPitch, 0);
+          playNote(kitMod.currentKit.kickBuffer, false, 0,0,-2, 0.5 * beatMod.theBeat.effectMix, kitMod.volumes[newNoteValue] * 1.0, kickPitch, 0);
           break;
 
         case 1:  // Snare
-          playNote(currentKit.snareBuffer, false, 0,0,-2, beatMod.theBeat.effectMix, volumes[newNoteValue] * 0.6, snarePitch, 0);
+          playNote(kitMod.currentKit.snareBuffer, false, 0,0,-2, beatMod.theBeat.effectMix, kitMod.volumes[newNoteValue] * 0.6, snarePitch, 0);
           break;
 
         case 2:  // Hihat
           // Pan the hihat according to sequence position.
-          playNote(currentKit.hihatBuffer, true, 0.5*rhythmIndex - 4, 0, -1.0, beatMod.theBeat.effectMix, volumes[newNoteValue] * 0.7, hihatPitch, 0);
+          playNote(kitMod.currentKit.hihatBuffer, true, 0.5*rhythmIndex - 4, 0, -1.0, beatMod.theBeat.effectMix, kitMod.volumes[newNoteValue] * 0.7, hihatPitch, 0);
           break;
 
         case 3:  // Tom 1
-          playNote(currentKit.tom1, false, 0,0,-2, beatMod.theBeat.effectMix, volumes[newNoteValue] * 0.6, tom1Pitch, 0);
+          playNote(kitMod.currentKit.tom1, false, 0,0,-2, beatMod.theBeat.effectMix, kitMod.volumes[newNoteValue] * 0.6, tom1Pitch, 0);
           break;
 
         case 4:  // Tom 2
-          playNote(currentKit.tom2, false, 0,0,-2, beatMod.theBeat.effectMix, volumes[newNoteValue] * 0.6, tom2Pitch, 0);
+          playNote(kitMod.currentKit.tom2, false, 0,0,-2, beatMod.theBeat.effectMix, kitMod.volumes[newNoteValue] * 0.6, tom2Pitch, 0);
           break;
 
         case 5:  // Tom 3
-          playNote(currentKit.tom3, false, 0,0,-2, beatMod.theBeat.effectMix, volumes[newNoteValue] * 0.6, tom3Pitch, 0);
+          playNote(kitMod.currentKit.tom3, false, 0,0,-2, beatMod.theBeat.effectMix, kitMod.volumes[newNoteValue] * 0.6, tom3Pitch, 0);
           break;
         }
     }
@@ -827,10 +700,10 @@ function handleKitComboMouseDown(event) {
 }
 
 function handleKitMouseDown(event) {
-    var index = kitNamePretty.indexOf(event.target.innerHTML);
+    var index = kitMod.kitNamePretty.indexOf(event.target.innerHTML);
     beatMod.setBeatKitIndex(index);
-    currentKit = kits[index];
-    document.getElementById('kitname').innerHTML = kitNamePretty[index];
+    kitMod.setCurrentKit(kitMod.kits[index]);
+    document.getElementById('kitname').innerHTML = kitMod.kitNamePretty[index];
 }
 
 function handleBodyMouseDown(event) {
@@ -994,8 +867,8 @@ function handleLoadOk(event) {
     beatMod.setBeat(JSON.parse(elTextarea.value));
 
     // Set drumkit
-    currentKit = kits[beatMod.theBeat.kitIndex];
-    document.getElementById('kitname').innerHTML = kitNamePretty[beatMod.theBeat.kitIndex];
+    kitMod.setCurrentKit(kitMod.kits[beatMod.theBeat.kitIndex]);
+    document.getElementById('kitname').innerHTML = kitMod.kitNamePretty[beatMod.theBeat.kitIndex];
 
     // Set effect
     setEffect(beatMod.theBeat.effectIndex);
@@ -1051,7 +924,7 @@ function loadBeat(beat) {
     handleStop();
 
     beatMod.setBeat(beatMod.cloneBeat(beat));
-    currentKit = kits[beatMod.theBeat.kitIndex];
+    kitMod.setCurrentKit(kitMod.kits[beatMod.theBeat.kitIndex]);
     setEffect(beatMod.theBeat.effectIndex);
 
     // apply values from sliders
@@ -1072,7 +945,7 @@ function loadBeat(beat) {
 
 function updateControls() {
     for (i = 0; i < beatMod.loopLength; ++i) {
-        for (j = 0; j < kNumInstruments; j++) {
+        for (j = 0; j < kitMod.kNumInstruments; j++) {
             switch (j) {
                 case 0: notes = beatMod.theBeat.rhythm1; break;
                 case 1: notes = beatMod.theBeat.rhythm2; break;
@@ -1086,7 +959,7 @@ function updateControls() {
         }
     }
 
-    document.getElementById('kitname').innerHTML = kitNamePretty[beatMod.theBeat.kitIndex];
+    document.getElementById('kitname').innerHTML = kitMod.kitNamePretty[beatMod.theBeat.kitIndex];
     document.getElementById('effectname').innerHTML = impulseResponseInfoList[beatMod.theBeat.effectIndex].name;
     document.getElementById('tempo').innerHTML = beatMod.theBeat.tempo;
     sliderSetPosition('swing_thumb', beatMod.theBeat.swingFactor);
