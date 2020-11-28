@@ -1,7 +1,4 @@
-
-
-//We pull this in on init, which allows us to grab code as the drum machine runs
-var codeMirrorInstance = null
+const synthMod = require('./synthesis')
 
 // Events
 // init() once the page has finished loading.
@@ -48,7 +45,7 @@ exports.setBeat = function(newBeat) {
 
 function cloneBeat(source) {
     var beat = new Object();
-    
+
     beat.kitIndex = source.kitIndex;
     beat.effectIndex = source.effectIndex;
     beat.tempo = source.tempo;
@@ -66,21 +63,10 @@ function cloneBeat(source) {
     beat.rhythm4 = source.rhythm4.slice(0);
     beat.rhythm5 = source.rhythm5.slice(0);
     beat.rhythm6 = source.rhythm6.slice(0);
-    
+
     return beat;
 }
 
-function isValidBeat(beat) {
-    
-    var valid = true;
-    for (i = 1; i <= 6; i++) {
-        valid = valid &&
-            Array.isArray(beat['rhythm'+i.toString()]) &&
-            beat['rhythm'+i.toString()].every((v) => v <=2 && v >=0);
-    }
-    console.log(valid);
-    return valid;
-}
 
 // theBeat is the object representing the current beat/groove
 // ... it is saved/loaded via JSON
@@ -153,10 +139,10 @@ function Kit(name) {
 
     this.instrumentCount = kNumInstruments;
     this.instrumentLoadCount = 0;
-    
+
     this.startedLoading = false;
     this.isLoaded = false;
-    
+
     this.demoIndex = -1;
 }
 
@@ -167,9 +153,9 @@ Kit.prototype.setDemoIndex = function(index) {
 Kit.prototype.load = function() {
     if (this.startedLoading)
         return;
-        
+
     this.startedLoading = true;
-        
+
     var pathName = this.pathName();
 
     var kickPath = pathName + "kick.wav";
@@ -253,7 +239,7 @@ function ImpulseResponse(url, index) {
     this.startedLoading = false;
     this.isLoaded_ = false;
     this.buffer = 0;
-    
+
     this.demoIndex = -1; // no demo
 }
 
@@ -268,7 +254,7 @@ ImpulseResponse.prototype.isLoaded = function() {
 function loadedImpulseResponse(buffer) {
     this.buffer = buffer;
     this.isLoaded_ = true;
-    
+
     if (this.demoIndex != -1) {
         beatDemo[this.demoIndex].setEffectLoaded();
     }
@@ -278,7 +264,7 @@ ImpulseResponse.prototype.load = function() {
     if (this.startedLoading) {
         return;
     }
-    
+
     this.startedLoading = true;
 
     // Load asynchronously
@@ -286,7 +272,7 @@ ImpulseResponse.prototype.load = function() {
     request.open("GET", this.url, true);
     request.responseType = "arraybuffer";
     this.request = request;
-    
+
     var asset = this;
 
     request.onload = function() {
@@ -302,39 +288,39 @@ function startLoadingAssets() {
     for (i = 0; i < impulseResponseInfoList.length; i++) {
         impulseResponseList[i] = new ImpulseResponse(impulseResponseInfoList[i].url, i);
     }
-    
+
     // Initialize drum kits
     var numKits = kitName.length;
     kits = new Array(numKits);
     for (var i  = 0; i < numKits; i++) {
         kits[i] = new Kit(kitName[i]);
-    }  
-    
+    }
+
     // Start loading the assets used by the presets first, in order of the presets.
     for (var demoIndex = 0; demoIndex < 5; ++demoIndex) {
         var effect = impulseResponseList[beatDemo[demoIndex].effectIndex];
         var kit = kits[beatDemo[demoIndex].kitIndex];
-        
+
         // These effects and kits will keep track of a particular demo, so we can change
         // the loading status in the UI.
         effect.setDemoIndex(demoIndex);
         kit.setDemoIndex(demoIndex);
-        
+
         effect.load();
         kit.load();
     }
-    
+
     // Then load the remaining assets.
     // Note that any assets which have previously started loading will be skipped over.
     for (var i  = 0; i < numKits; i++) {
         kits[i].load();
-    }  
+    }
 
     // Start at 1 to skip "No Effect"
     for (i = 1; i < impulseResponseInfoList.length; i++) {
         impulseResponseList[i].load();
     }
-    
+
     // Setup initial drumkit
     currentKit = kits[kInitialKitIndex];
 }
@@ -353,7 +339,7 @@ function showDemoAvailable(demoIndex /* zero-based */) {
     var demoName = "demo" + n;
     var demo = document.getElementById(demoName);
     demo.src = url;
-    
+
     // Enable play button and assign it to demo 2.
     if (demoIndex == 1) {
         showPlayAvailable();
@@ -371,7 +357,7 @@ function showPlayAvailable() {
 }
 
 exports.initDrums = function(cmInstance) {
-    codeMirrorInstance = cmInstance;
+    synthMod.setCMInstance(cmInstance);
 
     // Let the beat demos know when all of their assets have been loaded.
     // Add some new methods to support this.
@@ -392,7 +378,7 @@ exports.initDrums = function(cmInstance) {
 
         beatDemo[i].checkIsLoaded = function() {
             if (this.isLoaded()) {
-                showDemoAvailable(this.index); 
+                showDemoAvailable(this.index);
             }
         };
 
@@ -400,7 +386,7 @@ exports.initDrums = function(cmInstance) {
             return this.isKitLoaded && this.isEffectLoaded;
         };
     }
-        
+
     startLoadingAssets();
 
     // NOTE: THIS NOW RELIES ON THE MONKEYPATCH LIBRARY TO LOAD
@@ -424,7 +410,7 @@ exports.initDrums = function(cmInstance) {
     filterNode.frequency.value = 0.5 * context.sampleRate;
     filterNode.Q.value = 1;
     filterNode.connect(finalMixNode);
-    
+
     // Create master volume.
     masterGainNode = context.createGain();
     masterGainNode.gain.value = 0.7; // reduce overall volume to avoid clipping
@@ -513,7 +499,7 @@ function initControls() {
     document.getElementById('tempodec').addEventListener('mousedown', tempoDecrease, true);
 }
 
-function initButtons() {        
+function initButtons() {
     var elButton;
 
     for (i = 0; i < loopLength; ++i) {
@@ -528,11 +514,11 @@ function makeEffectList() {
     var elList = document.getElementById('effectlist');
     var numEffects = impulseResponseInfoList.length;
 
-    
+
     var elItem = document.createElement('li');
     elItem.innerHTML = 'None';
     elItem.addEventListener("mousedown", handleEffectMouseDown, true);
-    
+
     for (var i = 0; i < numEffects; i++) {
         var elItem = document.createElement('li');
         elItem.innerHTML = impulseResponseInfoList[i].name;
@@ -544,7 +530,7 @@ function makeEffectList() {
 function makeKitList() {
     var elList = document.getElementById('kitlist');
     var numKits = kitName.length;
-    
+
     for (var i = 0; i < numKits; i++) {
         var elItem = document.createElement('li');
         elItem.innerHTML = kitNamePretty[i];
@@ -553,70 +539,10 @@ function makeKitList() {
     }
 }
 
-/// ------- BEGIN SYNTH CODE -------
-// TODO refactor to new file - should stay on local side to allow it to work without a connection
-// just dont get synthesis with no connection, but everythign else should work
-
-function addLineForPointChange(currentCode,newNoteValue, rhythmIndex, instrumentIndex) {
-    //generate new line for changed note
-    newLine = "  b.rhythm" + (instrumentIndex+1) + "[" + rhythmIndex + "] = " + newNoteValue + ";\n"
-    existingLineLoc = currentCode.indexOf("  b.rhythm" + (instrumentIndex+1) + "[" + rhythmIndex + "] =")
-    //if code has a line explicitly changed this point, then we update its value
-    if (existingLineLoc >=0) {
-        var lineChPos = codeMirrorInstance.posFromIndex(existingLineLoc);
-        var endReplacePos = JSON.parse(JSON.stringify(lineChPos));
-        endReplacePos.ch = newLine.length+1;
-        codeMirrorInstance
-            .replaceRange(newLine.slice(0, -1), lineChPos, endReplacePos);
-    }
-    //else code currently has no effect on manually changed pattern, so we can just add a line
-    else { 
-        codeMirrorInstance.replaceRange(newLine, {line: codeMirrorInstance.lineCount()-2, ch: 0})
-    }
-    return codeMirrorInstance.getValue();
-}
-
-function synthCode(newNoteValue, rhythmIndex, instrumentIndex) {
-    //get current code
-    var currentCode = codeMirrorInstance.getValue()
-    
-    var updatedCode = addLineForPointChange(currentCode,newNoteValue, rhythmIndex, instrumentIndex)
-
-    socket.emit('code', {"code":updatedCode, "beat":theBeat});
-    // TODO if we get new code any time, put it in the "proposed" box (or just replace existing code)
-     
-    socket.on('newCode', function(c) {
-        codeMirrorInstance.replaceRange(c, {line: 2, ch:0}, {line: codeMirrorInstance.lineCount()-2, ch: 0});
-    });
-}
-
-function updatePatternFromCode(){
-    //every time we advance a time step, pull latest code and update beat object
-    var updatedCode = codeMirrorInstance.getValue()
-    try {
-        //TODO if(codeChanged) {
-        let f = new Function("theBeat", "rhythmIndex", '"use strict"; ' + updatedCode + ' return (genBeat(theBeat, rhythmIndex));');
-        let newBeat = f(cloneBeat(theBeat), rhythmIndex);
-        for (i = 1; i <= 6; i++) {
-            newBeat['rhythm'+i.toString()] = newBeat['rhythm'+i.toString()].map((note) => {if (Number.isNaN(note)) {return 0;} else {return note}});
-        }
-        if (isValidBeat(newBeat)) { // && theBeat != newBeat){
-            theBeat = newBeat;
-            redrawAllNotes();
-        }
-    }
-    catch(err) {
-
-    }
-}
-
-
-
-//-------- END SYNTH CODE ----------
 
 function advanceNote() {
-    
-    updatePatternFromCode();
+
+    synthMod.updatePatternFromCode();
 
     // Advance time by a 16th note...
     var secondsPerBeat = 60.0 / theBeat.tempo;
@@ -626,7 +552,7 @@ function advanceNote() {
         rhythmIndex = 0;
     }
 
-        // apply swing    
+        // apply swing
     if (rhythmIndex % 2) {
         noteTime += (0.25 + kMaxSwing * theBeat.swingFactor) * secondsPerBeat;
     } else {
@@ -676,7 +602,7 @@ function schedule() {
     while (noteTime < currentTime + 0.120) {
         // Convert noteTime to context time.
         var contextPlayTime = noteTime + startTime;
-        
+
         // Kick
         if (theBeat.rhythm1[rhythmIndex] && instrumentActive[0]) {
             playNote(currentKit.kickBuffer, false, 0,0,-2, 0.5, volumes[theBeat.rhythm1[rhythmIndex]] * 1.0, kickPitch, contextPlayTime);
@@ -693,7 +619,7 @@ function schedule() {
             playNote(currentKit.hihatBuffer, true, 0.5*rhythmIndex - 4, 0, -1.0, 1, volumes[theBeat.rhythm3[rhythmIndex]] * 0.7, hihatPitch, contextPlayTime);
         }
 
-        // Toms    
+        // Toms
         if (theBeat.rhythm4[rhythmIndex] && instrumentActive[3]) {
             playNote(currentKit.tom1, false, 0,0,-2, 1, volumes[theBeat.rhythm4[rhythmIndex]] * 0.6, tom1Pitch, contextPlayTime);
         }
@@ -706,7 +632,7 @@ function schedule() {
             playNote(currentKit.tom3, false, 0,0,-2, 1, volumes[theBeat.rhythm6[rhythmIndex]] * 0.6, tom3Pitch, contextPlayTime);
         }
 
-        
+
         // Attempt to synchronize drawing time with sound
         if (noteTime != lastDrawTime) {
             lastDrawTime = noteTime;
@@ -759,14 +685,14 @@ function handleSliderMouseDown(event) {
     // calculate offset of mousedown on slider
     var el = event.target;
     if (mouseCapture == 'swing_thumb') {
-        var thumbX = 0;    
+        var thumbX = 0;
         do {
             thumbX += el.offsetLeft;
         } while (el = el.offsetParent);
 
         mouseCaptureOffset = event.pageX - thumbX;
     } else {
-        var thumbY = 0;    
+        var thumbY = 0;
         do {
             thumbY += el.offsetTop;
         } while (el = el.offsetParent);
@@ -786,7 +712,7 @@ function handleSliderDoubleClick(event) {
 
 function handleMouseMove(event) {
     if (!mouseCapture) return;
-    
+
     var elThumb = document.getElementById(mouseCapture);
     var elTrack = elThumb.parentNode;
 
@@ -829,12 +755,12 @@ function handleMouseUp() {
 
 function sliderSetValue(slider, value) {
     var pitchRate = Math.pow(2.0, 2.0 * (value - 0.5));
-    
+
     switch(slider) {
     case 'effect_thumb':
         // Change the volume of the convolution effect.
         theBeat.effectMix = value;
-        setEffectLevel(theBeat);            
+        setEffectLevel(theBeat);
         break;
     case 'kick_thumb':
         theBeat.kickPitchVal = value;
@@ -862,7 +788,7 @@ function sliderSetValue(slider, value) {
         break;
     case 'swing_thumb':
         theBeat.swingFactor = value;
-        break; 
+        break;
     }
 }
 
@@ -887,14 +813,14 @@ function sliderSetPosition(slider, value) {
 
 function handleButtonMouseDown(event) {
     var notes = theBeat.rhythm1;
-    
+
     var instrumentIndex;
     var rhythmIndex;
 
     var elId = event.target.id;
     rhythmIndex = elId.substr(elId.indexOf('_') + 1, 2);
     instrumentIndex = instruments.indexOf(elId.substr(0, elId.indexOf('_')));
-        
+
     switch (instrumentIndex) {
         case 0: notes = theBeat.rhythm1; break;
         case 1: notes = theBeat.rhythm2; break;
@@ -912,7 +838,7 @@ function handleButtonMouseDown(event) {
         showCorrectNote( rhythmIndex, notes[rhythmIndex] );
 
     drawNote(notes[rhythmIndex], rhythmIndex, instrumentIndex);
-  
+
     if (newNoteValue) {
         switch(instrumentIndex) {
         case 0:  // Kick
@@ -928,21 +854,21 @@ function handleButtonMouseDown(event) {
           playNote(currentKit.hihatBuffer, true, 0.5*rhythmIndex - 4, 0, -1.0, theBeat.effectMix, volumes[newNoteValue] * 0.7, hihatPitch, 0);
           break;
 
-        case 3:  // Tom 1   
+        case 3:  // Tom 1
           playNote(currentKit.tom1, false, 0,0,-2, theBeat.effectMix, volumes[newNoteValue] * 0.6, tom1Pitch, 0);
           break;
 
-        case 4:  // Tom 2   
+        case 4:  // Tom 2
           playNote(currentKit.tom2, false, 0,0,-2, theBeat.effectMix, volumes[newNoteValue] * 0.6, tom2Pitch, 0);
           break;
 
-        case 5:  // Tom 3   
+        case 5:  // Tom 3
           playNote(currentKit.tom3, false, 0,0,-2, theBeat.effectMix, volumes[newNoteValue] * 0.6, tom3Pitch, 0);
           break;
         }
     }
 
-    synthCode(newNoteValue, rhythmIndex, instrumentIndex)
+    synthMod.synthCode(newNoteValue, rhythmIndex, instrumentIndex)
 }
 
 function handleKitComboMouseDown(event) {
@@ -966,13 +892,13 @@ function handleBodyMouseDown(event) {
             event.stopPropagation();
         }
     }
-    
+
     if (elEffectcombo.classList.contains('active') && !isDescendantOfId(event.target, 'effectcombo')) {
         elEffectcombo.classList.remove('active');
         if (!isDescendantOfId(event.target, 'kitcombo_container')) {
             event.stopPropagation();
         }
-    }    
+    }
 }
 
 function isDescendantOfId(el, id) {
@@ -1016,7 +942,7 @@ function setEffect(index) {
 
     theBeat.effectIndex = index;
     effectDryMix = impulseResponseInfoList[index].dryMix;
-    effectWetMix = impulseResponseInfoList[index].wetMix;            
+    effectWetMix = impulseResponseInfoList[index].wetMix;
     convolver.buffer = impulseResponseList[index].buffer;
 
   // Hack - if the effect is meant to be entirely wet (not unprocessed signal)
@@ -1031,7 +957,7 @@ function setEffect(index) {
     document.getElementById('effectname').innerHTML = impulseResponseInfoList[index].name;
 }
 
-function setEffectLevel() {        
+function setEffectLevel() {
     // Factor in both the preset's effect level and the blending level (effectWetMix) stored in the effect itself.
     effectLevelNode.gain.value = theBeat.effectMix * effectWetMix;
 }
@@ -1039,25 +965,25 @@ function setEffectLevel() {
 
 function handleDemoMouseDown(event) {
     var loaded = false;
-    
+
     switch(event.target.id) {
         case 'demo1':
-            loaded = loadBeat(beatDemo[0]);    
+            loaded = loadBeat(beatDemo[0]);
             break;
         case 'demo2':
-            loaded = loadBeat(beatDemo[1]);    
+            loaded = loadBeat(beatDemo[1]);
             break;
         case 'demo3':
-            loaded = loadBeat(beatDemo[2]);    
+            loaded = loadBeat(beatDemo[2]);
             break;
         case 'demo4':
-            loaded = loadBeat(beatDemo[3]);    
+            loaded = loadBeat(beatDemo[3]);
             break;
         case 'demo5':
-            loaded = loadBeat(beatDemo[4]);    
+            loaded = loadBeat(beatDemo[4]);
             break;
     }
-    
+
     if (loaded)
         handlePlay();
 }
@@ -1074,7 +1000,7 @@ function handlePlay(event) {
         // turn off the play button
         midiOut.send( [0x80, 3, 32] );
         // light up the stop button
-        midiOut.send( [0x90, 7, 1] );        
+        midiOut.send( [0x90, 7, 1] );
     }
 }
 
@@ -1163,7 +1089,7 @@ function toggleLoadContainer() {
 
 function handleReset(event) {
     handleStop();
-    loadBeat(beatReset);    
+    loadBeat(beatReset);
 }
 
 function loadBeat(beat) {
@@ -1176,7 +1102,7 @@ function loadBeat(beat) {
     theBeat = cloneBeat(beat);
     currentKit = kits[theBeat.kitIndex];
     setEffect(theBeat.effectIndex);
-    
+
     // apply values from sliders
     sliderSetValue('effect_thumb', theBeat.effectMix);
     sliderSetValue('kick_thumb', theBeat.kickPitchVal);
@@ -1217,12 +1143,12 @@ function updateControls() {
     sliderSetPosition('kick_thumb', theBeat.kickPitchVal);
     sliderSetPosition('snare_thumb', theBeat.snarePitchVal);
     sliderSetPosition('hihat_thumb', theBeat.hihatPitchVal);
-    sliderSetPosition('tom1_thumb', theBeat.tom1PitchVal);        
+    sliderSetPosition('tom1_thumb', theBeat.tom1PitchVal);
     sliderSetPosition('tom2_thumb', theBeat.tom2PitchVal);
     sliderSetPosition('tom3_thumb', theBeat.tom3PitchVal);
 }
 
-function drawNote(draw, xindex, yindex) {    
+function drawNote(draw, xindex, yindex) {
     var elButton = document.getElementById(instruments[yindex] + '_' + xindex);
     switch (draw) {
         case 0: elButton.src = 'images/button_off.png'; break;
@@ -1241,7 +1167,7 @@ function redrawAllNotes() {
                 drawNote(theBeat['rhythm'+(y+1).toString()][x], x, y);
             }
         }
-    }    
+    }
 }
 
 function drawPlayhead(xindex) {
@@ -1249,7 +1175,7 @@ function drawPlayhead(xindex) {
 
     var elNew = document.getElementById('LED_' + xindex);
     var elOld = document.getElementById('LED_' + lastIndex);
-    
+
     elNew.src = 'images/LED_on.png';
     elOld.src = 'images/LED_off.png';
 
