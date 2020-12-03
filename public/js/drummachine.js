@@ -2,6 +2,7 @@ const beatMod = require('./beat')
 const synthMod = require('./synthesis')
 const drawMod = require('./draw.js')
 const kitMod = require('./kit')
+const impulseMod = require('./impulse')
 
 // Events
 // init() once the page has finished loading.
@@ -37,92 +38,19 @@ var mouseCaptureOffset = 0;
 var noteTime = 0.0;
 
 
-var impulseResponseInfoList = [
-    // Impulse responses - each one represents a unique linear effect.
-    {"name":"No Effect", "url":"undefined", "dryMix":1, "wetMix":0},
-    {"name":"Spreader 2", "url":"impulse-responses/noise-spreader1.wav",        "dryMix":1, "wetMix":1},
-    {"name":"Spring Reverb", "url":"impulse-responses/feedback-spring.wav",     "dryMix":1, "wetMix":1},
-    {"name":"Space Oddity", "url":"impulse-responses/filter-rhythm3.wav",       "dryMix":1, "wetMix":0.7},
-    {"name":"Huge Reverse", "url":"impulse-responses/matrix6-backwards.wav",    "dryMix":0, "wetMix":0.7},
-    {"name":"Telephone Filter", "url":"impulse-responses/filter-telephone.wav", "dryMix":0, "wetMix":1.2},
-    {"name":"Lopass Filter", "url":"impulse-responses/filter-lopass160.wav",    "dryMix":0, "wetMix":0.5},
-    {"name":"Hipass Filter", "url":"impulse-responses/filter-hipass5000.wav",   "dryMix":0, "wetMix":4.0},
-    {"name":"Comb 1", "url":"impulse-responses/comb-saw1.wav",                  "dryMix":0, "wetMix":0.7},
-    {"name":"Comb 2", "url":"impulse-responses/comb-saw2.wav",                  "dryMix":0, "wetMix":1.0},
-    {"name":"Cosmic Ping", "url":"impulse-responses/cosmic-ping-long.wav",      "dryMix":0, "wetMix":0.9},
-    {"name":"Kitchen", "url":"impulse-responses/house-impulses/kitchen-true-stereo.wav", "dryMix":1, "wetMix":1},
-    {"name":"Living Room", "url":"impulse-responses/house-impulses/dining-living-true-stereo.wav", "dryMix":1, "wetMix":1},
-    {"name":"Living-Bedroom", "url":"impulse-responses/house-impulses/living-bedroom-leveled.wav", "dryMix":1, "wetMix":1},
-    {"name":"Dining-Far-Kitchen", "url":"impulse-responses/house-impulses/dining-far-kitchen.wav", "dryMix":1, "wetMix":1},
-    {"name":"Medium Hall 1", "url":"impulse-responses/matrix-reverb2.wav",      "dryMix":1, "wetMix":1},
-    {"name":"Medium Hall 2", "url":"impulse-responses/matrix-reverb3.wav",      "dryMix":1, "wetMix":1},
-    {"name":"Peculiar", "url":"impulse-responses/peculiar-backwards.wav",       "dryMix":1, "wetMix":1},
-    {"name":"Backslap", "url":"impulse-responses/backslap1.wav",                "dryMix":1, "wetMix":1},
-    {"name":"Diffusor", "url":"impulse-responses/diffusor3.wav",                "dryMix":1, "wetMix":1},
-    {"name":"Huge", "url":"impulse-responses/matrix-reverb6.wav",               "dryMix":1, "wetMix":0.7},
-]
-
-var impulseResponseList = 0;
-
-function ImpulseResponse(url, index) {
-    this.url = url;
-    this.index = index;
-    this.startedLoading = false;
-    this.isLoaded_ = false;
-    this.buffer = 0;
-
-    this.demoIndex = -1; // no demo
-}
-
-ImpulseResponse.prototype.setDemoIndex = function(index) {
-    this.demoIndex = index;
-}
-
-ImpulseResponse.prototype.isLoaded = function() {
-    return this.isLoaded_;
-}
-
-function loadedImpulseResponse(buffer) {
-    this.buffer = buffer;
-    this.isLoaded_ = true;
-
-    if (this.demoIndex != -1) {
-        beatMod.beatDemo[this.demoIndex].setEffectLoaded();
-    }
-}
-
-ImpulseResponse.prototype.load = function() {
-    if (this.startedLoading) {
-        return;
-    }
-
-    this.startedLoading = true;
-
-    // Load asynchronously
-    var request = new XMLHttpRequest();
-    request.open("GET", this.url, true);
-    request.responseType = "arraybuffer";
-    this.request = request;
-
-    var asset = this;
-
-    request.onload = function() {
-        context.decodeAudioData(request.response, loadedImpulseResponse.bind(asset) );
-    }
-
-    request.send();
-}
 
 function startLoadingAssets() {
-    impulseResponseList = new Array();
 
-    for (i = 0; i < impulseResponseInfoList.length; i++) {
-        impulseResponseList[i] = new ImpulseResponse(impulseResponseInfoList[i].url, i);
+    let tmp = new Array();
+
+    for (i = 0; i < impulseMod.impulseResponseInfoList.length; i++) {
+        tmp[i] = new impulseMod.ImpulseResponse(impulseMod.impulseResponseInfoList[i].url, i);
     }
+    impulseMod.setImpulseResponseList(tmp);
 
     // Initialize drum kits
     var numKits = kitMod.kitName.length;
-    let tmp = new Array(numKits);
+    tmp = new Array(numKits);
     for (var i  = 0; i < numKits; i++) {
         tmp[i] = new kitMod.Kit(kitMod.kitName[i]);
     }
@@ -130,7 +58,7 @@ function startLoadingAssets() {
 
     // Start loading the assets used by the presets first, in order of the presets.
     for (var demoIndex = 0; demoIndex < 5; ++demoIndex) {
-        var effect = impulseResponseList[beatMod.beatDemo[demoIndex].effectIndex];
+        var effect = impulseMod.impulseResponseList[beatMod.beatDemo[demoIndex].effectIndex];
         var kit = kitMod.kits[beatMod.beatDemo[demoIndex].kitIndex];
 
         // These effects and kits will keep track of a particular demo, so we can change
@@ -149,8 +77,8 @@ function startLoadingAssets() {
     }
 
     // Start at 1 to skip "No Effect"
-    for (i = 1; i < impulseResponseInfoList.length; i++) {
-        impulseResponseList[i].load();
+    for (i = 1; i < impulseMod.impulseResponseInfoList.length; i++) {
+        impulseMod.impulseResponseList[i].load();
     }
 
     // Setup initial drumkit
@@ -344,7 +272,7 @@ function initButtons() {
 
 function makeEffectList() {
     var elList = document.getElementById('effectlist');
-    var numEffects = impulseResponseInfoList.length;
+    var numEffects = impulseMod.impulseResponseInfoList.length;
 
 
     var elItem = document.createElement('li');
@@ -353,7 +281,7 @@ function makeEffectList() {
 
     for (var i = 0; i < numEffects; i++) {
         var elItem = document.createElement('li');
-        elItem.innerHTML = impulseResponseInfoList[i].name;
+        elItem.innerHTML = impulseMod.impulseResponseInfoList[i].name;
         elList.appendChild(elItem);
         elItem.addEventListener("mousedown", handleEffectMouseDown, true);
     }
@@ -744,8 +672,8 @@ function handleEffectComboMouseDown(event) {
 }
 
 function handleEffectMouseDown(event) {
-    for (var i = 0; i < impulseResponseInfoList.length; ++i) {
-        if (impulseResponseInfoList[i].name == event.target.innerHTML) {
+    for (var i = 0; i < impulseMod.impulseResponseInfoList.length; ++i) {
+        if (impulseMod.impulseResponseInfoList[i].name == event.target.innerHTML) {
 
             // Hack - if effect is turned all the way down - turn up effect slider.
             // ... since they just explicitly chose an effect from the list.
@@ -759,15 +687,15 @@ function handleEffectMouseDown(event) {
 }
 
 function setEffect(index) {
-    if (index > 0 && !impulseResponseList[index].isLoaded()) {
+    if (index > 0 && !impulseMod.impulseResponseList[index].isLoaded()) {
         alert('Sorry, this effect is still loading.  Try again in a few seconds :)');
         return;
     }
 
     beatMod.setBeatEffectIndex(index)
-    effectDryMix = impulseResponseInfoList[index].dryMix;
-    effectWetMix = impulseResponseInfoList[index].wetMix;
-    convolver.buffer = impulseResponseList[index].buffer;
+    effectDryMix = impulseMod.impulseResponseInfoList[index].dryMix;
+    effectWetMix = impulseMod.impulseResponseInfoList[index].wetMix;
+    convolver.buffer = impulseMod.impulseResponseList[index].buffer;
 
   // Hack - if the effect is meant to be entirely wet (not unprocessed signal)
   // then put the effect level all the way up.
@@ -778,7 +706,7 @@ function setEffect(index) {
     sliderSetValue('effect_thumb', beatMod.theBeat.effectMix);
     updateControls();
 
-    document.getElementById('effectname').innerHTML = impulseResponseInfoList[index].name;
+    document.getElementById('effectname').innerHTML = impulseMod.impulseResponseInfoList[index].name;
 }
 
 function setEffectLevel() {
@@ -960,7 +888,7 @@ function updateControls() {
     }
 
     document.getElementById('kitname').innerHTML = kitMod.kitNamePretty[beatMod.theBeat.kitIndex];
-    document.getElementById('effectname').innerHTML = impulseResponseInfoList[beatMod.theBeat.effectIndex].name;
+    document.getElementById('effectname').innerHTML = impulseMod.impulseResponseInfoList[beatMod.theBeat.effectIndex].name;
     document.getElementById('tempo').innerHTML = beatMod.theBeat.tempo;
     sliderSetPosition('swing_thumb', beatMod.theBeat.swingFactor);
     sliderSetPosition('effect_thumb', beatMod.theBeat.effectMix);
