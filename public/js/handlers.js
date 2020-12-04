@@ -7,7 +7,6 @@ const playMod = require('./play')
 const slidersMod = require('./sliders')
 const contextMod = require('./context')
 
-const drums = require('./drummachine')
 
 var timerWorker = null; // Worker thread to send us scheduling messages.
 
@@ -220,25 +219,53 @@ function handleEffectMouseDown(event) {
 }
 
 
+function loadBeat(beat) {
+    // Check that assets are loaded.
+    if (beat != beatMod.beatReset && !beat.isLoaded())
+        return false;
+
+    handleStop();
+
+    beatMod.setBeat(beatMod.cloneBeat(beat));
+    kitMod.setCurrentKit(kitMod.kits[beatMod.theBeat.kitIndex]);
+    impulseMod.setEffect(beatMod.theBeat.effectIndex);
+    drawMod.updateControls();
+
+    // apply values from sliders
+    slidersMod.sliderSetValue('effect_thumb', beatMod.theBeat.effectMix);
+    slidersMod.sliderSetValue('kick_thumb', beatMod.theBeat.kickPitchVal);
+    slidersMod.sliderSetValue('snare_thumb', beatMod.theBeat.snarePitchVal);
+    slidersMod.sliderSetValue('hihat_thumb', beatMod.theBeat.hihatPitchVal);
+    slidersMod.sliderSetValue('tom1_thumb', beatMod.theBeat.tom1PitchVal);
+    slidersMod.sliderSetValue('tom2_thumb', beatMod.theBeat.tom2PitchVal);
+    slidersMod.sliderSetValue('tom3_thumb', beatMod.theBeat.tom3PitchVal);
+    slidersMod.sliderSetValue('swing_thumb', beatMod.theBeat.swingFactor);
+
+    drawMod.updateControls();
+    setActiveInstrument(0);
+
+    return true;
+}
+
 
 function handleDemoMouseDown(event) {
     var loaded = false;
 
     switch(event.target.id) {
         case 'demo1':
-            loaded = drums.loadBeat(beatMod.beatDemo[0]);
+            loaded = loadBeat(beatMod.beatDemo[0]);
             break;
         case 'demo2':
-            loaded = drums.loadBeat(beatMod.beatDemo[1]);
+            loaded = loadBeat(beatMod.beatDemo[1]);
             break;
         case 'demo3':
-            loaded = drums.loadBeat(beatMod.beatDemo[2]);
+            loaded = loadBeat(beatMod.beatDemo[2]);
             break;
         case 'demo4':
-            loaded = drums.loadBeat(beatMod.beatDemo[3]);
+            loaded = loadBeat(beatMod.beatDemo[3]);
             break;
         case 'demo5':
-            loaded = drums.loadBeat(beatMod.beatDemo[4]);
+            loaded = loadBeat(beatMod.beatDemo[4]);
             break;
     }
 
@@ -348,7 +375,7 @@ function toggleLoadContainer() {
 
 function handleReset(event) {
     handleStop();
-    drums.loadBeat(beatMod.beatReset);
+    loadBeat(beatMod.beatReset);
 }
 
 
@@ -377,6 +404,7 @@ exports.handleLoad = handleLoad;
 exports.handleLoadOk = handleLoadOk;
 exports.handleLoadCancel = handleLoadCancel;
 exports.handleReset = handleReset;
+exports.loadBeat = loadBeat;
 
 exports.setTimerWorker = setTimerWorker;
 
