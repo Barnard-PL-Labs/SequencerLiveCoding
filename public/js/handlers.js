@@ -5,6 +5,7 @@ const synthMod = require('./synthesis')
 const impulseMod = require('./impulse')
 const playMod = require('./play')
 const slidersMod = require('./sliders')
+const contextMod = require('./context')
 
 const drums = require('./drummachine')
 
@@ -211,7 +212,8 @@ function handleEffectMouseDown(event) {
             if (beatMod.theBeat.effectMix == 0)
                 beatMod.setBeatEffectMix(0.5);
 
-            drums.setEffect(i);
+            impulseMod.setEffect(i);
+            drawMod.updateControls();
             break;
         }
     }
@@ -246,7 +248,7 @@ function handleDemoMouseDown(event) {
 
 function handlePlay(event) {
     playMod.setNoteTime(0.0);
-    beatMod.setStartTime(drums.context.currentTime + 0.005);
+    beatMod.setStartTime(contextMod.context.currentTime + 0.005);
     playMod.schedule();
     timerWorker.postMessage("start");
 
@@ -303,10 +305,11 @@ function handleLoadOk(event) {
     document.getElementById('kitname').innerHTML = kitMod.kitNamePretty[beatMod.theBeat.kitIndex];
 
     // Set effect
-    drums.setEffect(beatMod.theBeat.effectIndex);
+    impulseMod.setEffect(beatMod.theBeat.effectIndex);
+    drawMod.updateControls();
 
     // Change the volume of the convolution effect.
-    drums.setEffectLevel(beatMod.theBeat);
+    contextMod.setEffectLevel(beatMod.theBeat);
 
     // Apply values from sliders
     slidersMod.sliderSetValue('effect_thumb', beatMod.theBeat.effectMix);

@@ -1,7 +1,7 @@
 const beatMod = require('./beat')
 const kitMod = require('./kit')
+const contextMod = require('./context')
 
-const drums = require('./drummachine')
 
 function sliderSetValue(slider, value) {
     var pitchRate = Math.pow(2.0, 2.0 * (value - 0.5));
@@ -10,7 +10,7 @@ function sliderSetValue(slider, value) {
     case 'effect_thumb':
         // Change the volume of the convolution effect.
         beatMod.setBeatEffectMix(value);
-        drums.setEffectLevel(beatMod.theBeat);
+        contextMod.setEffectLevel(beatMod.theBeat);
         break;
     case 'kick_thumb':
         beatMod.setBeatKickPitchVal(value);

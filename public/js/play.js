@@ -3,8 +3,10 @@ const synthMod = require('./synthesis')
 const drawMod = require('./draw')
 const kitMod = require('./kit')
 const impulseMod = require('./impulse')
+const contextMod = require('./context')
 
 const drums = require('./drummachine')
+
 
 
 var noteTime = 0.0;
@@ -36,14 +38,14 @@ function advanceNote() {
 
 function playNote(buffer, pan, x, y, z, sendGain, mainGain, playbackRate, noteTime) {
     // Create the note
-    var voice = drums.context.createBufferSource();
+    var voice = contextMod.context.createBufferSource();
     voice.buffer = buffer;
     voice.playbackRate.value = playbackRate;
 
     // Optionally, connect to a panner
     var finalNode;
     if (pan) {
-        var panner = drums.context.createPanner();
+        var panner = contextMod.context.createPanner();
         panner.panningModel = "HRTF";
         panner.setPosition(x, y, z);
         voice.connect(panner);
@@ -53,22 +55,22 @@ function playNote(buffer, pan, x, y, z, sendGain, mainGain, playbackRate, noteTi
     }
 
     // Connect to dry mix
-    var dryGainNode = drums.context.createGain();
-    dryGainNode.gain.value = mainGain * impulseMod.effectDryMix;
+    var dryGainNode = contextMod.context.createGain();
+    dryGainNode.gain.value = mainGain * contextMod.effectDryMix;
     finalNode.connect(dryGainNode);
-    dryGainNode.connect(drums.masterGainNode);
+    contextMod.connectNodes(dryGainNode, contextMod.masterGainNode);
 
     // Connect to wet mix
-    var wetGainNode = drums.context.createGain();
+    var wetGainNode = contextMod.context.createGain();
     wetGainNode.gain.value = sendGain;
     finalNode.connect(wetGainNode);
-    wetGainNode.connect(drums.convolver);
+    contextMod.connectNodes(wetGainNode, contextMod.convolver);
 
     voice.start(noteTime);
 }
 
 function schedule() {
-    var currentTime = drums.context.currentTime;
+    var currentTime = contextMod.context.currentTime;
 
     // The sequence starts at startTime, so normalize currentTime so that it's 0 at the start of the sequence.
     currentTime -= beatMod.startTime;

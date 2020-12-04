@@ -1,5 +1,6 @@
 const beatMod = require('./beat')
-const drums = require('./drummachine')
+const contextMod = require('./context')
+const slidersMod = require('./sliders')
 
 
 var impulseResponseInfoList = [
@@ -34,26 +35,7 @@ function setImpulseResponseList (lst) {
   exports.impulseResponseList = impulseResponseList;
 }
 
-// function setImpulseResponseList_i (i, response) {
-//   impulseResponseList[i] =
-//   exports.impulseResponseList = impulseResponseList;
-// }
 
-
-// Each effect impulse response has a specific overall desired dry and wet volume.
-// For example in the telephone filter, it's necessary to make the dry volume 0 to correctly hear the effect.
-var effectDryMix = 1.0;
-var effectWetMix = 1.0;
-
-function setEffectDryMix(m) {
-  effectDryMix = m;
-  exports.effectDryMix = effectDryMix;
-}
-
-function setEffectWetMix(m) {
-  effectWetMix = m;
-  exports.effectWetMix = effectWetMix;
-}
 
 
 function ImpulseResponse(url, index) {
@@ -99,10 +81,33 @@ ImpulseResponse.prototype.load = function() {
     var asset = this;
 
     request.onload = function() {
-        drums.context.decodeAudioData(request.response, loadedImpulseResponse.bind(asset) );
+        contextMod.context.decodeAudioData(request.response, loadedImpulseResponse.bind(asset) );
     }
 
     request.send();
+}
+
+
+function setEffect(index) {
+    if (index > 0 && !impulseResponseList[index].isLoaded()) {
+        alert('Sorry, this effect is still loading.  Try again in a few seconds :)');
+        return;
+    }
+
+    beatMod.setBeatEffectIndex(index)
+    contextMod.setEffectDryMix(impulseResponseInfoList[index].dryMix);
+    contextMod.setEffectWetMix(impulseResponseInfoList[index].wetMix);
+    contextMod.setConvolverBuffer(impulseResponseList[index].buffer);
+
+  // Hack - if the effect is meant to be entirely wet (not unprocessed signal)
+  // then put the effect level all the way up.
+    if (contextMod.effectDryMix == 0)
+        beatMod.setBeatEffectMix(1);
+
+    contextMod.setEffectLevel(beatMod.theBeat);
+    slidersMod.sliderSetValue('effect_thumb', beatMod.theBeat.effectMix);
+
+    document.getElementById('effectname').innerHTML = impulseResponseInfoList[index].name;
 }
 
 
@@ -112,14 +117,13 @@ exports.ImpulseResponse = ImpulseResponse;
 
 // functions
 exports.setImpulseResponseList = setImpulseResponseList;
-exports.setEffectDryMix = setEffectDryMix;
-exports.setEffectWetMix = setEffectWetMix;
+exports.setEffect = setEffect;
+
 
 // variables
 exports.impulseResponseList = impulseResponseList;
 exports.impulseResponseInfoList = impulseResponseInfoList;
-exports.effectDryMix = effectDryMix;
-exports.effectWetMix = effectWetMix;
+
 
 
 

@@ -6,18 +6,13 @@ const impulseMod = require('./impulse')
 const handlersMod = require('./handlers')
 const playMod = require('./play')
 const slidersMod = require('./sliders')
+const contextMod = require('./context')
 
 // Events
 // init() once the page has finished loading.
 //window.onload = init;
 
 
-var context; exports.context = context;
-var convolver; exports.convolver = convolver;
-var compressor; exports.compressor = compressor;
-var masterGainNode; exports.masterGainNode = masterGainNode;
-var effectLevelNode; exports.effectLevelNode = effectLevelNode;
-var filterNode; exports.filterNode = filterNode;
 
 
 var timeoutId;
@@ -140,46 +135,44 @@ exports.initDrums = function(cmInstance) {
 
     // NOTE: THIS NOW RELIES ON THE MONKEYPATCH LIBRARY TO LOAD
     // IN CHROME AND SAFARI (until they release unprefixed)
-    context = new AudioContext(); exports.context = context;
+    contextMod.setContext(new AudioContext());
 
     var finalMixNode;
-    if (context.createDynamicsCompressor) {
+    if (contextMod.context.createDynamicsCompressor) {
         // Create a dynamics compressor to sweeten the overall mix.
-        compressor = context.createDynamicsCompressor();
-        compressor.connect(context.destination);
-        finalMixNode = compressor;
+        contextMod.setCompressor(contextMod.context.createDynamicsCompressor());
+        contextMod.connectNodes(contextMod.compressor, contextMod.context.destination);
+        finalMixNode = contextMod.compressor;
     } else {
         // No compressor available in this implementation.
-        finalMixNode = context.destination;
+        finalMixNode = contextMod.context.destination;
     }
 
     // create master filter node
-    filterNode = context.createBiquadFilter();
-    filterNode.type = "lowpass";
-    filterNode.frequency.value = 0.5 * context.sampleRate;
-    filterNode.Q.value = 1;
-    filterNode.connect(finalMixNode);
+    let tmp = contextMod.context.createBiquadFilter();
+    tmp.type = "lowpass";
+    tmp.frequency.value = 0.5 * contextMod.context.sampleRate;
+    tmp.Q.value = 1;
+    contextMod.setFilterNode(tmp);
+    contextMod.connectNodes(contextMod.filterNode, finalMixNode);
 
     // Create master volume.
-    masterGainNode = context.createGain();
-    masterGainNode.gain.value = 0.7; // reduce overall volume to avoid clipping
-    masterGainNode.connect(filterNode);
+    tmp = contextMod.context.createGain();
+    tmp.gain.value = 0.7; // reduce overall volume to avoid clipping
+    contextMod.setMasterGainNode(tmp);
+    contextMod.connectNodes(contextMod.masterGainNode, contextMod.filterNode);
 
     // Create effect volume.
-    effectLevelNode = context.createGain();
-    effectLevelNode.gain.value = 1.0; // effect level slider controls this
-    effectLevelNode.connect(masterGainNode);
+    tmp = contextMod.context.createGain();
+    tmp.gain.value = 1.0; // effect level slider controls this
+    contextMod.setEffectLevelNode(tmp);
+    contextMod.connectNodes(contextMod.effectLevelNode, contextMod.masterGainNode);
 
     // Create convolver for effect
-    convolver = context.createConvolver();
-    convolver.connect(effectLevelNode);
+    tmp = contextMod.context.createConvolver();
+    contextMod.setConvolver(tmp);
+    contextMod.connectNodes(contextMod.convolver, contextMod.effectLevelNode);
 
-    exports.filterNode = filterNode;
-    exports.finalMixNode = finalMixNode;
-    exports.compressor = compressor;
-    exports.masterGainNode = masterGainNode;
-    exports.effectLevelNode = effectLevelNode;
-    exports.convolver = convolver;
 
     var elKitCombo = document.getElementById('kitcombo');
     elKitCombo.addEventListener("mousedown", handlersMod.handleKitComboMouseDown, true);
@@ -203,8 +196,7 @@ exports.initDrums = function(cmInstance) {
       playMod.schedule();
     };
     tmp.postMessage('init'); // Start the worker.
-
-    handlersMod.setTimerWorker(tmp)
+    handlersMod.setTimerWorker(tmp);
 
 }
 
@@ -298,42 +290,6 @@ function makeKitList() {
 
 
 
-
-
-
-
-function setEffect(index) {
-    if (index > 0 && !impulseMod.impulseResponseList[index].isLoaded()) {
-        alert('Sorry, this effect is still loading.  Try again in a few seconds :)');
-        return;
-    }
-
-    beatMod.setBeatEffectIndex(index)
-    impulseMod.setEffectDryMix(impulseMod.impulseResponseInfoList[index].dryMix);
-    impulseMod.setEffectWetMix(impulseMod.impulseResponseInfoList[index].wetMix);
-    convolver.buffer = impulseMod.impulseResponseList[index].buffer;
-
-  // Hack - if the effect is meant to be entirely wet (not unprocessed signal)
-  // then put the effect level all the way up.
-    if (impulseMod.effectDryMix == 0)
-        beatMod.setBeatEffectMix(1);
-
-    setEffectLevel(beatMod.theBeat);
-    slidersMod.sliderSetValue('effect_thumb', beatMod.theBeat.effectMix);
-    drawMod.updateControls();
-
-    document.getElementById('effectname').innerHTML = impulseMod.impulseResponseInfoList[index].name;
-}
-exports.setEffect = setEffect;
-
-function setEffectLevel() {
-    // Factor in both the preset's effect level and the blending level (effectWetMix) stored in the effect itself.
-    effectLevelNode.gain.value = beatMod.theBeat.effectMix * impulseMod.effectWetMix;
-    exports.effectLevelNode = effectLevelNode;
-}
-exports.setEffectLevel = setEffectLevel;
-
-
 function loadBeat(beat) {
     // Check that assets are loaded.
     if (beat != beatMod.beatReset && !beat.isLoaded())
@@ -343,7 +299,8 @@ function loadBeat(beat) {
 
     beatMod.setBeat(beatMod.cloneBeat(beat));
     kitMod.setCurrentKit(kitMod.kits[beatMod.theBeat.kitIndex]);
-    setEffect(beatMod.theBeat.effectIndex);
+    impulseMod.setEffect(beatMod.theBeat.effectIndex);
+    drawMod.updateControls();
 
     // apply values from sliders
     slidersMod.sliderSetValue('effect_thumb', beatMod.theBeat.effectMix);
@@ -365,30 +322,7 @@ exports.loadBeat = loadBeat;
 
 
 
-function filterFrequencyFromCutoff( cutoff ) {
-    var nyquist = 0.5 * context.sampleRate;
 
-    // spreads over a ~ten-octave range, from 20Hz - 20kHz.
-    var filterFrequency = Math.pow(2, (11 * cutoff)) * 40;
-
-    if (filterFrequency > nyquist)
-        filterFrequency = nyquist;
-    return filterFrequency;
-}
-
-function setFilterCutoff( cutoff ) {
-    if (filterNode){
-        filterNode.frequency.value = filterFrequencyFromCutoff( cutoff );
-        exports.filterNode = filterNode;
-    }
-}
-
-function setFilterQ( Q ) {
-    if (filterNode){
-        filterNode.Q.value = Q;
-        exports.filterNode = filterNode;
-    }
-}
 
 
 
