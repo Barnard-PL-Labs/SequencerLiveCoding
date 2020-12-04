@@ -44,15 +44,35 @@ function drawPlayhead(xindex) {
     showBeat( xindex );
 }
 
+function sliderSetPosition(slider, value) {
+    var elThumb = document.getElementById(slider);
+    var elTrack = elThumb.parentNode;
+
+    if (slider == 'swing_thumb') {
+        var thumbW = elThumb.clientWidth;
+        var trackW = elTrack.clientWidth;
+        var travelW = trackW - thumbW;
+
+        elThumb.style.left = travelW * value + 'px';
+    } else {
+        var thumbH = elThumb.clientHeight;
+        var trackH = elTrack.clientHeight;
+        var travelH = trackH - thumbH;
+
+        elThumb.style.top = travelH * (1.0 - value) + 'px';
+    }
+}
+
 
 // functions
-exports.drawNote = drawNote
-exports.redrawAllNotes = redrawAllNotes
-exports.drawPlayhead = drawPlayhead
-exports.setLastDrawTime = setLastDrawTime
+exports.drawNote = drawNote;
+exports.redrawAllNotes = redrawAllNotes;
+exports.drawPlayhead = drawPlayhead;
+exports.setLastDrawTime = setLastDrawTime;
+exports.sliderSetPosition = sliderSetPosition;
 
 // variables
-exports.lastDrawTime = lastDrawTime
+exports.lastDrawTime = lastDrawTime;
 
 
 //

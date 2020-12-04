@@ -2,6 +2,16 @@
 var kMinTempo = 53;
 var kMaxTempo = 180;
 
+var kMaxSwing = .08;
+
+var startTime;
+
+function setStartTime (t) {
+  startTime = t;
+  exports.startTime = startTime;
+}
+
+
 var loopLength = 16;
 var rhythmIndex = 0;
 
@@ -121,28 +131,30 @@ function tempoDecrease() {
 
 
 // functions
-exports.setBeat = setBeat
+exports.setBeat = setBeat;
 
-exports.setBeatEffectMix = setBeatEffectMix
-exports.setBeatKickPitchVal = setBeatKickPitchVal
-exports.setBeatSnarePitchVal = setBeatSnarePitchVal
-exports.setBeatHihatPitchVal = setBeatHihatPitchVal
-exports.setBeatTom1PitchVal = setBeatTom1PitchVal
-exports.setBeatTom2PitchVal = setBeatTom2PitchVal
-exports.setBeatTom3PitchVal = setBeatTom3PitchVal
-exports.setBeatSwingFactor = setBeatSwingFactor
+exports.setBeatEffectMix = setBeatEffectMix;
+exports.setBeatKickPitchVal = setBeatKickPitchVal;
+exports.setBeatSnarePitchVal = setBeatSnarePitchVal;
+exports.setBeatHihatPitchVal = setBeatHihatPitchVal;
+exports.setBeatTom1PitchVal = setBeatTom1PitchVal;
+exports.setBeatTom2PitchVal = setBeatTom2PitchVal;
+exports.setBeatTom3PitchVal = setBeatTom3PitchVal;
+exports.setBeatSwingFactor = setBeatSwingFactor;
 
-exports.setBeatKitIndex = setBeatKitIndex
-exports.setBeatEffectIndex = setBeatEffectIndex
-exports.setRhythmIndex = setRhythmIndex
+exports.setBeatKitIndex = setBeatKitIndex;
+exports.setBeatEffectIndex = setBeatEffectIndex;
+exports.setRhythmIndex = setRhythmIndex;
+exports.setStartTime = setStartTime;
 
-exports.cloneBeat = cloneBeat
-exports.tempoIncrease = tempoIncrease
-exports.tempoDecrease = tempoDecrease
+exports.cloneBeat = cloneBeat;
+exports.tempoIncrease = tempoIncrease;
+exports.tempoDecrease = tempoDecrease;
 
 // variables
-exports.theBeat = theBeat
-exports.beatReset = beatReset
-exports.beatDemo = beatDemo
-exports.loopLength = loopLength
-exports.rhythmIndex = rhythmIndex
+exports.theBeat = theBeat;
+exports.beatReset = beatReset;
+exports.beatDemo = beatDemo;
+exports.loopLength = loopLength;
+exports.rhythmIndex = rhythmIndex;
+exports.kMaxSwing = kMaxSwing;

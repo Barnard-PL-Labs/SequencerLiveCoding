@@ -1,5 +1,5 @@
-const beatMod = require('./beat.js')
-const drawMod = require('./draw.js')
+const beatMod = require('./beat')
+const drawMod = require('./draw')
 
 
 //We pull this in on init, which allows us to grab code as the drum machine runs
