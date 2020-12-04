@@ -5,6 +5,7 @@ const kitMod = require('./kit')
 const impulseMod = require('./impulse')
 const handlersMod = require('./handlers')
 const playMod = require('./play')
+const slidersMod = require('./sliders')
 
 // Events
 // init() once the page has finished loading.
@@ -24,12 +25,6 @@ var timeoutId;
 
 
 
-
-
-kickPitch = snarePitch = hihatPitch = tom1Pitch = tom2Pitch = tom3Pitch = 0;
-
-
-var noteTime = 0.0;
 
 
 
@@ -195,7 +190,7 @@ exports.initDrums = function(cmInstance) {
     document.body.addEventListener("mousedown", handlersMod.handleBodyMouseDown, true);
 
     initControls();
-    updateControls();
+    drawMod.updateControls();
 
     var timerWorkerBlob = new Blob([
         "var timeoutID=0;function schedule(){timeoutID=setTimeout(function(){postMessage('schedule'); schedule();},100);} onmessage = function(e) { if (e.data == 'start') { if (!timeoutID) schedule();} else if (e.data == 'stop') {if (timeoutID) clearTimeout(timeoutID); timeoutID=0;};}"]);
@@ -324,8 +319,8 @@ function setEffect(index) {
         beatMod.setBeatEffectMix(1);
 
     setEffectLevel(beatMod.theBeat);
-    handlersMod.sliderSetValue('effect_thumb', beatMod.theBeat.effectMix);
-    updateControls();
+    slidersMod.sliderSetValue('effect_thumb', beatMod.theBeat.effectMix);
+    drawMod.updateControls();
 
     document.getElementById('effectname').innerHTML = impulseMod.impulseResponseInfoList[index].name;
 }
@@ -351,50 +346,23 @@ function loadBeat(beat) {
     setEffect(beatMod.theBeat.effectIndex);
 
     // apply values from sliders
-    handlersMod.sliderSetValue('effect_thumb', beatMod.theBeat.effectMix);
-    handlersMod.sliderSetValue('kick_thumb', beatMod.theBeat.kickPitchVal);
-    handlersMod.sliderSetValue('snare_thumb', beatMod.theBeat.snarePitchVal);
-    handlersMod.sliderSetValue('hihat_thumb', beatMod.theBeat.hihatPitchVal);
-    handlersMod.sliderSetValue('tom1_thumb', beatMod.theBeat.tom1PitchVal);
-    handlersMod.sliderSetValue('tom2_thumb', beatMod.theBeat.tom2PitchVal);
-    handlersMod.sliderSetValue('tom3_thumb', beatMod.theBeat.tom3PitchVal);
-    handlersMod.sliderSetValue('swing_thumb', beatMod.theBeat.swingFactor);
+    slidersMod.sliderSetValue('effect_thumb', beatMod.theBeat.effectMix);
+    slidersMod.sliderSetValue('kick_thumb', beatMod.theBeat.kickPitchVal);
+    slidersMod.sliderSetValue('snare_thumb', beatMod.theBeat.snarePitchVal);
+    slidersMod.sliderSetValue('hihat_thumb', beatMod.theBeat.hihatPitchVal);
+    slidersMod.sliderSetValue('tom1_thumb', beatMod.theBeat.tom1PitchVal);
+    slidersMod.sliderSetValue('tom2_thumb', beatMod.theBeat.tom2PitchVal);
+    slidersMod.sliderSetValue('tom3_thumb', beatMod.theBeat.tom3PitchVal);
+    slidersMod.sliderSetValue('swing_thumb', beatMod.theBeat.swingFactor);
 
-    updateControls();
+    drawMod.updateControls();
     setActiveInstrument(0);
 
     return true;
 }
 exports.loadBeat = loadBeat;
 
-function updateControls() {
-    for (i = 0; i < beatMod.loopLength; ++i) {
-        for (j = 0; j < kitMod.kNumInstruments; j++) {
-            switch (j) {
-                case 0: notes = beatMod.theBeat.rhythm1; break;
-                case 1: notes = beatMod.theBeat.rhythm2; break;
-                case 2: notes = beatMod.theBeat.rhythm3; break;
-                case 3: notes = beatMod.theBeat.rhythm4; break;
-                case 4: notes = beatMod.theBeat.rhythm5; break;
-                case 5: notes = beatMod.theBeat.rhythm6; break;
-            }
 
-            drawMod.drawNote(notes[i], i, j);
-        }
-    }
-
-    document.getElementById('kitname').innerHTML = kitMod.kitNamePretty[beatMod.theBeat.kitIndex];
-    document.getElementById('effectname').innerHTML = impulseMod.impulseResponseInfoList[beatMod.theBeat.effectIndex].name;
-    document.getElementById('tempo').innerHTML = beatMod.theBeat.tempo;
-    drawMod.sliderSetPosition('swing_thumb', beatMod.theBeat.swingFactor);
-    drawMod.sliderSetPosition('effect_thumb', beatMod.theBeat.effectMix);
-    drawMod.sliderSetPosition('kick_thumb', beatMod.theBeat.kickPitchVal);
-    drawMod.sliderSetPosition('snare_thumb', beatMod.theBeat.snarePitchVal);
-    drawMod.sliderSetPosition('hihat_thumb', beatMod.theBeat.hihatPitchVal);
-    drawMod.sliderSetPosition('tom1_thumb', beatMod.theBeat.tom1PitchVal);
-    drawMod.sliderSetPosition('tom2_thumb', beatMod.theBeat.tom2PitchVal);
-    drawMod.sliderSetPosition('tom3_thumb', beatMod.theBeat.tom3PitchVal);
-}
 
 
 function filterFrequencyFromCutoff( cutoff ) {
@@ -421,24 +389,6 @@ function setFilterQ( Q ) {
         exports.filterNode = filterNode;
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

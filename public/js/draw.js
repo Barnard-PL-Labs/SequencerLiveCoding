@@ -1,5 +1,8 @@
-const kitMod = require('./kit')
 const beatMod = require('./beat')
+const kitMod = require('./kit')
+const impulseMod = require('./impulse')
+
+
 
 var lastDrawTime = -1;
 
@@ -63,6 +66,35 @@ function sliderSetPosition(slider, value) {
     }
 }
 
+function updateControls() {
+    for (i = 0; i < beatMod.loopLength; ++i) {
+        for (j = 0; j < kitMod.kNumInstruments; j++) {
+            switch (j) {
+                case 0: notes = beatMod.theBeat.rhythm1; break;
+                case 1: notes = beatMod.theBeat.rhythm2; break;
+                case 2: notes = beatMod.theBeat.rhythm3; break;
+                case 3: notes = beatMod.theBeat.rhythm4; break;
+                case 4: notes = beatMod.theBeat.rhythm5; break;
+                case 5: notes = beatMod.theBeat.rhythm6; break;
+            }
+
+            drawNote(notes[i], i, j);
+        }
+    }
+
+    document.getElementById('kitname').innerHTML = kitMod.kitNamePretty[beatMod.theBeat.kitIndex];
+    document.getElementById('effectname').innerHTML = impulseMod.impulseResponseInfoList[beatMod.theBeat.effectIndex].name;
+    document.getElementById('tempo').innerHTML = beatMod.theBeat.tempo;
+    sliderSetPosition('swing_thumb', beatMod.theBeat.swingFactor);
+    sliderSetPosition('effect_thumb', beatMod.theBeat.effectMix);
+    sliderSetPosition('kick_thumb', beatMod.theBeat.kickPitchVal);
+    sliderSetPosition('snare_thumb', beatMod.theBeat.snarePitchVal);
+    sliderSetPosition('hihat_thumb', beatMod.theBeat.hihatPitchVal);
+    sliderSetPosition('tom1_thumb', beatMod.theBeat.tom1PitchVal);
+    sliderSetPosition('tom2_thumb', beatMod.theBeat.tom2PitchVal);
+    sliderSetPosition('tom3_thumb', beatMod.theBeat.tom3PitchVal);
+}
+
 
 // functions
 exports.drawNote = drawNote;
@@ -70,6 +102,7 @@ exports.redrawAllNotes = redrawAllNotes;
 exports.drawPlayhead = drawPlayhead;
 exports.setLastDrawTime = setLastDrawTime;
 exports.sliderSetPosition = sliderSetPosition;
+exports.updateControls = updateControls;
 
 // variables
 exports.lastDrawTime = lastDrawTime;

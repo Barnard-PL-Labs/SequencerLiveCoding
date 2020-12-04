@@ -1,6 +1,40 @@
 const drums = require('./drummachine');
 const beatMod = require('./beat')
 
+var kickPitch = snarePitch = hihatPitch = tom1Pitch = tom2Pitch = tom3Pitch = 0;
+
+function setKickPitch(p) {
+  kickPitch = p;
+  exports.kickPitch = kickPitch;
+}
+
+function setSnarePitch(p) {
+  snarePitch = p;
+  exports.snarePitch = snarePitch;
+}
+
+function setHihatPitch(p) {
+  hihatPitch = p;
+  exports.hihatPitch = hihatPitch;
+}
+
+function setTom1Pitch(p) {
+  tom1Pitch = p;
+  exports.tom1Pitch = tom1Pitch;
+}
+
+function setTom2Pitch(p) {
+  tom2Pitch = p;
+  exports.tom2Pitch = tom2Pitch;
+}
+
+function setTom3Pitch(p) {
+  tom3Pitch = p;
+  exports.tom3Pitch = tom3Pitch;
+}
+
+
+
 var kits;
 
 function setKits(k) {
@@ -147,23 +181,36 @@ Kit.prototype.loadSample = function(sampleID, url, mixToMono) {
 
 
 // classes
-exports.Kit = Kit
+exports.Kit = Kit;
 
 // functions
-exports.setKits = setKits
-exports.setCurrentKit = setCurrentKit
+exports.setKits = setKits;
+exports.setCurrentKit = setCurrentKit;
+
+exports.setKickPitch = setKickPitch;
+exports.setSnarePitch = setSnarePitch;
+exports.setHihatPitch = setHihatPitch;
+exports.setTom1Pitch = setTom1Pitch;
+exports.setTom2Pitch = setTom2Pitch;
+exports.setTom3Pitch = setTom3Pitch;
 
 
 // variables
-exports.instruments = instruments
-exports.volumes = volumes
-exports.kNumInstruments = kNumInstruments
-exports.kits = kits
-exports.currentKit = currentKit
-exports.kitName = kitName
-exports.kitNamePretty = kitNamePretty
-exports.kInitialKitIndex = kInitialKitIndex
+exports.instruments = instruments;
+exports.volumes = volumes;
+exports.kNumInstruments = kNumInstruments;
+exports.kits = kits;
+exports.currentKit = currentKit;
+exports.kitName = kitName;
+exports.kitNamePretty = kitNamePretty;
+exports.kInitialKitIndex = kInitialKitIndex;
 
+exports.kickPitch = kickPitch;
+exports.snarePitch = snarePitch;
+exports.hihatPitch = hihatPitch;
+exports.tom1Pitch = tom1Pitch;
+exports.tom2Pitch = tom2Pitch;
+exports.tom3Pitch = tom3Pitch;
 
 
 //

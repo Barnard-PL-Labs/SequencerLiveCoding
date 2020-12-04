@@ -4,6 +4,7 @@ const drawMod = require('./draw')
 const synthMod = require('./synthesis')
 const impulseMod = require('./impulse')
 const playMod = require('./play')
+const slidersMod = require('./sliders')
 
 const drums = require('./drummachine')
 
@@ -44,8 +45,8 @@ function handleSliderDoubleClick(event) {
     var id = event.target.id;
     if (id != 'swing_thumb' && id != 'effect_thumb') {
         mouseCapture = null;
-        sliderSetValue(event.target.id, 0.5);
-        updateControls();
+        slidersMod.sliderSetValue(event.target.id, 0.5);
+        drawMod.updateControls();
     }
 }
 
@@ -85,7 +86,7 @@ function handleMouseMove(event) {
         elThumb.style.left = travelW * value + 'px';
     }
 
-    sliderSetValue(mouseCapture, value);
+    slidersMod.sliderSetValue(mouseCapture, value);
 }
 
 function handleMouseUp() {
@@ -124,28 +125,28 @@ function handleButtonMouseDown(event) {
     if (newNoteValue) {
         switch(instrumentIndex) {
         case 0:  // Kick
-          playMod.playNote(kitMod.currentKit.kickBuffer, false, 0,0,-2, 0.5 * beatMod.theBeat.effectMix, kitMod.volumes[newNoteValue] * 1.0, kickPitch, 0);
+          playMod.playNote(kitMod.currentKit.kickBuffer, false, 0,0,-2, 0.5 * beatMod.theBeat.effectMix, kitMod.volumes[newNoteValue] * 1.0, kitMod.kickPitch, 0);
           break;
 
         case 1:  // Snare
-          playMod.playNote(kitMod.currentKit.snareBuffer, false, 0,0,-2, beatMod.theBeat.effectMix, kitMod.volumes[newNoteValue] * 0.6, snarePitch, 0);
+          playMod.playNote(kitMod.currentKit.snareBuffer, false, 0,0,-2, beatMod.theBeat.effectMix, kitMod.volumes[newNoteValue] * 0.6, kitMod.snarePitch, 0);
           break;
 
         case 2:  // Hihat
           // Pan the hihat according to sequence position.
-          playMod.playNote(kitMod.currentKit.hihatBuffer, true, 0.5*rhythmIndex - 4, 0, -1.0, beatMod.theBeat.effectMix, kitMod.volumes[newNoteValue] * 0.7, hihatPitch, 0);
+          playMod.playNote(kitMod.currentKit.hihatBuffer, true, 0.5*rhythmIndex - 4, 0, -1.0, beatMod.theBeat.effectMix, kitMod.volumes[newNoteValue] * 0.7, kitMod.hihatPitch, 0);
           break;
 
         case 3:  // Tom 1
-          playMod.playNote(kitMod.currentKit.tom1, false, 0,0,-2, beatMod.theBeat.effectMix, kitMod.volumes[newNoteValue] * 0.6, tom1Pitch, 0);
+          playMod.playNote(kitMod.currentKit.tom1, false, 0,0,-2, beatMod.theBeat.effectMix, kitMod.volumes[newNoteValue] * 0.6, kitMod.tom1Pitch, 0);
           break;
 
         case 4:  // Tom 2
-          playMod.playNote(kitMod.currentKit.tom2, false, 0,0,-2, beatMod.theBeat.effectMix, kitMod.volumes[newNoteValue] * 0.6, tom2Pitch, 0);
+          playMod.playNote(kitMod.currentKit.tom2, false, 0,0,-2, beatMod.theBeat.effectMix, kitMod.volumes[newNoteValue] * 0.6, kitMod.tom2Pitch, 0);
           break;
 
         case 5:  // Tom 3
-          playMod.playNote(kitMod.currentKit.tom3, false, 0,0,-2, beatMod.theBeat.effectMix, kitMod.volumes[newNoteValue] * 0.6, tom3Pitch, 0);
+          playMod.playNote(kitMod.currentKit.tom3, false, 0,0,-2, beatMod.theBeat.effectMix, kitMod.volumes[newNoteValue] * 0.6, kitMod.tom3Pitch, 0);
           break;
         }
     }
@@ -244,7 +245,7 @@ function handleDemoMouseDown(event) {
 }
 
 function handlePlay(event) {
-    noteTime = 0.0;
+    playMod.setNoteTime(0.0);
     beatMod.setStartTime(drums.context.currentTime + 0.005);
     playMod.schedule();
     timerWorker.postMessage("start");
@@ -308,20 +309,20 @@ function handleLoadOk(event) {
     drums.setEffectLevel(beatMod.theBeat);
 
     // Apply values from sliders
-    sliderSetValue('effect_thumb', beatMod.theBeat.effectMix);
-    sliderSetValue('kick_thumb', beatMod.theBeat.kickPitchVal);
-    sliderSetValue('snare_thumb', beatMod.theBeat.snarePitchVal);
-    sliderSetValue('hihat_thumb', beatMod.theBeat.hihatPitchVal);
-    sliderSetValue('tom1_thumb', beatMod.theBeat.tom1PitchVal);
-    sliderSetValue('tom2_thumb', beatMod.theBeat.tom2PitchVal);
-    sliderSetValue('tom3_thumb', beatMod.theBeat.tom3PitchVal);
-    sliderSetValue('swing_thumb', beatMod.theBeat.swingFactor);
+    slidersMod.sliderSetValue('effect_thumb', beatMod.theBeat.effectMix);
+    slidersMod.sliderSetValue('kick_thumb', beatMod.theBeat.kickPitchVal);
+    slidersMod.sliderSetValue('snare_thumb', beatMod.theBeat.snarePitchVal);
+    slidersMod.sliderSetValue('hihat_thumb', beatMod.theBeat.hihatPitchVal);
+    slidersMod.sliderSetValue('tom1_thumb', beatMod.theBeat.tom1PitchVal);
+    slidersMod.sliderSetValue('tom2_thumb', beatMod.theBeat.tom2PitchVal);
+    slidersMod.sliderSetValue('tom3_thumb', beatMod.theBeat.tom3PitchVal);
+    slidersMod.sliderSetValue('swing_thumb', beatMod.theBeat.swingFactor);
 
     // Clear out the text area post-processing
     elTextarea.value = '';
 
     toggleLoadContainer();
-    updateControls();
+    drawMod.updateControls();
 }
 
 function handleLoadCancel(event) {
@@ -349,44 +350,6 @@ function handleReset(event) {
 
 
 
-function sliderSetValue(slider, value) {
-    var pitchRate = Math.pow(2.0, 2.0 * (value - 0.5));
-
-    switch(slider) {
-    case 'effect_thumb':
-        // Change the volume of the convolution effect.
-        beatMod.setBeatEffectMix(value);
-        drums.setEffectLevel(beatMod.theBeat);
-        break;
-    case 'kick_thumb':
-        beatMod.setBeatKickPitchVal(value);
-        kickPitch = pitchRate;
-        break;
-    case 'snare_thumb':
-        beatMod.setBeatSnarePitchVal(value);
-        snarePitch = pitchRate;
-        break;
-    case 'hihat_thumb':
-        beatMod.setBeatHihatPitchVal(value);
-        hihatPitch = pitchRate;
-        break;
-    case 'tom1_thumb':
-        beatMod.setBeatTom1PitchVal(value);
-        tom1Pitch = pitchRate;
-        break;
-    case 'tom2_thumb':
-        beatMod.setBeatTom2PitchVal(value);
-        tom2Pitch = pitchRate;
-        break;
-    case 'tom3_thumb':
-        beatMod.setBeatTom3PitchVal(value);
-        tom3Pitch = pitchRate;
-        break;
-    case 'swing_thumb':
-        beatMod.setBeatSwingFactor(value);
-        break;
-    }
-}
 
 
 
@@ -413,7 +376,7 @@ exports.handleLoadCancel = handleLoadCancel;
 exports.handleReset = handleReset;
 
 exports.setTimerWorker = setTimerWorker;
-exports.sliderSetValue = sliderSetValue;
+
 
 // variables
 exports.timerWorker = timerWorker;
