@@ -5,21 +5,11 @@ const kitMod = require('./kit')
 const impulseMod = require('./impulse')
 const handlersMod = require('./handlers')
 const playMod = require('./play')
-const slidersMod = require('./sliders')
 const contextMod = require('./context')
-
-// Events
-// init() once the page has finished loading.
-//window.onload = init;
-
 
 
 
 var timeoutId;
-
-
-
-
 
 
 
@@ -87,7 +77,7 @@ function showDemoAvailable(demoIndex /* zero-based */) {
     // Enable play button and assign it to demo 2.
     if (demoIndex == 1) {
         showPlayAvailable();
-        loadBeat(beatMod.beatDemo[1]);
+        handlersMod.loadBeat(beatMod.beatDemo[1]);
 
     // Uncomment to allow autoplay
     //     handlePlay();
@@ -287,44 +277,6 @@ function makeKitList() {
         elItem.addEventListener("mousedown", handlersMod.handleKitMouseDown, true);
     }
 }
-
-
-
-function loadBeat(beat) {
-    // Check that assets are loaded.
-    if (beat != beatMod.beatReset && !beat.isLoaded())
-        return false;
-
-    handlersMod.handleStop();
-
-    beatMod.setBeat(beatMod.cloneBeat(beat));
-    kitMod.setCurrentKit(kitMod.kits[beatMod.theBeat.kitIndex]);
-    impulseMod.setEffect(beatMod.theBeat.effectIndex);
-    drawMod.updateControls();
-
-    // apply values from sliders
-    slidersMod.sliderSetValue('effect_thumb', beatMod.theBeat.effectMix);
-    slidersMod.sliderSetValue('kick_thumb', beatMod.theBeat.kickPitchVal);
-    slidersMod.sliderSetValue('snare_thumb', beatMod.theBeat.snarePitchVal);
-    slidersMod.sliderSetValue('hihat_thumb', beatMod.theBeat.hihatPitchVal);
-    slidersMod.sliderSetValue('tom1_thumb', beatMod.theBeat.tom1PitchVal);
-    slidersMod.sliderSetValue('tom2_thumb', beatMod.theBeat.tom2PitchVal);
-    slidersMod.sliderSetValue('tom3_thumb', beatMod.theBeat.tom3PitchVal);
-    slidersMod.sliderSetValue('swing_thumb', beatMod.theBeat.swingFactor);
-
-    drawMod.updateControls();
-    setActiveInstrument(0);
-
-    return true;
-}
-exports.loadBeat = loadBeat;
-
-
-
-
-
-
-
 
 
 
