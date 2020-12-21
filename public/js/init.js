@@ -1,5 +1,4 @@
 const beatMod = require('./beat')
-const synthMod = require('./synthesis')
 const drawMod = require('./draw')
 const kitMod = require('./kit')
 const impulseMod = require('./impulse')
@@ -7,11 +6,7 @@ const handlersMod = require('./handlers')
 const playMod = require('./play')
 const contextMod = require('./context')
 
-
-
 var timeoutId;
-
-
 
 function startLoadingAssets() {
 
@@ -91,7 +86,6 @@ function showPlayAvailable() {
 }
 
 exports.initDrums = function(cmInstance) {
-    synthMod.setCMInstance(cmInstance);
 
     // Let the beat demos know when all of their assets have been loaded.
     // Add some new methods to support this.
@@ -195,29 +189,31 @@ function initControls(timerWorker) {
     makeKitList();
     makeEffectList();
 
-    function setHandler(elemId, handlerFxn) {
+    function setMouseDownHandler(elemId, handlerFxn) {
         document.getElementById(elemId).addEventListener('mousedown', handlerFxn, true)
     }
-
+    function seDoubleClickHandler(elemId, handlerFxn) {
+        document.getElementById(elemId).addEventListener('dblclick', handlerFxn, true)
+    }
     // sliders
     sliderIdNames = ['effect_thumb', 'tom1_thumb', 'tom2_thumb', 'tom3_thumb', 'hihat_thumb', 'snare_thumb', 'kick_thumb', 'swing_thumb']
-    sliderIdNames.map(idName => setHandler(idName, handlersMod.handleSliderMouseDown));
-    sliderIdNames.map(idName => setHandler(idName, handlersMod.handleSliderDoubleClick));
+    sliderIdNames.map(idName => setMouseDownHandler(idName, handlersMod.handleSliderMouseDown));
+    sliderIdNames.map(idName => seDoubleClickHandler(idName, handlersMod.handleSliderDoubleClick));
 
     // tool buttons
-    setHandler('play', ev => handlersMod.handlePlay(timerWorker, ev));
-    setHandler('stop', ev => handlersMod.handleStop(timerWorker, ev));
-    setHandler('save', handlersMod.handleSave);
-    setHandler('save_ok', handlersMod.handleSaveOk);
-    setHandler('load', handlersMod.handleLoad);
-    setHandler('load)ok', handlersMod.handleLoadOk);
-    setHandler('load_cancel', handlersMod.handleLoadCancel);
-    setHandler('reset', handlersMod.handleReset);
-    setHandler('tempoinc', beatMod.tempoIncrease);
-    setHandler('tempodec', beatMod.tempoDecrease);
+    setMouseDownHandler('play', ev => handlersMod.handlePlay(timerWorker, ev));
+    setMouseDownHandler('stop', ev => handlersMod.handleStop(timerWorker, ev));
+    setMouseDownHandler('save', handlersMod.handleSave);
+    setMouseDownHandler('save_ok', handlersMod.handleSaveOk);
+    setMouseDownHandler('load', handlersMod.handleLoad);
+    setMouseDownHandler('load_ok', handlersMod.handleLoadOk);
+    setMouseDownHandler('load_cancel', handlersMod.handleLoadCancel);
+    setMouseDownHandler('reset', handlersMod.handleReset);
+    setMouseDownHandler('tempoinc', beatMod.tempoIncrease);
+    setMouseDownHandler('tempodec', beatMod.tempoDecrease);
 
     demos = ['demo1', 'demo2', 'demo3', 'demo4', 'demo5']
-    demos.map(demoName => setHandler(demoName, handlersMod.handleDemoMouseDown));
+    demos.map(demoName => setMouseDownHandler(demoName, handlersMod.handleDemoMouseDown));
 
     var elBody = document.getElementById('body');
     elBody.addEventListener('mousemove', handlersMod.handleMouseMove, true);

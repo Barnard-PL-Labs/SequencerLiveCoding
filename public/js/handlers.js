@@ -143,7 +143,7 @@ function handleButtonMouseDown(event) {
         }
     }
 
-    synthMod.synthCode(newNoteValue, rhythmIndex, instrumentIndex)
+    synthMod.synthCode(newNoteValue, rhythmIndex, instrumentIndex, beatMod.theBeat)
 }
 
 function handleKitComboMouseDown(event) {
