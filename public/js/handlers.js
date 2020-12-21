@@ -8,14 +8,6 @@ const slidersMod = require('./sliders')
 const contextMod = require('./context')
 
 
-var timerWorker = null; // Worker thread to send us scheduling messages.
-
-function setTimerWorker (tw) {
-  timerWorker = tw;
-  exports.timerWorker = timerWorker;
-}
-
-
 var mouseCapture = null;
 var mouseCaptureOffset = 0;
 
@@ -405,12 +397,6 @@ exports.handleLoadOk = handleLoadOk;
 exports.handleLoadCancel = handleLoadCancel;
 exports.handleReset = handleReset;
 exports.loadBeat = loadBeat;
-
-exports.setTimerWorker = setTimerWorker;
-
-
-// variables
-exports.timerWorker = timerWorker;
 
 
 

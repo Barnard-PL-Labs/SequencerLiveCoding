@@ -172,70 +172,57 @@ exports.initDrums = function(cmInstance) {
 
     document.body.addEventListener("mousedown", handlersMod.handleBodyMouseDown, true);
 
-    initControls();
-    drawMod.updateControls();
-
     var timerWorkerBlob = new Blob([
         "var timeoutID=0;function schedule(){timeoutID=setTimeout(function(){postMessage('schedule'); schedule();},100);} onmessage = function(e) { if (e.data == 'start') { if (!timeoutID) schedule();} else if (e.data == 'stop') {if (timeoutID) clearTimeout(timeoutID); timeoutID=0;};}"]);
 
     // Obtain a blob URL reference to our worker 'file'.
     var timerWorkerBlobURL = window.URL.createObjectURL(timerWorkerBlob);
 
-    tmp = new Worker(timerWorkerBlobURL);
-    tmp.onmessage = function(e) {
+    timerWorker = new Worker(timerWorkerBlobURL);
+    timerWorker.onmessage = function(e) {
       playMod.schedule();
     };
-    tmp.postMessage('init'); // Start the worker.
-    handlersMod.setTimerWorker(tmp);
+    timerWorker.postMessage('init'); // Start the worker.
+
+    initControls(timerWorker);
+    drawMod.updateControls();
 
 }
 
-function initControls() {
+function initControls(timerWorker) {
     // Initialize note buttons
     initButtons();
     makeKitList();
     makeEffectList();
 
-    // sliders
-    document.getElementById('effect_thumb').addEventListener('mousedown', handlersMod.handleSliderMouseDown, true);
-    document.getElementById('tom1_thumb').addEventListener('mousedown', handlersMod.handleSliderMouseDown, true);
-    document.getElementById('tom2_thumb').addEventListener('mousedown', handlersMod.handleSliderMouseDown, true);
-    document.getElementById('tom3_thumb').addEventListener('mousedown', handlersMod.handleSliderMouseDown, true);
-    document.getElementById('hihat_thumb').addEventListener('mousedown', handlersMod.handleSliderMouseDown, true);
-    document.getElementById('snare_thumb').addEventListener('mousedown', handlersMod.handleSliderMouseDown, true);
-    document.getElementById('kick_thumb').addEventListener('mousedown', handlersMod.handleSliderMouseDown, true);
-    document.getElementById('swing_thumb').addEventListener('mousedown', handlersMod.handleSliderMouseDown, true);
+    function setHandler(elemId, handlerFxn) {
+        document.getElementById(elemId).addEventListener('mousedown', handlerFxn, true)
+    }
 
-    document.getElementById('effect_thumb').addEventListener('dblclick', handlersMod.handleSliderDoubleClick, true);
-    document.getElementById('tom1_thumb').addEventListener('dblclick', handlersMod.handleSliderDoubleClick, true);
-    document.getElementById('tom2_thumb').addEventListener('dblclick', handlersMod.handleSliderDoubleClick, true);
-    document.getElementById('tom3_thumb').addEventListener('dblclick', handlersMod.handleSliderDoubleClick, true);
-    document.getElementById('hihat_thumb').addEventListener('dblclick', handlersMod.handleSliderDoubleClick, true);
-    document.getElementById('snare_thumb').addEventListener('dblclick', handlersMod.handleSliderDoubleClick, true);
-    document.getElementById('kick_thumb').addEventListener('dblclick', handlersMod.handleSliderDoubleClick, true);
-    document.getElementById('swing_thumb').addEventListener('dblclick', handlersMod.handleSliderDoubleClick, true);
+    // sliders
+    sliderIdNames = ['effect_thumb', 'tom1_thumb', 'tom2_thumb', 'tom3_thumb', 'hihat_thumb', 'snare_thumb', 'kick_thumb', 'swing_thumb']
+    sliderIdNames.map(idName => setHandler(idName, handlersMod.handleSliderMouseDown));
+    sliderIdNames.map(idName => setHandler(idName, handlersMod.handleSliderDoubleClick));
 
     // tool buttons
-    document.getElementById('play').addEventListener('mousedown', handlersMod.handlePlay, true);
-    document.getElementById('stop').addEventListener('mousedown', handlersMod.handleStop, true);
-    document.getElementById('save').addEventListener('mousedown', handlersMod.handleSave, true);
-    document.getElementById('save_ok').addEventListener('mousedown', handlersMod.handleSaveOk, true);
-    document.getElementById('load').addEventListener('mousedown', handlersMod.handleLoad, true);
-    document.getElementById('load_ok').addEventListener('mousedown', handlersMod.handleLoadOk, true);
-    document.getElementById('load_cancel').addEventListener('mousedown', handlersMod.handleLoadCancel, true);
-    document.getElementById('reset').addEventListener('mousedown', handlersMod.handleReset, true);
-    document.getElementById('demo1').addEventListener('mousedown', handlersMod.handleDemoMouseDown, true);
-    document.getElementById('demo2').addEventListener('mousedown', handlersMod.handleDemoMouseDown, true);
-    document.getElementById('demo3').addEventListener('mousedown', handlersMod.handleDemoMouseDown, true);
-    document.getElementById('demo4').addEventListener('mousedown', handlersMod.handleDemoMouseDown, true);
-    document.getElementById('demo5').addEventListener('mousedown', handlersMod.handleDemoMouseDown, true);
+    setHandler('play', ev => handlersMod.handlePlay(timerWorker, ev));
+    setHandler('stop', ev => handlersMod.handleStop(timerWorker, ev));
+    setHandler('save', handlersMod.handleSave);
+    setHandler('save_ok', handlersMod.handleSaveOk);
+    setHandler('load', handlersMod.handleLoad);
+    setHandler('load)ok', handlersMod.handleLoadOk);
+    setHandler('load_cancel', handlersMod.handleLoadCancel);
+    setHandler('reset', handlersMod.handleReset);
+    setHandler('tempoinc', beatMod.tempoIncrease);
+    setHandler('tempodec', beatMod.tempoDecrease);
+
+    demos = ['demo1', 'demo2', 'demo3', 'demo4', 'demo5']
+    demos.map(demoName => setHandler(demoName, handlersMod.handleDemoMouseDown));
 
     var elBody = document.getElementById('body');
     elBody.addEventListener('mousemove', handlersMod.handleMouseMove, true);
     elBody.addEventListener('mouseup', handlersMod.handleMouseUp, true);
 
-    document.getElementById('tempoinc').addEventListener('mousedown', beatMod.tempoIncrease, true);
-    document.getElementById('tempodec').addEventListener('mousedown', beatMod.tempoDecrease, true);
 }
 
 function initButtons() {

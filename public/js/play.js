@@ -5,10 +5,6 @@ const kitMod = require('./kit')
 const impulseMod = require('./impulse')
 const contextMod = require('./context')
 
-const drums = require('./drummachine')
-
-
-
 var noteTime = 0.0;
 
 function setNoteTime (t) {
@@ -143,10 +139,6 @@ function playDrum(noteNumber, velocity) {
             console.log("note:0x" + noteNumber.toString(16) );
     }
 }
-
-
-
-
 
 // functions
 exports.advanceNote = advanceNote;
