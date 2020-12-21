@@ -14,8 +14,11 @@ function setNoteTime (t) {
 
 function advanceNote() {
 
-    synthMod.updatePatternFromCode();
-
+    newBeat = synthMod.updatePatternFromCode(beatMod.cloneBeat(beatMod.theBeat), beatMod.rhythmIndex);
+    if (newBeat != null) {
+        beatMod.setBeat(newBeat)
+        drawMod.redrawAllNotes();
+    }
     // Advance time by a 16th note...
     var secondsPerBeat = 60.0 / beatMod.theBeat.tempo;
 

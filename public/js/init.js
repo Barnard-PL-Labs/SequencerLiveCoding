@@ -1,5 +1,4 @@
 const beatMod = require('./beat')
-const synthMod = require('./synthesis')
 const drawMod = require('./draw')
 const kitMod = require('./kit')
 const impulseMod = require('./impulse')
@@ -7,11 +6,7 @@ const handlersMod = require('./handlers')
 const playMod = require('./play')
 const contextMod = require('./context')
 
-
-
 var timeoutId;
-
-
 
 function startLoadingAssets() {
 
@@ -91,7 +86,6 @@ function showPlayAvailable() {
 }
 
 exports.initDrums = function(cmInstance) {
-    synthMod.setCMInstance(cmInstance);
 
     // Let the beat demos know when all of their assets have been loaded.
     // Add some new methods to support this.
