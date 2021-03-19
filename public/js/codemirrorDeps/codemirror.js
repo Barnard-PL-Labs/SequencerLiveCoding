@@ -3047,7 +3047,7 @@
       if (to < ext.lineN)
         { ext.lineN += lendiff; }
       else if (from < ext.lineN + ext.size)
-        { display.externalMeasured = null; } 
+        { display.externalMeasured = null; }
     }
   }
 
