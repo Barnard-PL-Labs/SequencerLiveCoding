@@ -163,16 +163,16 @@ exports.kMaxSwing = kMaxSwing;
 },{}],2:[function(require,module,exports){
 
 
-exports.bootCodeMirror = function() {
+exports.bootCodeMirror = function () {
 
-    var myCodeMirror = CodeMirror.fromTextArea( document.getElementById("codingWindow"),
+	var myCodeMirror = CodeMirror.fromTextArea(document.getElementById("codingWindow"),
 		{
-		lineNumbers: true, 
-		mode:  "javascript"
+			lineNumbers: true,
+			mode: "javascript"
 		});
 	//TODO fix function header and return statement outside code window so user cannot change it, but still sees it
-	myCodeMirror.setValue('function genBeat(b, currentTimestep){\n\n  return b;\n};');
-    return myCodeMirror;	
+	myCodeMirror.setValue('function genBeat(b, s, currentTimestep){\n\n  return {beat:b, sliders:s};\n};');
+	return myCodeMirror;
 };
 
 
@@ -1485,53 +1485,55 @@ window.onload = function(){
 }
 
 },{"./codeManager":2,"./init":7,"./synthesis":12}],10:[function(require,module,exports){
-const beatMod = require('./beat')
-const synthMod = require('./synthesis')
-const drawMod = require('./draw')
-const kitMod = require('./kit')
+const beatManager = require('./beat')
+const synth = require('./synthesis')
+const drawer = require('./draw')
+const kit = require('./kit')
 const impulseMod = require('./impulse')
-const contextMod = require('./context')
+const context = require('./context')
+const sliders = require('./sliders')
 
 var noteTime = 0.0;
 
-function setNoteTime (t) {
-  noteTime = t;
-  exports.noteTime = noteTime;
+function setNoteTime(t) {
+    noteTime = t;
+    exports.noteTime = noteTime;
 }
 
 function advanceNote() {
 
-    newBeat = synthMod.updatePatternFromCode(beatMod.cloneBeat(beatMod.theBeat), beatMod.rhythmIndex);
-    if (newBeat != null) {
-        beatMod.setBeat(newBeat)
-        drawMod.redrawAllNotes();
+    newData = synth.updatePatternFromCode(beatManager.cloneBeat(beatManager.theBeat), beatManager.rhythmIndex);
+    if (newData != null) {
+        sliders.updateSliderVals(newData.sliders);
+        beatManager.setBeat(newData.beat)
+        drawer.redrawAllNotes();
     }
     // Advance time by a 16th note...
-    var secondsPerBeat = 60.0 / beatMod.theBeat.tempo;
+    var secondsPerBeat = 60.0 / beatManager.theBeat.tempo;
 
-    beatMod.setRhythmIndex(beatMod.rhythmIndex + 1);
-    if (beatMod.rhythmIndex == beatMod.loopLength) {
-        beatMod.setRhythmIndex(0);
+    beatManager.setRhythmIndex(beatManager.rhythmIndex + 1);
+    if (beatManager.rhythmIndex == beatManager.loopLength) {
+        beatManager.setRhythmIndex(0);
     }
 
-        // apply swing
-    if (beatMod.rhythmIndex % 2) {
-        noteTime += (0.25 + beatMod.kMaxSwing * beatMod.theBeat.swingFactor) * secondsPerBeat;
+    // apply swing
+    if (beatManager.rhythmIndex % 2) {
+        noteTime += (0.25 + beatManager.kMaxSwing * beatManager.theBeat.swingFactor) * secondsPerBeat;
     } else {
-        noteTime += (0.25 - beatMod.kMaxSwing * beatMod.theBeat.swingFactor) * secondsPerBeat;
+        noteTime += (0.25 - beatManager.kMaxSwing * beatManager.theBeat.swingFactor) * secondsPerBeat;
     }
 }
 
 function playNote(buffer, pan, x, y, z, sendGain, mainGain, playbackRate, noteTime) {
     // Create the note
-    var voice = contextMod.context.createBufferSource();
+    var voice = context.context.createBufferSource();
     voice.buffer = buffer;
     voice.playbackRate.value = playbackRate;
 
     // Optionally, connect to a panner
     var finalNode;
     if (pan) {
-        var panner = contextMod.context.createPanner();
+        var panner = context.context.createPanner();
         panner.panningModel = "HRTF";
         panner.setPosition(x, y, z);
         voice.connect(panner);
@@ -1541,64 +1543,64 @@ function playNote(buffer, pan, x, y, z, sendGain, mainGain, playbackRate, noteTi
     }
 
     // Connect to dry mix
-    var dryGainNode = contextMod.context.createGain();
-    dryGainNode.gain.value = mainGain * contextMod.effectDryMix;
+    var dryGainNode = context.context.createGain();
+    dryGainNode.gain.value = mainGain * context.effectDryMix;
     finalNode.connect(dryGainNode);
-    contextMod.connectNodes(dryGainNode, contextMod.masterGainNode);
+    context.connectNodes(dryGainNode, context.masterGainNode);
 
     // Connect to wet mix
-    var wetGainNode = contextMod.context.createGain();
+    var wetGainNode = context.context.createGain();
     wetGainNode.gain.value = sendGain;
     finalNode.connect(wetGainNode);
-    contextMod.connectNodes(wetGainNode, contextMod.convolver);
+    context.connectNodes(wetGainNode, context.convolver);
 
     voice.start(noteTime);
 }
 
 function schedule() {
-    var currentTime = contextMod.context.currentTime;
+    var currentTime = context.context.currentTime;
 
     // The sequence starts at startTime, so normalize currentTime so that it's 0 at the start of the sequence.
-    currentTime -= beatMod.startTime;
+    currentTime -= beatManager.startTime;
 
     while (noteTime < currentTime + 0.120) {
         // Convert noteTime to context time.
-        var contextPlayTime = noteTime + beatMod.startTime;
+        var contextPlayTime = noteTime + beatManager.startTime;
 
         // Kick
-        if (beatMod.theBeat.rhythm1[beatMod.rhythmIndex] && instrumentActive[0]) {
-            playNote(kitMod.currentKit.kickBuffer, false, 0,0,-2, 0.5, kitMod.volumes[beatMod.theBeat.rhythm1[beatMod.rhythmIndex]] * 1.0, kitMod.kickPitch, contextPlayTime);
+        if (beatManager.theBeat.rhythm1[beatManager.rhythmIndex] && instrumentActive[0]) {
+            playNote(kit.currentKit.kickBuffer, false, 0, 0, -2, 0.5, kit.volumes[beatManager.theBeat.rhythm1[beatManager.rhythmIndex]] * 1.0, kit.kickPitch, contextPlayTime);
         }
 
         // Snare
-        if (beatMod.theBeat.rhythm2[beatMod.rhythmIndex] && instrumentActive[1]) {
-            playNote(kitMod.currentKit.snareBuffer, false, 0,0,-2, 1, kitMod.volumes[beatMod.theBeat.rhythm2[beatMod.rhythmIndex]] * 0.6, kitMod.snarePitch, contextPlayTime);
+        if (beatManager.theBeat.rhythm2[beatManager.rhythmIndex] && instrumentActive[1]) {
+            playNote(kit.currentKit.snareBuffer, false, 0, 0, -2, 1, kit.volumes[beatManager.theBeat.rhythm2[beatManager.rhythmIndex]] * 0.6, kit.snarePitch, contextPlayTime);
         }
 
         // Hihat
-        if (beatMod.theBeat.rhythm3[beatMod.rhythmIndex] && instrumentActive[2]) {
+        if (beatManager.theBeat.rhythm3[beatManager.rhythmIndex] && instrumentActive[2]) {
             // Pan the hihat according to sequence position.
-            playNote(kitMod.currentKit.hihatBuffer, true, 0.5*beatMod.rhythmIndex - 4, 0, -1.0, 1, kitMod.volumes[beatMod.theBeat.rhythm3[beatMod.rhythmIndex]] * 0.7, kitMod.hihatPitch, contextPlayTime);
+            playNote(kit.currentKit.hihatBuffer, true, 0.5 * beatManager.rhythmIndex - 4, 0, -1.0, 1, kit.volumes[beatManager.theBeat.rhythm3[beatManager.rhythmIndex]] * 0.7, kit.hihatPitch, contextPlayTime);
         }
 
         // Toms
-        if (beatMod.theBeat.rhythm4[beatMod.rhythmIndex] && instrumentActive[3]) {
-            playNote(kitMod.currentKit.tom1, false, 0,0,-2, 1, kitMod.volumes[beatMod.theBeat.rhythm4[beatMod.rhythmIndex]] * 0.6, kitMod.tom1Pitch, contextPlayTime);
+        if (beatManager.theBeat.rhythm4[beatManager.rhythmIndex] && instrumentActive[3]) {
+            playNote(kit.currentKit.tom1, false, 0, 0, -2, 1, kit.volumes[beatManager.theBeat.rhythm4[beatManager.rhythmIndex]] * 0.6, kit.tom1Pitch, contextPlayTime);
         }
 
-        if (beatMod.theBeat.rhythm5[beatMod.rhythmIndex] && instrumentActive[4]) {
-            playNote(kitMod.currentKit.tom2, false, 0,0,-2, 1, kitMod.volumes[beatMod.theBeat.rhythm5[beatMod.rhythmIndex]] * 0.6, kitMod.tom2Pitch, contextPlayTime);
+        if (beatManager.theBeat.rhythm5[beatManager.rhythmIndex] && instrumentActive[4]) {
+            playNote(kit.currentKit.tom2, false, 0, 0, -2, 1, kit.volumes[beatManager.theBeat.rhythm5[beatManager.rhythmIndex]] * 0.6, kit.tom2Pitch, contextPlayTime);
         }
 
-        if (beatMod.theBeat.rhythm6[beatMod.rhythmIndex] && instrumentActive[5]) {
-            playNote(kitMod.currentKit.tom3, false, 0,0,-2, 1, kitMod.volumes[beatMod.theBeat.rhythm6[beatMod.rhythmIndex]] * 0.6, kitMod.tom3Pitch, contextPlayTime);
+        if (beatManager.theBeat.rhythm6[beatManager.rhythmIndex] && instrumentActive[5]) {
+            playNote(kit.currentKit.tom3, false, 0, 0, -2, 1, kit.volumes[beatManager.theBeat.rhythm6[beatManager.rhythmIndex]] * 0.6, kit.tom3Pitch, contextPlayTime);
         }
 
 
         // Attempt to synchronize drawing time with sound
-        if (noteTime != drawMod.lastDrawTime) {
-            drawMod.setLastDrawTime(noteTime);
-            drawMod.drawPlayhead((beatMod.rhythmIndex + 15) % 16);
+        if (noteTime != drawer.lastDrawTime) {
+            drawer.setLastDrawTime(noteTime);
+            drawer.drawPlayhead((beatManager.rhythmIndex + 15) % 16);
         }
 
         advanceNote();
@@ -1608,25 +1610,25 @@ function schedule() {
 function playDrum(noteNumber, velocity) {
     switch (noteNumber) {
         case 0x24:
-            playNote(kitMod.currentKit.kickBuffer,  false, 0,0,-2,  0.5, (velocity / 127), kitMod.kickPitch,  0);
+            playNote(kit.currentKit.kickBuffer, false, 0, 0, -2, 0.5, (velocity / 127), kit.kickPitch, 0);
             break;
         case 0x26:
-            playNote(kitMod.currentKit.snareBuffer, false, 0,0,-2,  1,   (velocity / 127), kitMod.snarePitch, 0);
+            playNote(kit.currentKit.snareBuffer, false, 0, 0, -2, 1, (velocity / 127), kit.snarePitch, 0);
             break;
         case 0x28:
-            playNote(kitMod.currentKit.hihatBuffer, true,  0,0,-1.0,1,   (velocity / 127), kitMod.hihatPitch, 0);
+            playNote(kit.currentKit.hihatBuffer, true, 0, 0, -1.0, 1, (velocity / 127), kit.hihatPitch, 0);
             break;
         case 0x2d:
-            playNote(kitMod.currentKit.tom1,        false, 0,0,-2,  1,   (velocity / 127), kitMod.tom1Pitch,  0);
+            playNote(kit.currentKit.tom1, false, 0, 0, -2, 1, (velocity / 127), kit.tom1Pitch, 0);
             break;
         case 0x2f:
-            playNote(kitMod.currentKit.tom2,        false, 0,0,-2,  1,   (velocity / 127), kitMod.tom2Pitch,  0);
+            playNote(kit.currentKit.tom2, false, 0, 0, -2, 1, (velocity / 127), kit.tom2Pitch, 0);
             break;
         case 0x32:
-            playNote(kitMod.currentKit.tom3,        false, 0,0,-2,  1,   (velocity / 127), kitMod.tom3Pitch,  0);
+            playNote(kit.currentKit.tom3, false, 0, 0, -2, 1, (velocity / 127), kit.tom3Pitch, 0);
             break;
         default:
-            console.log("note:0x" + noteNumber.toString(16) );
+            console.log("note:0x" + noteNumber.toString(16));
     }
 }
 
@@ -1646,48 +1648,56 @@ exports.noteTime = noteTime;
 
 //
 
-},{"./beat":1,"./context":3,"./draw":4,"./impulse":6,"./kit":8,"./synthesis":12}],11:[function(require,module,exports){
-const beatMod = require('./beat')
-const kitMod = require('./kit')
+},{"./beat":1,"./context":3,"./draw":4,"./impulse":6,"./kit":8,"./sliders":11,"./synthesis":12}],11:[function(require,module,exports){
+const beatManager = require('./beat')
+const kit = require('./kit')
 const contextMod = require('./context')
+const drawer = require('./draw')
 
+function updateSliderVals(sliderValObj) {
+    Object.entries(sliderValObj).forEach(entry => {
+        const [trackEffectName, trackEffectVal] = entry;
+        sliderSetValue(trackEffectName, trackEffectVal);
+    });
+    drawer.updateControls();
+}
 
 function sliderSetValue(slider, value) {
     var pitchRate = Math.pow(2.0, 2.0 * (value - 0.5));
 
-    switch(slider) {
-    case 'effect_thumb':
-        // Change the volume of the convolution effect.
-        beatMod.setBeatEffectMix(value);
-        contextMod.setEffectLevel(beatMod.theBeat);
-        break;
-    case 'kick_thumb':
-        beatMod.setBeatKickPitchVal(value);
-        kitMod.setKickPitch(pitchRate);
-        break;
-    case 'snare_thumb':
-        beatMod.setBeatSnarePitchVal(value);
-        kitMod.setSnarePitch(pitchRate);
-        break;
-    case 'hihat_thumb':
-        beatMod.setBeatHihatPitchVal(value);
-        kitMod.setHihatPitch(pitchRate);
-        break;
-    case 'tom1_thumb':
-        beatMod.setBeatTom1PitchVal(value);
-        kitMod.setTom1Pitch(pitchRate);
-        break;
-    case 'tom2_thumb':
-        beatMod.setBeatTom2PitchVal(value);
-        kitMod.setTom2Pitch(pitchRate);
-        break;
-    case 'tom3_thumb':
-        beatMod.setBeatTom3PitchVal(value);
-        kitMod.setTom3Pitch(pitchRate);
-        break;
-    case 'swing_thumb':
-        beatMod.setBeatSwingFactor(value);
-        break;
+    switch (slider) {
+        case 'effect_thumb':
+            // Change the volume of the convolution effect.
+            beatManager.setBeatEffectMix(value);
+            contextMod.setEffectLevel(beatManager.theBeat);
+            break;
+        case 'kick_thumb':
+            beatManager.setBeatKickPitchVal(value);
+            kit.setKickPitch(pitchRate);
+            break;
+        case 'snare_thumb':
+            beatManager.setBeatSnarePitchVal(value);
+            kit.setSnarePitch(pitchRate);
+            break;
+        case 'hihat_thumb':
+            beatManager.setBeatHihatPitchVal(value);
+            kit.setHihatPitch(pitchRate);
+            break;
+        case 'tom1_thumb':
+            beatManager.setBeatTom1PitchVal(value);
+            kit.setTom1Pitch(pitchRate);
+            break;
+        case 'tom2_thumb':
+            beatManager.setBeatTom2PitchVal(value);
+            kit.setTom2Pitch(pitchRate);
+            break;
+        case 'tom3_thumb':
+            beatManager.setBeatTom3PitchVal(value);
+            kit.setTom3Pitch(pitchRate);
+            break;
+        case 'swing_thumb':
+            beatManager.setBeatSwingFactor(value);
+            break;
     }
 }
 
@@ -1696,30 +1706,31 @@ function sliderSetValue(slider, value) {
 
 // functions
 exports.sliderSetValue = sliderSetValue;
+exports.updateSliderVals = updateSliderVals;
 
-},{"./beat":1,"./context":3,"./kit":8}],12:[function(require,module,exports){
+},{"./beat":1,"./context":3,"./draw":4,"./kit":8}],12:[function(require,module,exports){
 //We pull this in on init, which allows us to grab code as the drum machine runs
 var codeMirrorInstance = null
 
-function setCMInstance (cm) {
+function setCMInstance(cm) {
     codeMirrorInstance = cm;
 }
 
-function addLineForPointChange(currentCode,newNoteValue, rhythmIndex, instrumentIndex) {
+function addLineForPointChange(currentCode, newNoteValue, rhythmIndex, instrumentIndex) {
     //generate new line for changed note
-    newLine = "  b.rhythm" + (instrumentIndex+1) + "[" + rhythmIndex + "] = " + newNoteValue + ";\n"
-    existingLineLoc = currentCode.indexOf("  b.rhythm" + (instrumentIndex+1) + "[" + rhythmIndex + "] =")
+    newLine = "  b.rhythm" + (instrumentIndex + 1) + "[" + rhythmIndex + "] = " + newNoteValue + ";\n"
+    existingLineLoc = currentCode.indexOf("  b.rhythm" + (instrumentIndex + 1) + "[" + rhythmIndex + "] =")
     //if code has a line explicitly changed this point, then we update its value
-    if (existingLineLoc >=0) {
+    if (existingLineLoc >= 0) {
         var lineChPos = codeMirrorInstance.posFromIndex(existingLineLoc);
         var endReplacePos = JSON.parse(JSON.stringify(lineChPos));
-        endReplacePos.ch = newLine.length+1;
+        endReplacePos.ch = newLine.length + 1;
         codeMirrorInstance
             .replaceRange(newLine.slice(0, -1), lineChPos, endReplacePos);
     }
     //else code currently has no effect on manually changed pattern, so we can just add a line
     else {
-        codeMirrorInstance.replaceRange(newLine, {line: codeMirrorInstance.lineCount()-2, ch: 0})
+        codeMirrorInstance.replaceRange(newLine, { line: codeMirrorInstance.lineCount() - 2, ch: 0 })
     }
     return codeMirrorInstance.getValue();
 }
@@ -1728,50 +1739,60 @@ function synthCode(newNoteValue, rhythmIndex, instrumentIndex, theBeat) {
     //get current code
     var currentCode = codeMirrorInstance.getValue()
 
-    var updatedCode = addLineForPointChange(currentCode,newNoteValue, rhythmIndex, instrumentIndex)
+    var updatedCode = addLineForPointChange(currentCode, newNoteValue, rhythmIndex, instrumentIndex)
 
-    socket.emit('code', {"code":updatedCode, "beat":theBeat});
-    
+    socket.emit('code', { "code": updatedCode, "beat": theBeat });
+
     // currently, if we get new code any time, we replace code with synthesized code
     // TODO we need something a bit more tasteful - e.g. put new code in a "proposed change" box 
-    socket.on('newCode', function(c) {
-        codeMirrorInstance.replaceRange(c, {line: 2, ch:0}, {line: codeMirrorInstance.lineCount()-2, ch: 0});
+    socket.on('newCode', function (c) {
+        codeMirrorInstance.replaceRange(c, { line: 2, ch: 0 }, { line: codeMirrorInstance.lineCount() - 2, ch: 0 });
     });
 }
 
-function updatePatternFromCode(currentBeat, rhythmIndex){
+function updatePatternFromCode(currentBeat, rhythmIndex) {
     //every time we advance a time step, pull latest code and update beat object
     var updatedCode = codeMirrorInstance.getValue()
     try {
         //TODO if(codeChanged) {
-        let f = new Function("theBeat", "rhythmIndex", '"use strict"; ' + updatedCode + ' return (genBeat(theBeat, rhythmIndex));');
-        let newBeat = f(currentBeat, rhythmIndex);
+        let f = new Function("theBeat", "rhythmIndex", '"use strict"; ' + updatedCode + ' return (genBeat(theBeat, {}, rhythmIndex));');
+        let newData = f(currentBeat, rhythmIndex);
+        let newBeat = newData.beat;
+        let newSliders = newData.sliders;
         for (i = 1; i <= 6; i++) {
-            newBeat['rhythm'+i.toString()] = newBeat['rhythm'+i.toString()].map((note) => {if (Number.isNaN(note)) {return 0;} else {return note}});
+            newBeat['rhythm' + i.toString()] = newBeat['rhythm' + i.toString()].map((note) => { if (Number.isNaN(note)) { return 0; } else { return note } });
         }
-        if (isValidBeat(newBeat)) { // && theBeat != newBeat){
-            return newBeat;
+        if (isValidBeat(newBeat) && isValidSliders(newSliders)) { // && theBeat != newBeat){
+            return { beat: newBeat, sliders: newSliders };
         }
     }
-    catch(err) {
-      console.log("updatePatternFromCode error")
-      console.log(err)
+    catch (err) {
+        console.log("updatePatternFromCode error")
+        console.log(err)
     }
     return null;
 }
 
 function isValidBeat(beat) {
-
     var valid = true;
     for (i = 1; i <= 6; i++) {
         valid = valid &&
-            Array.isArray(beat['rhythm'+i.toString()]) &&
-            beat['rhythm'+i.toString()].every((v) => v <=2 && v >=0);
+            Array.isArray(beat['rhythm' + i.toString()]) &&
+            beat['rhythm' + i.toString()].every((v) => v <= 2 && v >= 0);
     }
     console.log(valid);
     return valid;
 }
 
+function isValidSliders(sliders) {
+    var valid = true;
+    Object.values(sliders).forEach(val => {
+        valid = valid &&
+            typeof val == 'number' &&
+            val >= 0 && val <= 1
+    });
+    return valid;
+}
 
 exports.setCMInstance = setCMInstance
 exports.synthCode = synthCode
