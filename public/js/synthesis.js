@@ -39,6 +39,25 @@ function synthCode(newNoteValue, rhythmIndex, instrumentIndex, theBeat) {
     });
 }
 
+function synthSliderCode(sliderTarget, value) {
+    var currentCode = codeMirrorInstance.getValue()
+    //generate new line for changed note
+    newLine = "  s." + sliderTarget + " = " + Math.round((value + Number.EPSILON) * 100) / 100 + ";\n"
+    existingLineLoc = currentCode.indexOf("  s." + sliderTarget)
+    //if code has a line explicitly changed this point, then we update its value
+    if (existingLineLoc >= 0) {
+        var lineChPos = codeMirrorInstance.posFromIndex(existingLineLoc);
+        var endReplacePos = JSON.parse(JSON.stringify(lineChPos));
+        endReplacePos.ch = newLine.length + 1;
+        codeMirrorInstance
+            .replaceRange(newLine.slice(0, -1), lineChPos, endReplacePos);
+    }
+    //else code currently has no effect on manually changed pattern, so we can just add a line
+    else {
+        codeMirrorInstance.replaceRange(newLine, { line: codeMirrorInstance.lineCount() - 2, ch: 0 })
+    }
+}
+
 function updatePatternFromCode(currentBeat, rhythmIndex) {
     //every time we advance a time step, pull latest code and update beat object
     var updatedCode = codeMirrorInstance.getValue()
@@ -85,6 +104,7 @@ function isValidSliders(sliders) {
 
 exports.setCMInstance = setCMInstance
 exports.synthCode = synthCode
+exports.synthSliderCode = synthSliderCode
 exports.updatePatternFromCode = updatePatternFromCode
 
 //
