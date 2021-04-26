@@ -39,3 +39,6 @@ Then install everything and get playing!
     npm install
     node app.js # or, on a server, nohup node app.js &
 
+# TODOs
+
+CVC4 moduluo (http://smtlib.cs.uiowa.edu/theories-Ints.shtml) and js modulo differ (https://stackoverflow.com/a/17323608)
