@@ -63,12 +63,12 @@ function updatePatternFromCode(currentBeat, rhythmIndex) {
     var updatedCode = codeMirrorInstance.getValue()
     try {
         //TODO if(codeChanged) {
-        let f = new Function("theBeat", "rhythmIndex", '"use strict"; ' + updatedCode + ' return (genBeat(theBeat, {}, rhythmIndex));');
+        let f = new Function("theBeat", "rhythmIndex", '"use strict"; ' + pattern.toString() + updatedCode + ' return (genBeat(theBeat, {}, rhythmIndex));');
         let newData = f(currentBeat, rhythmIndex);
         let newBeat = newData.beat;
         let newSliders = newData.sliders;
         for (i = 1; i <= 6; i++) {
-            newBeat['rhythm' + i.toString()] = newBeat['rhythm' + i.toString()].map((note) => { if (Number.isNaN(note)) { return 0; } else { return note } });
+            newBeat['rhythm' + i.toString()] = newBeat['rhythm' + i.toString()].map((note) => { console.log("rhythm" + i + "'s note: " + note); if (Number.isNaN(note)) { return 0; } else { return note } });
         }
         if (isValidBeat(newBeat) && isValidSliders(newSliders)) { // && theBeat != newBeat){
             return { beat: newBeat, sliders: newSliders };
@@ -81,6 +81,11 @@ function updatePatternFromCode(currentBeat, rhythmIndex) {
     return null;
 }
 
+//function that creates new beat with equation as only input
+function pattern(equation){
+     return new Array(16).fill(0).map(equation);
+}
+
 function isValidBeat(beat) {
     var valid = true;
     for (i = 1; i <= 6; i++) {
@@ -88,7 +93,7 @@ function isValidBeat(beat) {
             Array.isArray(beat['rhythm' + i.toString()]) &&
             beat['rhythm' + i.toString()].every((v) => v <= 2 && v >= 0);
     }
-    console.log(valid);
+    console.log("isValidBeat: " + valid);
     return valid;
 }
 
@@ -99,6 +104,7 @@ function isValidSliders(sliders) {
             typeof val == 'number' &&
             val >= 0 && val <= 1
     });
+    console.log("isValidSliders: " + valid);
     return valid;
 }
 

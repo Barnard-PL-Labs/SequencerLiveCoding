@@ -35,7 +35,8 @@ process.on('message', (data) => {
 function parseCodeLine(line) {
     var indexOperation = new RegExp(/b\.rhythm([1-6])\[(1?[0-9])\] ?= ?([0-2])[;,\n]/);
     //TODO, relax assumption that all maps are of the form "b.rhythm1 = b.rhythm1.map"
-    var mapOperation = new RegExp(/b\.rhythm([1-6])\.map\((.*)=> *\{(.*)\}\)/);
+    // var mapOperation = new RegExp(/b\.rhythm([1-6])\.map\((.*)=> *\{(.*)\}\)/);
+    var mapOperation = new RegExp(/b\.rhythm([1-6])(\s?)=(\s?)pattern\((.*)=>(.*)\);/);
     
     if (indexOperation.test(line)) {
         matches = line.match(indexOperation);
@@ -44,7 +45,7 @@ function parseCodeLine(line) {
         matches = line.match(mapOperation);
         return MapOp(matches[1] - 1, matches[2], matches[3])
     } else {
-        throw ParseError(line);
+        throw new ParseError(line);
     }
     
 }
@@ -67,7 +68,7 @@ simplifyCode = async function(codeAndBeat) {
             var parsed = parseCodeLine(line)
             parsedCode.push(parsed);
         } catch (error) {
-            
+            //these errors are non-synthesized lines, don't do anything
         }
     });
 
@@ -98,7 +99,9 @@ simplifyCode = async function(codeAndBeat) {
                 var newFxn = fxnDefs[0];
                 var newNewJsFxnBody = astToJs(smt_parser(newFxn));
                 newCode = newCode.replace(new RegExp(".*rhythm"+whichPattern+".*\n", "g"), '')
-                newCode += "  b.rhythm" + whichPattern + " = new Array(16).fill(0).map((val,i) => {"+newNewJsFxnBody+" });\n";
+                newCode += displayPattern(whichPattern,newNewJsFxnBody);
+                console.log("newCode Changed");
+                // newCode += "  b.rhythm" + whichPattern + " = new Array(16).fill(0).map((val,i) => {"+newNewJsFxnBody+" });\n";
                 newCode += "  b.rhythm" + whichPattern + ".splice(" + subseq['startMaxSubseq'] + "," + subseq['lengthMaxSubseq'] + ",...Array(" + subseq['lengthMaxSubseq'] + ").fill(" + subseq['valMaxSubseq'] + "));\n"
             }
         }
@@ -107,6 +110,13 @@ simplifyCode = async function(codeAndBeat) {
     //TODO merge newNewJsFxnBody with parsedCode and code
     return {"newCode": newCode};
 
+}
+
+//function that displays the .pattern() keyword in place of "new Array(16).fill(0)..."
+function displayPattern(whichPattern, newNewJsFxnBody) {
+   console.log(newNewJsFxnBody);
+   var equation = newNewJsFxnBody.replace('return', '').replace(';','').trim();
+   return "  b.rhythm" + whichPattern + " = pattern((val,i) => " + equation+");\n";
 }
 
 function sygusOnePattern(codeAndBeat, whichPattern) {
