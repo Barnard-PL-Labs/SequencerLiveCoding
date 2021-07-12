@@ -1,3 +1,6 @@
+// const { setBeatSnarePitchVal, setBeatTom2PitchVal, setBeatTom1PitchVal, setBeatHihatPitchVal, setBeatTom3PitchVal} = require("./beat");
+const beatMod = require('./beat')
+
 //We pull this in on init, which allows us to grab code as the drum machine runs
 var codeMirrorInstance = null
 
@@ -63,12 +66,12 @@ function updatePatternFromCode(currentBeat, rhythmIndex) {
     var updatedCode = codeMirrorInstance.getValue()
     try {
         //TODO if(codeChanged) {
-        let f = new Function("theBeat", "rhythmIndex", '"use strict"; ' + pattern.toString() + updatedCode + ' return (genBeat(theBeat, {}, rhythmIndex));');
+        let f = new Function("theBeat", "rhythmIndex", '"use strict"; ' + pattern.toString() + setAll.toString() + changePitch.toString() + backBeat.toString() + updatedCode + ' return (genBeat(theBeat, {}, rhythmIndex));');
         let newData = f(currentBeat, rhythmIndex);
         let newBeat = newData.beat;
         let newSliders = newData.sliders;
         for (i = 1; i <= 6; i++) {
-            newBeat['rhythm' + i.toString()] = newBeat['rhythm' + i.toString()].map((note) => { console.log("rhythm" + i + "'s note: " + note); if (Number.isNaN(note)) { return 0; } else { return note } });
+            newBeat['rhythm' + i.toString()] = newBeat['rhythm' + i.toString()].map((note) => { if (Number.isNaN(note)) { return 0; } else { return note } });
         }
         if (isValidBeat(newBeat) && isValidSliders(newSliders)) { // && theBeat != newBeat){
             return { beat: newBeat, sliders: newSliders };
@@ -86,6 +89,39 @@ function pattern(equation){
      return new Array(16).fill(0).map(equation);
 }
 
+function setAll(val){
+    if(val>=0 && val<=2)
+        return new Array(16).fill(val);
+}
+
+function changePitch(instrument, val){
+    // console.log("inside changePitch" + instrumentIndex);
+    switch(instrument.toLowerCase()){
+        case "kick":
+            beatMod.setBeatKickPitchVal(val);
+            break;
+        case "snare":
+            beatMod.setBeatSnarePitchVal(val);
+            break;
+        case "tom 1":
+            beatMod.setBeatTom1PitchVal(val);
+            break;
+        case "tom 2":
+            beatMod.setBeatTom2PitchVal(val);
+            break;
+        case "tom 3":
+            beatMod.setBeatTom3PitchVal(val);
+            break;
+        case "high-hat":
+            beatMod.setBeatHihatPitchVal(val);
+            break;
+    }
+}
+
+function backBeat(){
+    return new Array(16).fill(0).map((val,i) => i%2);
+}
+
 function isValidBeat(beat) {
     var valid = true;
     for (i = 1; i <= 6; i++) {
@@ -93,7 +129,6 @@ function isValidBeat(beat) {
             Array.isArray(beat['rhythm' + i.toString()]) &&
             beat['rhythm' + i.toString()].every((v) => v <= 2 && v >= 0);
     }
-    console.log("isValidBeat: " + valid);
     return valid;
 }
 
@@ -104,7 +139,6 @@ function isValidSliders(sliders) {
             typeof val == 'number' &&
             val >= 0 && val <= 1
     });
-    console.log("isValidSliders: " + valid);
     return valid;
 }
 

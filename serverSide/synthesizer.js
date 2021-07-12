@@ -2,7 +2,14 @@ const { callPBE } = require("./cvc4");
 const { findMaxSubseq, zipWithIndex, checkForSingleEdit } = require("./synthUtils");
 const { smt_parser } = require("./parsers/smt_parser");
 const { astToJs } = require("./parsers/astToJS");
-
+const instrument = {
+    1: "Kick",
+    2: "Snare",
+    3: "Hi-Hat",
+    4: "Tom 1",
+    5: "Tom 2",
+    6: "Tom 3"
+};
 
 class ParseError extends Error {
     constructor(message) {
@@ -35,13 +42,16 @@ process.on('message', (data) => {
 function parseCodeLine(line) {
     var indexOperation = new RegExp(/b\.rhythm([1-6])\[(1?[0-9])\] ?= ?([0-2])[;,\n]/);
     //TODO, relax assumption that all maps are of the form "b.rhythm1 = b.rhythm1.map"
-    // var mapOperation = new RegExp(/b\.rhythm([1-6])\.map\((.*)=> *\{(.*)\}\)/);
-    var mapOperation = new RegExp(/b\.rhythm([1-6])(\s?)=(\s?)pattern\((.*)=>(.*)\);/);
-    
+    var mapOperation = new RegExp(/(b\.rhythm([1-6])(\s?))=(\s?)pattern\((.*)=>(.*)\);/g);
+    //g-tag: matches only contain results that match the COMPLETE regExp
+
+    //if line has match with indexOp
     if (indexOperation.test(line)) {
         matches = line.match(indexOperation);
         return IndexOp(matches[1] - 1, matches[2], matches[3])
+    //if line has match with mapOp
     } else if (mapOperation.test(line)) {
+        //matches: a string array of matching retult(s)
         matches = line.match(mapOperation);
         return MapOp(matches[1] - 1, matches[2], matches[3])
     } else {
@@ -53,6 +63,7 @@ function parseCodeLine(line) {
 //check if we have inserted a array index manipulation line of code 
 function hasPatternEdit(parsedCode, whichPattern) {
     const matchesP = (codeLine) => codeLine["instIndex"] == whichPattern-1;
+    console.log(whichPattern-1 + ": " + parsedCode.some(matchesP));
     return parsedCode.some(matchesP);
 }
 
@@ -80,12 +91,14 @@ simplifyCode = async function(codeAndBeat) {
     for (whichPattern = 1; whichPattern <= 6; whichPattern++) {
         var singleEditInfo = checkForSingleEdit(codeAndBeat["beat"]["rhythm" + whichPattern])
         if (singleEditInfo["hasOneChangedIndex"]) {
+            console.log("Pattern " + whichPattern + " has singleEdit");
             newCode = newCode.replace(new RegExp(".*rhythm"+whichPattern+".*\n", "g"), '')
             newCode += "  b.rhythm" + whichPattern + " = new Array(16).fill(" + singleEditInfo["fillVal"] + ")\n"
             newCode += "  b.rhythm" + whichPattern + "[" + singleEditInfo["editLoc"] + "] = " + singleEditInfo["editVal"] + ";\n"
 
         }
         else if (hasPatternEdit(parsedCode, whichPattern)) {
+            console.log("Pattern " + whichPattern + " has patternEdit");
             var synthSolution = sygusOnePattern(codeAndBeat, whichPattern);
             var sygusSolution = synthSolution["code"]
             var subseq = synthSolution["subseq"]
@@ -99,9 +112,8 @@ simplifyCode = async function(codeAndBeat) {
                 var newFxn = fxnDefs[0];
                 var newNewJsFxnBody = astToJs(smt_parser(newFxn));
                 newCode = newCode.replace(new RegExp(".*rhythm"+whichPattern+".*\n", "g"), '')
+                //corresponds to the new .pattern() in synthesis.js
                 newCode += displayPattern(whichPattern,newNewJsFxnBody);
-                console.log("newCode Changed");
-                // newCode += "  b.rhythm" + whichPattern + " = new Array(16).fill(0).map((val,i) => {"+newNewJsFxnBody+" });\n";
                 newCode += "  b.rhythm" + whichPattern + ".splice(" + subseq['startMaxSubseq'] + "," + subseq['lengthMaxSubseq'] + ",...Array(" + subseq['lengthMaxSubseq'] + ").fill(" + subseq['valMaxSubseq'] + "));\n"
             }
         }
@@ -114,8 +126,10 @@ simplifyCode = async function(codeAndBeat) {
 
 //function that displays the .pattern() keyword in place of "new Array(16).fill(0)..."
 function displayPattern(whichPattern, newNewJsFxnBody) {
-   console.log(newNewJsFxnBody);
+   console.log("newFxn: "+newNewJsFxnBody);
    var equation = newNewJsFxnBody.replace('return', '').replace(';','').trim();
+   console.log("new .pattern() added");
+//    return "  " + instrument[whichPattern] + " = pattern((val,i) => " + equation+");\n";
    return "  b.rhythm" + whichPattern + " = pattern((val,i) => " + equation+");\n";
 }
 
