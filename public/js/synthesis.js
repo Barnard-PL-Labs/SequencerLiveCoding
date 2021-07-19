@@ -1,5 +1,7 @@
 // const { setBeatSnarePitchVal, setBeatTom2PitchVal, setBeatTom1PitchVal, setBeatHihatPitchVal, setBeatTom3PitchVal} = require("./beat");
-const beatMod = require('./beat')
+// const beatMod = require('./beat')
+
+const { kickPitch } = require("./kit");
 
 //We pull this in on init, which allows us to grab code as the drum machine runs
 var codeMirrorInstance = null
@@ -66,7 +68,7 @@ function updatePatternFromCode(currentBeat, rhythmIndex) {
     var updatedCode = codeMirrorInstance.getValue()
     try {
         //TODO if(codeChanged) {
-        let f = new Function("theBeat", "rhythmIndex", '"use strict"; ' + pattern.toString() + setAll.toString() + changePitch.toString() + backBeat.toString() + updatedCode + ' return (genBeat(theBeat, {}, rhythmIndex));');
+        let f = new Function("theBeat", "rhythmIndex", '"use strict"; ' + pattern.toString() + setAll.toString() + backBeat.toString() + p.toString() + updatedCode + ' return (genBeat(theBeat, {}, rhythmIndex));');
         let newData = f(currentBeat, rhythmIndex);
         let newBeat = newData.beat;
         let newSliders = newData.sliders;
@@ -94,29 +96,28 @@ function setAll(val){
         return new Array(16).fill(val);
 }
 
-function changePitch(instrument, val){
-    // console.log("inside changePitch" + instrumentIndex);
-    switch(instrument.toLowerCase()){
-        case "kick":
-            beatMod.setBeatKickPitchVal(val);
-            break;
-        case "snare":
-            beatMod.setBeatSnarePitchVal(val);
-            break;
-        case "tom 1":
-            beatMod.setBeatTom1PitchVal(val);
-            break;
-        case "tom 2":
-            beatMod.setBeatTom2PitchVal(val);
-            break;
-        case "tom 3":
-            beatMod.setBeatTom3PitchVal(val);
-            break;
-        case "high-hat":
-            beatMod.setBeatHihatPitchVal(val);
-            break;
-    }
+function p(val){
+    const notes = {
+        "C": 0,
+        "D": 0.167,
+        "E": 0.333,
+        "F": 0.5,
+        "G": 0.667,
+        "A": 0.833,
+        "B": 1
+    };
+    if(isNaN(val)){
+        if(val.match(/[A-G]/g))
+            val = notes[val];
+        else
+            val = 0;
+    }else{
+        val = val%1;
+    }   
+    console.log("pitchVal: " + val);
+    return val;
 }
+
 
 function backBeat(){
     return new Array(16).fill(0).map((val,i) => i%2);
@@ -139,6 +140,7 @@ function isValidSliders(sliders) {
             typeof val == 'number' &&
             val >= 0 && val <= 1
     });
+    console.log("Slider: " + valid)
     return valid;
 }
 
