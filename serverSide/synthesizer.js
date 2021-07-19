@@ -86,7 +86,7 @@ simplifyCode = async function(codeAndBeat) {
         }
         else if (hasPatternEdit(parsedCode, whichPattern)) {
             var synthSolution = sygusOnePattern(codeAndBeat, whichPattern);
-            var sygusSolution = synthSolution["code"]
+            var sygusSolution = synthSolution["code"] 
             var subseq = synthSolution["subseq"]
             //turn sygus sol'n to JS code
             //TODO refactor to fxn

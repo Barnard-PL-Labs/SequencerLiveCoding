@@ -4,7 +4,7 @@
 ( declare-datatypes ( ( Pair 0) ) (
 (( pair ( first Int ) ( second Int )) )))
 
-(synth-fun patternGen ((i i Pair)) Int
+(synth-fun patternGen ((i Pair)) Int
   ((I Int) (P Pair)) 
 (  (I Int (i 0 1 2 3 4 5 6
   ))
@@ -13,6 +13,6 @@
   ))
 ))
 (declare-var i Int)
-(constraint (= (patternGen pair 1 1) (15))) ;a input can't produce 2 outputs, can we try an output with 2 inputs?
+(constraint (= (patternGen 1 1) 0)) ;a input can't produce 2 outputs, can we try an output with 2 inputs?
 ; (constraint (= (patternGen 0) (pair 0 0)))
 (check-synth)
