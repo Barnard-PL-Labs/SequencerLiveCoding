@@ -13,7 +13,7 @@ function updateSliderVals(sliderValObj) {
 
 function sliderSetValue(slider, value) {
     var pitchRate = Math.pow(2.0, 2.0 * (value - 0.5));
-
+    console.log("pitch rate: " + pitchRate);
     switch (slider) {
         case 'effect_thumb':
             // Change the volume of the convolution effect.

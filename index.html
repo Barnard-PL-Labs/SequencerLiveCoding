@@ -60,6 +60,38 @@
 		<div>
 			<textarea id="codingWindow" rows="10" cols="120" style="border:1px solid black" class="boxsizingBorder">
 		</textarea>
+		<section>
+			<div id="instructionsForAddedFunctions">
+				Instructions for Added Functions:
+				<ul>
+					<li>pattern( ): takes in an equations that is used to map beats. 
+						<ul>
+							<li>The equation must take in the form of "(val,i)=>_____".</li>
+							<li>Exmaple: b.rhythm4 = pattern((val,i)=>1-i%2);</li>
+						</ul>
+					</li>
+					<div></div>
+					<li>setAll( ): takes in an integer(0, 1, or 2) and sets the value of all beats to that integer.
+						<ul>
+							<li>0 is rests, 1 is regular beat, 2 is beat with forte</li>
+							<li>Example: b.rhythm4 = setAll(1);</li>
+						</ul>
+					</li>
+					<li>backBeat( ): takes no parameter, creates a rhythm that sounds on beats 2,4, 6,... etc.
+						<ul>
+							<li>Example: b.rhythm4 = backBeat( );</li>
+						</ul>
+					</li>
+					<li>p( ): takes in a String parameter or a numeric value to change the pitch.
+						<ul>
+							<li>Numeric value: should be between 0 to 1(inclusive)</li>
+							<li>String value: should be a letter between A and G(inclusive)</li>
+							<li>Example: s.kick_thumb = p(0.5); s.kick_thumb = p("C"); </li>
+						</ul>
+					</li>
+				</ul>
+			</div>
+		</section>
 		</div>
 
 		<div>
@@ -277,7 +309,6 @@
 						src='images/btn_demo5_loading.gif' width='45' height='33'>
 				</span>
 			</section>
-
 
 			<div class='container' id='save_container'>
 				<h3>

@@ -5,7 +5,11 @@
     "dependencies": {
         "codemirror": "^5.55.0",
         "express": "^4.17.1",
+<<<<<<< HEAD
         "jquery": "^3.6.0",
         "socket.io": "^2.3.0"
+=======
+        "socket.io": "^4.0.1"
+>>>>>>> dc61c9c48a4436ec049668c6cd18c84d1fc56530
     }
 }

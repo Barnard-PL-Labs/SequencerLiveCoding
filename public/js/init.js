@@ -20,7 +20,7 @@ function startLoadingAssets() {
     // Initialize drum kits
     var numKits = kitMod.kitName.length;
     tmp = new Array(numKits);
-    for (var i  = 0; i < numKits; i++) {
+    for (var i = 0; i < numKits; i++) {
         tmp[i] = new kitMod.Kit(kitMod.kitName[i]);
     }
     kitMod.setKits(tmp)
@@ -41,7 +41,7 @@ function startLoadingAssets() {
 
     // Then load the remaining assets.
     // Note that any assets which have previously started loading will be skipped over.
-    for (var i  = 0; i < numKits; i++) {
+    for (var i = 0; i < numKits; i++) {
         kitMod.kits[i].load();
     }
 
@@ -74,8 +74,8 @@ function showDemoAvailable(demoIndex /* zero-based */) {
         showPlayAvailable();
         handlersMod.loadBeat(beatMod.beatDemo[1]);
 
-    // Uncomment to allow autoplay
-    //     handlePlay();
+        // Uncomment to allow autoplay
+        //     handlePlay();
     }
 }
 
@@ -85,7 +85,7 @@ function showPlayAvailable() {
     play.src = "images/btn_play.png";
 }
 
-exports.initDrums = function(cmInstance) {
+exports.initDrums = function (cmInstance) {
 
     // Let the beat demos know when all of their assets have been loaded.
     // Add some new methods to support this.
@@ -94,23 +94,23 @@ exports.initDrums = function(cmInstance) {
         beatMod.beatDemo[i].isKitLoaded = false;
         beatMod.beatDemo[i].isEffectLoaded = false;
 
-        beatMod.beatDemo[i].setKitLoaded = function() {
+        beatMod.beatDemo[i].setKitLoaded = function () {
             this.isKitLoaded = true;
             this.checkIsLoaded();
         };
 
-        beatMod.beatDemo[i].setEffectLoaded = function() {
+        beatMod.beatDemo[i].setEffectLoaded = function () {
             this.isEffectLoaded = true;
             this.checkIsLoaded();
         };
 
-        beatMod.beatDemo[i].checkIsLoaded = function() {
+        beatMod.beatDemo[i].checkIsLoaded = function () {
             if (this.isLoaded()) {
                 showDemoAvailable(this.index);
             }
         };
 
-        beatMod.beatDemo[i].isLoaded = function() {
+        beatMod.beatDemo[i].isLoaded = function () {
             return this.isKitLoaded && this.isEffectLoaded;
         };
     }
@@ -131,6 +131,8 @@ exports.initDrums = function(cmInstance) {
         // No compressor available in this implementation.
         finalMixNode = contextMod.context.destination;
     }
+
+    //TODO @hannahcmacias add webaudiorecorder here to finalMixNode?
 
     // create master filter node
     let tmp = contextMod.context.createBiquadFilter();
@@ -173,8 +175,8 @@ exports.initDrums = function(cmInstance) {
     var timerWorkerBlobURL = window.URL.createObjectURL(timerWorkerBlob);
 
     timerWorker = new Worker(timerWorkerBlobURL);
-    timerWorker.onmessage = function(e) {
-      playMod.schedule();
+    timerWorker.onmessage = function (e) {
+        playMod.schedule();
     };
     timerWorker.postMessage('init'); // Start the worker.
 
@@ -226,8 +228,8 @@ function initButtons() {
 
     for (i = 0; i < beatMod.loopLength; ++i) {
         for (j = 0; j < kitMod.kNumInstruments; j++) {
-                elButton = document.getElementById(kitMod.instruments[j] + '_' + i);
-                elButton.addEventListener("mousedown", handlersMod.handleButtonMouseDown, true);
+            elButton = document.getElementById(kitMod.instruments[j] + '_' + i);
+            elButton.addEventListener("mousedown", handlersMod.handleButtonMouseDown, true);
         }
     }
 }
