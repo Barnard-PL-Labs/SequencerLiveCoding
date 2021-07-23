@@ -1,3 +1,8 @@
+// const { setBeatSnarePitchVal, setBeatTom2PitchVal, setBeatTom1PitchVal, setBeatHihatPitchVal, setBeatTom3PitchVal} = require("./beat");
+// const beatMod = require('./beat')
+
+const { kickPitch } = require("./kit");
+
 //We pull this in on init, which allows us to grab code as the drum machine runs
 var codeMirrorInstance = null
 
@@ -63,7 +68,7 @@ function updatePatternFromCode(currentBeat, rhythmIndex) {
     var updatedCode = codeMirrorInstance.getValue()
     try {
         //TODO if(codeChanged) {
-        let f = new Function("theBeat", "rhythmIndex", '"use strict"; ' + updatedCode + ' return (genBeat(theBeat, {}, rhythmIndex));');
+        let f = new Function("theBeat", "rhythmIndex", '"use strict"; ' + pattern.toString() + setAll.toString() + backBeat.toString() + p.toString() + updatedCode + ' return (genBeat(theBeat, {}, rhythmIndex));');
         let newData = f(currentBeat, rhythmIndex);
         let newBeat = newData.beat;
         let newSliders = newData.sliders;
@@ -81,6 +86,43 @@ function updatePatternFromCode(currentBeat, rhythmIndex) {
     return null;
 }
 
+//function that creates new beat with equation as only input
+function pattern(equation){
+     return new Array(16).fill(0).map(equation);
+}
+
+function setAll(val){
+    if(val>=0 && val<=2)
+        return new Array(16).fill(val);
+}
+
+function p(val){
+    const notes = {
+        "C": 0,
+        "D": 0.167,
+        "E": 0.333,
+        "F": 0.5,
+        "G": 0.667,
+        "A": 0.833,
+        "B": 1
+    };
+    if(isNaN(val)){
+        if(val.match(/[A-G]/g))
+            val = notes[val];
+        else
+            val = 0;
+    }else{
+        val = val%1;
+    }   
+    console.log("pitchVal: " + val);
+    return val;
+}
+
+
+function backBeat(){
+    return new Array(16).fill(0).map((val,i) => i%2);
+}
+
 function isValidBeat(beat) {
     var valid = true;
     for (i = 1; i <= 6; i++) {
@@ -88,7 +130,6 @@ function isValidBeat(beat) {
             Array.isArray(beat['rhythm' + i.toString()]) &&
             beat['rhythm' + i.toString()].every((v) => v <= 2 && v >= 0);
     }
-    console.log(valid);
     return valid;
 }
 
@@ -99,6 +140,7 @@ function isValidSliders(sliders) {
             typeof val == 'number' &&
             val >= 0 && val <= 1
     });
+    console.log("Slider: " + valid)
     return valid;
 }
 
