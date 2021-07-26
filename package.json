@@ -1,10 +1,10 @@
 {
-    "name": "sequencer-live-coding",
-    "version": "0.0.1",
-    "description": "my first socket.io app",
-    "dependencies": {
-        "codemirror": "^5.55.0",
-        "express": "^4.17.1",
-        "socket.io": "^4.0.1"
+        "name": "sequencer-live-coding",
+        "version": "0.0.1",
+        "description": "my first socket.io app",
+        "dependencies": {
+            "codemirror": "^5.55.0",
+            "express": "^4.17.1",
+            "socket.io": "^4.0.1"
+        }
     }
-}

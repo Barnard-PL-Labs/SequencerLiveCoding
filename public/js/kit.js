@@ -60,7 +60,8 @@ var volumes = [0, 0.3, 1];
 
 // var kitCount = 0;
 
-var kitName = [
+var kitName = [ //backend
+    "astrobeats",
     "R8",
     "CR78",
     "KPR77",
@@ -78,7 +79,8 @@ var kitName = [
     "TheCheebacabra2"
     ];
 
-var kitNamePretty = [
+var kitNamePretty = [ //interface
+    "astrobeats",
     "Roland R-8",
     "Roland CR-78",
     "Korg KPR-77",
@@ -100,7 +102,7 @@ function Kit(name) {
     this.name = name;
 
     this.pathName = function() {
-        var pathName = "sounds/drum-samples/" + this.name + "/";
+        var pathName = "sounds/drum-samples/" + this.name + "/"; //corresponds to left folder
         return pathName;
     };
 

@@ -20,13 +20,13 @@ function setRhythmIndex(idx) {
     rhythmIndex = idx;
     exports.rhythmIndex = rhythmIndex;
 }
-
+//what are the different elements of array beatDemo?
 var beatReset = {"kitIndex":0,"effectIndex":0,"tempo":100,"swingFactor":0,"effectMix":0.25,"kickPitchVal":0.5,"snarePitchVal":0.5,"hihatPitchVal":0.5,"tom1PitchVal":0.5,"tom2PitchVal":0.5,"tom3PitchVal":0.5,"rhythm1":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"rhythm2":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"rhythm3":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"rhythm4":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"rhythm5":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"rhythm6":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]};
-var beatDemo = [
-    {"kitIndex":13,"effectIndex":18,"tempo":120,"swingFactor":0,"effectMix":0.19718309859154926,"kickPitchVal":0.5,"snarePitchVal":0.5,"hihatPitchVal":0.5,"tom1PitchVal":0.5,"tom2PitchVal":0.5,"tom3PitchVal":0.5,"rhythm1":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"rhythm2":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"rhythm3":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"rhythm4":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"rhythm5":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"rhythm6":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]},
-    {"kitIndex":4,"effectIndex":12,"tempo":100,"swingFactor":0,"effectMix":0.2,"kickPitchVal":0.46478873239436624,"snarePitchVal":0.45070422535211263,"hihatPitchVal":0.15492957746478875,"tom1PitchVal":0.7183098591549295,"tom2PitchVal":0.704225352112676,"tom3PitchVal":0.8028169014084507,"rhythm1":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"rhythm2":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"rhythm3":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"rhythm4":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"rhythm5":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"rhythm6":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]},
-    {"kitIndex":2,"effectIndex":5,"tempo":100,"swingFactor":0,"effectMix":0.25,"kickPitchVal":0.5,"snarePitchVal":0.5,"hihatPitchVal":0.5211267605633803,"tom1PitchVal":0.23943661971830987,"tom2PitchVal":0.21126760563380287,"tom3PitchVal":0.2535211267605634,"rhythm1":[2,0,0,0,2,0,0,0,2,0,0,0,2,0,0,0],"rhythm2":[0,0,0,0,2,0,0,0,0,0,0,0,2,0,0,0],"rhythm3":[0,0,1,0,0,0,1,0,0,0,1,0,0,0,1,0],"rhythm4":[1,1,0,1,1,1,0,1,1,1,0,1,1,1,0,1],"rhythm5":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,0],"rhythm6":[0,0,1,0,1,0,0,2,0,2,0,0,1,0,0,0]},
-    {"kitIndex":1,"effectIndex":4,"tempo":120,"swingFactor":0,"effectMix":0.25,"kickPitchVal":0.7887323943661972,"snarePitchVal":0.49295774647887325,"hihatPitchVal":0.5,"tom1PitchVal":0.323943661971831,"tom2PitchVal":0.3943661971830986,"tom3PitchVal":0.323943661971831,"rhythm1":[2,0,0,0,0,0,0,2,2,0,0,0,0,0,0,1],"rhythm2":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"rhythm3":[0,0,1,0,2,0,1,0,1,0,1,0,2,0,2,0],"rhythm4":[2,0,2,0,0,0,0,0,2,0,0,0,0,2,0,0],"rhythm5":[0,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0],"rhythm6":[0,2,0,0,0,2,0,0,0,2,0,0,0,0,0,0]},
+var beatDemo = [ //default, add duration val
+    {"kitIndex":13,"effectIndex":18,"tempo":120,"swingFactor":0,"effectMix":0.19718309859154926,"kickPitchVal":0.5,"snarePitchVal":0.5,"hihatPitchVal":0.5,"tom1PitchVal":0.5,"tom2PitchVal":0.5,"tom3PitchVal":0.5,"rhythm1":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"rhythm2":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"rhythm3":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"rhythm4":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"rhythm5":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"rhythm6":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0], "rhythm1duration":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0], "rhythm2duration":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0], "rhythm3duration":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0], "rhythm4duration":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0], "rhythm5duration":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0], "rhythm6duration":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]}, //rhythm1-duration [0000]
+    {"kitIndex":4,"effectIndex":12,"tempo":100,"swingFactor":0,"effectMix":0.2,"kickPitchVal":0.46478873239436624,"snarePitchVal":0.45070422535211263,"hihatPitchVal":0.15492957746478875,"tom1PitchVal":0.7183098591549295,"tom2PitchVal":0.704225352112676,"tom3PitchVal":0.8028169014084507,"rhythm1":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"rhythm2":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"rhythm3":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"rhythm4":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"rhythm5":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"rhythm6":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0], "rhythm1duration":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0], "rhythm2duration":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0], "rhythm3duration":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0], "rhythm4duration":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0], "rhythm5duration":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0], "rhythm6duration":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]},
+    {"kitIndex":2,"effectIndex":5,"tempo":100,"swingFactor":0,"effectMix":0.25,"kickPitchVal":0.5,"snarePitchVal":0.5,"hihatPitchVal":0.5211267605633803,"tom1PitchVal":0.23943661971830987,"tom2PitchVal":0.21126760563380287,"tom3PitchVal":0.2535211267605634,"rhythm1":[2,0,0,0,2,0,0,0,2,0,0,0,2,0,0,0],"rhythm2":[0,0,0,0,2,0,0,0,0,0,0,0,2,0,0,0],"rhythm3":[0,0,1,0,0,0,1,0,0,0,1,0,0,0,1,0],"rhythm4":[1,1,0,1,1,1,0,1,1,1,0,1,1,1,0,1],"rhythm5":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,0],"rhythm6":[0,0,1,0,1,0,0,2,0,2,0,0,1,0,0,0], "rhythm1duration":[2,0,0,0,2,0,0,0,2,0,0,0,2,0,0,0],"rhythm2duration":[0,0,0,0,2,0,0,0,0,0,0,0,2,0,0,0],"rhythm3duration":[0,0,1,0,0,0,1,0,0,0,1,0,0,0,1,0],"rhythm4duration":[1,1,0,1,1,1,0,1,1,1,0,1,1,1,0,1],"rhythm5duration":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,0],"rhythm6duration":[0,0,1,0,1,0,0,2,0,2,0,0,1,0,0,0]},
+    {"kitIndex":1,"effectIndex":4,"tempo":120,"swingFactor":0,"effectMix":0.25,"kickPitchVal":0.7887323943661972,"snarePitchVal":0.49295774647887325,"hihatPitchVal":0.5,"tom1PitchVal":0.323943661971831,"tom2PitchVal":0.3943661971830986,"tom3PitchVal":0.323943661971831,"rhythm1":[2,0,0,0,0,0,0,2,2,0,0,0,0,0,0,1],"rhythm2":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"rhythm3":[0,0,1,0,2,0,1,0,1,0,1,0,2,0,2,0],"rhythm4":[2,0,2,0,0,0,0,0,2,0,0,0,0,2,0,0],"rhythm5":[0,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0],"rhythm6":[0,2,0,0,0,2,0,0,0,2,0,0,0,0,0,0], "rhythm1duration":[2,0,0,0,0,0,0,2,2,0,0,0,0,0,0,1],"rhythm2duration":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"rhythm3duration":[0,0,1,0,2,0,1,0,1,0,1,0,2,0,2,0],"rhythm4duration":[2,0,2,0,0,0,0,0,2,0,0,0,0,2,0,0],"rhythm5":[0,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0],"rhythm6":[0,2,0,0,0,2,0,0,0,2,0,0,0,0,0,0]},
     {"kitIndex":0,"effectIndex":1,"tempo":60,"swingFactor":0.5419847328244275,"effectMix":0.25,"kickPitchVal":0.5,"snarePitchVal":0.5,"hihatPitchVal":0.5,"tom1PitchVal":0.5,"tom2PitchVal":0.5,"tom3PitchVal":0.5,"rhythm1":[2,2,0,1,2,2,0,1,2,2,0,1,2,2,0,1],"rhythm2":[0,0,2,0,0,0,2,0,0,0,2,0,0,0,2,0],"rhythm3":[2,1,1,1,2,1,1,1,2,1,1,1,2,1,1,1],"rhythm4":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"rhythm5":[0,0,1,0,0,1,0,1,0,0,1,0,0,0,1,0],"rhythm6":[1,0,0,1,0,1,0,1,1,0,0,1,1,1,1,0]},
 ];
 
@@ -926,7 +926,7 @@ function startLoadingAssets() {
     // Initialize drum kits
     var numKits = kitMod.kitName.length;
     tmp = new Array(numKits);
-    for (var i  = 0; i < numKits; i++) {
+    for (var i = 0; i < numKits; i++) {
         tmp[i] = new kitMod.Kit(kitMod.kitName[i]);
     }
     kitMod.setKits(tmp)
@@ -947,7 +947,7 @@ function startLoadingAssets() {
 
     // Then load the remaining assets.
     // Note that any assets which have previously started loading will be skipped over.
-    for (var i  = 0; i < numKits; i++) {
+    for (var i = 0; i < numKits; i++) {
         kitMod.kits[i].load();
     }
 
@@ -980,8 +980,8 @@ function showDemoAvailable(demoIndex /* zero-based */) {
         showPlayAvailable();
         handlersMod.loadBeat(beatMod.beatDemo[1]);
 
-    // Uncomment to allow autoplay
-    //     handlePlay();
+        // Uncomment to allow autoplay
+        //     handlePlay();
     }
 }
 
@@ -991,7 +991,7 @@ function showPlayAvailable() {
     play.src = "images/btn_play.png";
 }
 
-exports.initDrums = function(cmInstance) {
+exports.initDrums = function (cmInstance) {
 
     // Let the beat demos know when all of their assets have been loaded.
     // Add some new methods to support this.
@@ -1000,23 +1000,23 @@ exports.initDrums = function(cmInstance) {
         beatMod.beatDemo[i].isKitLoaded = false;
         beatMod.beatDemo[i].isEffectLoaded = false;
 
-        beatMod.beatDemo[i].setKitLoaded = function() {
+        beatMod.beatDemo[i].setKitLoaded = function () {
             this.isKitLoaded = true;
             this.checkIsLoaded();
         };
 
-        beatMod.beatDemo[i].setEffectLoaded = function() {
+        beatMod.beatDemo[i].setEffectLoaded = function () {
             this.isEffectLoaded = true;
             this.checkIsLoaded();
         };
 
-        beatMod.beatDemo[i].checkIsLoaded = function() {
+        beatMod.beatDemo[i].checkIsLoaded = function () {
             if (this.isLoaded()) {
                 showDemoAvailable(this.index);
             }
         };
 
-        beatMod.beatDemo[i].isLoaded = function() {
+        beatMod.beatDemo[i].isLoaded = function () {
             return this.isKitLoaded && this.isEffectLoaded;
         };
     }
@@ -1037,6 +1037,8 @@ exports.initDrums = function(cmInstance) {
         // No compressor available in this implementation.
         finalMixNode = contextMod.context.destination;
     }
+
+    //TODO @hannahcmacias add webaudiorecorder here to finalMixNode?
 
     // create master filter node
     let tmp = contextMod.context.createBiquadFilter();
@@ -1079,8 +1081,8 @@ exports.initDrums = function(cmInstance) {
     var timerWorkerBlobURL = window.URL.createObjectURL(timerWorkerBlob);
 
     timerWorker = new Worker(timerWorkerBlobURL);
-    timerWorker.onmessage = function(e) {
-      playMod.schedule();
+    timerWorker.onmessage = function (e) {
+        playMod.schedule();
     };
     timerWorker.postMessage('init'); // Start the worker.
 
@@ -1132,8 +1134,8 @@ function initButtons() {
 
     for (i = 0; i < beatMod.loopLength; ++i) {
         for (j = 0; j < kitMod.kNumInstruments; j++) {
-                elButton = document.getElementById(kitMod.instruments[j] + '_' + i);
-                elButton.addEventListener("mousedown", handlersMod.handleButtonMouseDown, true);
+            elButton = document.getElementById(kitMod.instruments[j] + '_' + i);
+            elButton.addEventListener("mousedown", handlersMod.handleButtonMouseDown, true);
         }
     }
 }
@@ -1236,7 +1238,8 @@ var volumes = [0, 0.3, 1];
 
 // var kitCount = 0;
 
-var kitName = [
+var kitName = [ //backend
+    "astrobeats",
     "R8",
     "CR78",
     "KPR77",
@@ -1254,7 +1257,8 @@ var kitName = [
     "TheCheebacabra2"
     ];
 
-var kitNamePretty = [
+var kitNamePretty = [ //interface
+    "astrobeats",
     "Roland R-8",
     "Roland CR-78",
     "Korg KPR-77",
@@ -1276,7 +1280,7 @@ function Kit(name) {
     this.name = name;
 
     this.pathName = function() {
-        var pathName = "sounds/drum-samples/" + this.name + "/";
+        var pathName = "sounds/drum-samples/" + this.name + "/"; //corresponds to left folder
         return pathName;
     };
 
@@ -1428,7 +1432,8 @@ function advanceNote() {
         drawer.redrawAllNotes();
     }
     // Advance time by a 16th note...
-    var secondsPerBeat = 60.0 / beatManager.theBeat.tempo;
+    //var secondsPerBeat = 60.0 / beatManager.theBeat.tempo; //new funct
+    var seconds = durationRange(beatManager);
 
     beatManager.setRhythmIndex(beatManager.rhythmIndex + 1);
     if (beatManager.rhythmIndex == beatManager.loopLength) {
@@ -1443,7 +1448,13 @@ function advanceNote() {
     }
 }
 
-function playNote(buffer, pan, x, y, z, sendGain, mainGain, playbackRate, noteTime) {
+function durationRange(beatManager){
+    var secondsPerBeat = 60.0 / beatManager.theBeat.tempo;
+    return secondsPerBeat;
+}
+
+//change play.js to support durationVal
+function playNote(buffer, pan, x, y, z, sendGain, mainGain, playbackRate, noteTime, durationVal) { //add durationVal
     // Create the note
     var voice = context.context.createBufferSource();
     voice.buffer = buffer;
@@ -1473,10 +1484,11 @@ function playNote(buffer, pan, x, y, z, sendGain, mainGain, playbackRate, noteTi
     finalNode.connect(wetGainNode);
     context.connectNodes(wetGainNode, context.convolver);
 
-    voice.start(noteTime);
+    voice.start(noteTime); //doesn't cut off, 
+    voice.stop(noteTime + (durationVal * (durationRange))); //or multiply by range of duration //seconds //funct
 }
 
-function schedule() {
+function schedule() { 
     var currentTime = context.context.currentTime;
 
     // The sequence starts at startTime, so normalize currentTime so that it's 0 at the start of the sequence.
@@ -1484,35 +1496,35 @@ function schedule() {
 
     while (noteTime < currentTime + 0.120) {
         // Convert noteTime to context time.
-        var contextPlayTime = noteTime + beatManager.startTime;
+        var contextPlayTime = noteTime + beatManager.startTime; 
 
         // Kick
-        if (beatManager.theBeat.rhythm1[beatManager.rhythmIndex] && instrumentActive[0]) {
-            playNote(kit.currentKit.kickBuffer, false, 0, 0, -2, 0.5, kit.volumes[beatManager.theBeat.rhythm1[beatManager.rhythmIndex]] * 1.0, kit.kickPitch, contextPlayTime);
+        if (beatManager.theBeat.rhythm1[beatManager.rhythmIndex] && instrumentActive[0]) { //kick //add in rhythm1duration
+            playNote(kit.currentKit.kickBuffer, false, 0, 0, -2, 0.5, kit.volumes[beatManager.theBeat.rhythm1[beatManager.rhythmIndex]] * 1.0, kit.kickPitch, contextPlayTime, beatManager.theBeat.rhythm1duration[beatManager.rhythmIndex] ); //range of duration
         }
 
         // Snare
         if (beatManager.theBeat.rhythm2[beatManager.rhythmIndex] && instrumentActive[1]) {
-            playNote(kit.currentKit.snareBuffer, false, 0, 0, -2, 1, kit.volumes[beatManager.theBeat.rhythm2[beatManager.rhythmIndex]] * 0.6, kit.snarePitch, contextPlayTime);
+            playNote(kit.currentKit.snareBuffer, false, 0, 0, -2, 1, kit.volumes[beatManager.theBeat.rhythm2[beatManager.rhythmIndex]] * 0.6, kit.snarePitch, contextPlayTime, beatManager.theBeat.rhythm2duration[beatManager.rhythmIndex]);
         }
 
         // Hihat
         if (beatManager.theBeat.rhythm3[beatManager.rhythmIndex] && instrumentActive[2]) {
             // Pan the hihat according to sequence position.
-            playNote(kit.currentKit.hihatBuffer, true, 0.5 * beatManager.rhythmIndex - 4, 0, -1.0, 1, kit.volumes[beatManager.theBeat.rhythm3[beatManager.rhythmIndex]] * 0.7, kit.hihatPitch, contextPlayTime);
+            playNote(kit.currentKit.hihatBuffer, true, 0.5 * beatManager.rhythmIndex - 4, 0, -1.0, 1, kit.volumes[beatManager.theBeat.rhythm3[beatManager.rhythmIndex]] * 0.7, kit.hihatPitch, contextPlayTime, beatManager.theBeat.rhythm3duration[beatManager.rhythmIndex]);
         }
 
         // Toms
         if (beatManager.theBeat.rhythm4[beatManager.rhythmIndex] && instrumentActive[3]) {
-            playNote(kit.currentKit.tom1, false, 0, 0, -2, 1, kit.volumes[beatManager.theBeat.rhythm4[beatManager.rhythmIndex]] * 0.6, kit.tom1Pitch, contextPlayTime);
+            playNote(kit.currentKit.tom1, false, 0, 0, -2, 1, kit.volumes[beatManager.theBeat.rhythm4[beatManager.rhythmIndex]] * 0.6, kit.tom1Pitch, contextPlayTime, beatManager.theBeat.rhythm4duration[beatManager.rhythmIndex]);
         }
 
         if (beatManager.theBeat.rhythm5[beatManager.rhythmIndex] && instrumentActive[4]) {
-            playNote(kit.currentKit.tom2, false, 0, 0, -2, 1, kit.volumes[beatManager.theBeat.rhythm5[beatManager.rhythmIndex]] * 0.6, kit.tom2Pitch, contextPlayTime);
+            playNote(kit.currentKit.tom2, false, 0, 0, -2, 1, kit.volumes[beatManager.theBeat.rhythm5[beatManager.rhythmIndex]] * 0.6, kit.tom2Pitch, contextPlayTime, beatManager.theBeat.rhythm5duration[beatManager.rhythmIndex]);
         }
 
         if (beatManager.theBeat.rhythm6[beatManager.rhythmIndex] && instrumentActive[5]) {
-            playNote(kit.currentKit.tom3, false, 0, 0, -2, 1, kit.volumes[beatManager.theBeat.rhythm6[beatManager.rhythmIndex]] * 0.6, kit.tom3Pitch, contextPlayTime);
+            playNote(kit.currentKit.tom3, false, 0, 0, -2, 1, kit.volumes[beatManager.theBeat.rhythm6[beatManager.rhythmIndex]] * 0.6, kit.tom3Pitch, contextPlayTime, beatManager.theBeat.rhythm6duration[beatManager.rhythmIndex]);
         }
 
 
@@ -1526,13 +1538,13 @@ function schedule() {
     }
 }
 
-function playDrum(noteNumber, velocity) {
+function playDrum(noteNumber, velocity) { //pass duration
     switch (noteNumber) {
         case 0x24:
-            playNote(kit.currentKit.kickBuffer, false, 0, 0, -2, 0.5, (velocity / 127), kit.kickPitch, 0);
+            playNote(kit.currentKit.kickBuffer, false, 0, 0, -2, 0.5, (velocity / 127), kit.kickPitch, 0, 1); //1s for duration val
             break;
         case 0x26:
-            playNote(kit.currentKit.snareBuffer, false, 0, 0, -2, 1, (velocity / 127), kit.snarePitch, 0);
+            playNote(kit.currentKit.snareBuffer, false, 0, 0, -2, 1, (velocity / 127), kit.snarePitch, 0, 1);
             break;
         case 0x28:
             playNote(kit.currentKit.hihatBuffer, true, 0, 0, -1.0, 1, (velocity / 127), kit.hihatPitch, 0);
@@ -1677,7 +1689,7 @@ function synthCode(newNoteValue, rhythmIndex, instrumentIndex, theBeat) {
 function synthSliderCode(sliderTarget, value) {
     var currentCode = codeMirrorInstance.getValue()
     //generate new line for changed note
-    newLine = "  s." + sliderTarget + " = " + Math.round((value + Number.EPSILON) * 100) / 100 + ";\n"
+    newLine = "  s." + sliderTarget + " = " + "p(" + Math.round((value + Number.EPSILON) * 100) / 100 + ");\n"
     existingLineLoc = currentCode.indexOf("  s." + sliderTarget)
     //if code has a line explicitly changed this point, then we update its value
     if (existingLineLoc >= 0) {
@@ -1773,6 +1785,88 @@ function isValidSliders(sliders) {
     console.log("Slider: " + valid)
     return valid;
 }
+
+function updatePatternFromCode(currentBeat, rhythmIndex) {
+    //every time we advance a time step, pull latest code and update beat object
+    var updatedCode = codeMirrorInstance.getValue()
+    try {
+        //TODO if(codeChanged) {
+        let f = new Function("theBeat", "rhythmIndex", '"use strict"; ' + pattern.toString() + setAll.toString() + backBeat.toString() + p.toString() + updatedCode + ' return (genBeat(theBeat, {}, rhythmIndex));');
+        let newData = f(currentBeat, rhythmIndex);
+        let newBeat = newData.beat;
+        let newSliders = newData.sliders;
+        for (i = 1; i <= 6; i++) {
+            newBeat['rhythm' + i.toString()] = newBeat['rhythm' + i.toString()].map((note) => { if (Number.isNaN(note)) { return 0; } else { return note } });
+        }
+        if (isValidBeat(newBeat) && isValidSliders(newSliders)) { // && theBeat != newBeat){
+            return { beat: newBeat, sliders: newSliders };
+        }
+    }
+    catch (err) {
+        console.log("updatePatternFromCode error")
+        console.log(err)
+    }
+    return null;
+}
+
+//function that creates new beat with equation as only input
+function pattern(equation){
+     return new Array(16).fill(0).map(equation);
+}
+
+function setAll(val){
+    if(val>=0 && val<=2)
+        return new Array(16).fill(val);
+}
+
+function p(val){
+    const notes = {
+        "C": 0,
+        "D": 0.167,
+        "E": 0.333,
+        "F": 0.5,
+        "G": 0.667,
+        "A": 0.833,
+        "B": 1
+    };
+    if(isNaN(val)){
+        if(val.match(/[A-G]/g))
+            val = notes[val];
+        else
+            val = 0;
+    }else{
+        val = val%1;
+    }   
+    console.log("pitchVal: " + val);
+    return val;
+}
+
+
+function backBeat(){
+    return new Array(16).fill(0).map((val,i) => i%2);
+}
+
+function isValidBeat(beat) {
+    var valid = true;
+    for (i = 1; i <= 6; i++) {
+        valid = valid &&
+            Array.isArray(beat['rhythm' + i.toString()]) &&
+            beat['rhythm' + i.toString()].every((v) => v <= 2 && v >= 0);
+    }
+    return valid;
+}
+
+function isValidSliders(sliders) {
+    var valid = true;
+    Object.values(sliders).forEach(val => {
+        valid = valid &&
+            typeof val == 'number' &&
+            val >= 0 && val <= 1
+    });
+    console.log("Slider: " + valid)
+    return valid;
+}
+
 
 exports.setCMInstance = setCMInstance
 exports.synthCode = synthCode
