@@ -15,7 +15,7 @@ function setNoteTime(t) {
 
 function secondsPerBeat() {
     // Advance time by a 16th note...
-    var secondsPerBeat = 60.0 / beatManager.theBeat.tempo;
+     var secondsPerBeat = 60.0 / beatManager.theBeat.tempo;
 }
 
 function advanceNote() {
@@ -34,13 +34,13 @@ function advanceNote() {
 
     // apply swing
     if (beatManager.rhythmIndex % 2) {
-        noteTime += (0.25 + beatManager.kMaxSwing * beatManager.theBeat.swingFactor) * secondsPerBeat;
+        noteTime += (0.25 + beatManager.kMaxSwing * beatManager.theBeat.swingFactor) * secondsPerBeat();
     } else {
-        noteTime += (0.25 - beatManager.kMaxSwing * beatManager.theBeat.swingFactor) * secondsPerBeat;
+        noteTime += (0.25 - beatManager.kMaxSwing * beatManager.theBeat.swingFactor) * secondsPerBeat();
     }
 }
-//change play.js to support durationVal
-function playNote(buffer, pan, x, y, z, sendGain, mainGain, playbackRate, noteTime) { //add durationVal
+
+function playNote(buffer, pan, x, y, z, sendGain, mainGain, playbackRate, noteTime, durationVal) { 
     // Create the note
     var voice = context.context.createBufferSource();
     voice.buffer = buffer;
@@ -70,8 +70,8 @@ function playNote(buffer, pan, x, y, z, sendGain, mainGain, playbackRate, noteTi
     finalNode.connect(wetGainNode);
     context.connectNodes(wetGainNode, context.convolver);
 
-    voice.start(noteTime); //doesn't cut off, 
-    voice.stop(noteTime + secondsPerBeat());
+    voice.start(noteTime); 
+    voice.stop(noteTime + (durationVal * secondsPerBeat()));
 }
 
 function schedule() {
