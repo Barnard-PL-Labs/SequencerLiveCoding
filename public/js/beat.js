@@ -19,7 +19,6 @@ function setRhythmIndex(idx) {
     rhythmIndex = idx;
     exports.rhythmIndex = rhythmIndex;
 }
-daasdafsd
 
 var beatReset = {"kitIndex":0,"effectIndex":0,"tempo":100,"swingFactor":0,"effectMix":0.25,"kickPitchVal":0.5,"snarePitchVal":0.5,"hihatPitchVal":0.5,"tom1PitchVal":0.5,"tom2PitchVal":0.5,"tom3PitchVal":0.5,"rhythm1":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"rhythm2":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"rhythm3":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"rhythm4":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"rhythm5":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"rhythm6":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0], "rhythm1duration":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0], "rhythm2duration":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0], "rhythm3duration":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0], "rhythm4duration":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0], "rhythm5duration":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0], "rhythm6duration":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]};
 var beatDemo = [ 
