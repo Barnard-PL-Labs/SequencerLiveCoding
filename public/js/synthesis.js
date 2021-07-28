@@ -63,6 +63,29 @@ function synthSliderCode(sliderTarget, value) {
     }
 }
 
+function updatePatternFromCode(currentBeat, rhythmIndex) {
+    //every time we advance a time step, pull latest code and update beat object
+    var updatedCode = codeMirrorInstance.getValue()
+    try {
+        //TODO if(codeChanged) {
+        let f = new Function("theBeat", "rhythmIndex", '"use strict"; ' + pattern.toString() + setAll.toString() + backBeat.toString() + p.toString() + updatedCode + ' return (genBeat(theBeat, {}, rhythmIndex));');
+        let newData = f(currentBeat, rhythmIndex);
+        let newBeat = newData.beat;
+        let newSliders = newData.sliders;
+        for (i = 1; i <= 6; i++) {
+            newBeat['rhythm' + i.toString()] = newBeat['rhythm' + i.toString()].map((note) => { if (Number.isNaN(note)) { return 0; } else { return note } });
+        }
+        if (isValidBeat(newBeat) && isValidSliders(newSliders)) { // && theBeat != newBeat){
+            return { beat: newBeat, sliders: newSliders };
+        }
+    }
+    catch (err) {
+        console.log("updatePatternFromCode error")
+        console.log(err)
+    }
+    return null;
+}
+
 //function that creates new beat with equation as only input
 function pattern(equation){
      return new Array(16).fill(0).map(equation);
