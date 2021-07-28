@@ -13,6 +13,11 @@ function setNoteTime(t) {
     exports.noteTime = noteTime;
 }
 
+function secondsPerBeat() {
+    // Advance time by a 16th note...
+    var secondsPerBeat = 60.0 / beatManager.theBeat.tempo;
+}
+
 function advanceNote() {
 
     newData = synth.updatePatternFromCode(beatManager.cloneBeat(beatManager.theBeat), beatManager.rhythmIndex);
@@ -21,8 +26,6 @@ function advanceNote() {
         beatManager.setBeat(newData.beat)
         drawer.redrawAllNotes();
     }
-    // Advance time by a 16th note...
-    var secondsPerBeat = 60.0 / beatManager.theBeat.tempo;
 
     beatManager.setRhythmIndex(beatManager.rhythmIndex + 1);
     if (beatManager.rhythmIndex == beatManager.loopLength) {
@@ -68,7 +71,7 @@ function playNote(buffer, pan, x, y, z, sendGain, mainGain, playbackRate, noteTi
     context.connectNodes(wetGainNode, context.convolver);
 
     voice.start(noteTime); //doesn't cut off, 
-    //voice.stop(noteTime + durationval)
+    voice.stop(noteTime + secondsPerBeat());
 }
 
 function schedule() {
