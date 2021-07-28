@@ -86,31 +86,31 @@ function schedule() {
 
         // Kick
         if (beatManager.theBeat.rhythm1[beatManager.rhythmIndex] && instrumentActive[0]) { //kick
-            playNote(kit.currentKit.kickBuffer, false, 0, 0, -2, 0.5, kit.volumes[beatManager.theBeat.rhythm1[beatManager.rhythmIndex]] * 1.0, kit.kickPitch, contextPlayTime);
+            playNote(kit.currentKit.kickBuffer, false, 0, 0, -2, 0.5, kit.volumes[beatManager.theBeat.rhythm1[beatManager.rhythmIndex]] * 1.0, kit.kickPitch, contextPlayTime, kit.volumes[beatManager.theBeat.rhythm1duration[beatManager.rhythmIndex]]);
         }
 
         // Snare
         if (beatManager.theBeat.rhythm2[beatManager.rhythmIndex] && instrumentActive[1]) {
-            playNote(kit.currentKit.snareBuffer, false, 0, 0, -2, 1, kit.volumes[beatManager.theBeat.rhythm2[beatManager.rhythmIndex]] * 0.6, kit.snarePitch, contextPlayTime);
+            playNote(kit.currentKit.snareBuffer, false, 0, 0, -2, 1, kit.volumes[beatManager.theBeat.rhythm2[beatManager.rhythmIndex]] * 0.6, kit.snarePitch, contextPlayTime, kit.volumes[beatManager.theBeat.rhythm2duration[beatManager.rhythmIndex]]);
         }
 
         // Hihat
         if (beatManager.theBeat.rhythm3[beatManager.rhythmIndex] && instrumentActive[2]) {
             // Pan the hihat according to sequence position.
-            playNote(kit.currentKit.hihatBuffer, true, 0.5 * beatManager.rhythmIndex - 4, 0, -1.0, 1, kit.volumes[beatManager.theBeat.rhythm3[beatManager.rhythmIndex]] * 0.7, kit.hihatPitch, contextPlayTime);
+            playNote(kit.currentKit.hihatBuffer, true, 0.5 * beatManager.rhythmIndex - 4, 0, -1.0, 1, kit.volumes[beatManager.theBeat.rhythm3[beatManager.rhythmIndex]] * 0.7, kit.hihatPitch, contextPlayTime, kit.volumes[beatManager.theBeat.rhythm3duration[beatManager.rhythmIndex]]);
         }
 
         // Toms
         if (beatManager.theBeat.rhythm4[beatManager.rhythmIndex] && instrumentActive[3]) {
-            playNote(kit.currentKit.tom1, false, 0, 0, -2, 1, kit.volumes[beatManager.theBeat.rhythm4[beatManager.rhythmIndex]] * 0.6, kit.tom1Pitch, contextPlayTime);
+            playNote(kit.currentKit.tom1, false, 0, 0, -2, 1, kit.volumes[beatManager.theBeat.rhythm4[beatManager.rhythmIndex]] * 0.6, kit.tom1Pitch, contextPlayTime, kit.volumes[beatManager.theBeat.rhythm4duration[beatManager.rhythmIndex]]);
         }
 
         if (beatManager.theBeat.rhythm5[beatManager.rhythmIndex] && instrumentActive[4]) {
-            playNote(kit.currentKit.tom2, false, 0, 0, -2, 1, kit.volumes[beatManager.theBeat.rhythm5[beatManager.rhythmIndex]] * 0.6, kit.tom2Pitch, contextPlayTime);
+            playNote(kit.currentKit.tom2, false, 0, 0, -2, 1, kit.volumes[beatManager.theBeat.rhythm5[beatManager.rhythmIndex]] * 0.6, kit.tom2Pitch, contextPlayTime, kit.volumes[beatManager.theBeat.rhythm5duration[beatManager.rhythmIndex]]);
         }
 
         if (beatManager.theBeat.rhythm6[beatManager.rhythmIndex] && instrumentActive[5]) {
-            playNote(kit.currentKit.tom3, false, 0, 0, -2, 1, kit.volumes[beatManager.theBeat.rhythm6[beatManager.rhythmIndex]] * 0.6, kit.tom3Pitch, contextPlayTime);
+            playNote(kit.currentKit.tom3, false, 0, 0, -2, 1, kit.volumes[beatManager.theBeat.rhythm6[beatManager.rhythmIndex]] * 0.6, kit.tom3Pitch, contextPlayTime, kit.volumes[beatManager.theBeat.rhythm6duration[beatManager.rhythmIndex]]);
         }
 
 
