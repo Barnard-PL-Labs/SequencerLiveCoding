@@ -6,10 +6,12 @@ const impulse = require('./impulse')
 const play = require('./play')
 const slidersManager = require('./sliders')
 const context = require('./context')
+const init = require('./init')
 
 
 var mouseCapture = null;
 var mouseCaptureOffset = 0;
+
 
 function handleSliderMouseDown(event) {
     mouseCapture = event.target.id;
@@ -88,6 +90,11 @@ function handleMouseUp() {
 }
 
 function handleButtonMouseDown(event) {
+    console.log(init.stateInterface.currentState);
+    if(init.stateInterface.currentState == 'liveCodingView'){
+        console.log(init.stateInterface.currentState);
+        return
+    }
     var notes = beatManager.theBeat.rhythm1;
 
     var instrumentIndex;
