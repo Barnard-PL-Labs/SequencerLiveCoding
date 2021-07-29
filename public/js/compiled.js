@@ -1636,7 +1636,14 @@ exports.updateSliderVals = updateSliderVals;
 // const { setBeatSnarePitchVal, setBeatTom2PitchVal, setBeatTom1PitchVal, setBeatHihatPitchVal, setBeatTom3PitchVal} = require("./beat");
 // const beatMod = require('./beat')
 
-const { kickPitch } = require("./kit");
+const instrument = {
+    1: "Kick",
+    2: "Snare",
+    3: "Hi-Hat",
+    4: "Tom1",
+    5: "Tom2",
+    6: "Tom3"
+};
 
 //We pull this in on init, which allows us to grab code as the drum machine runs
 var codeMirrorInstance = null
@@ -1647,8 +1654,10 @@ function setCMInstance(cm) {
 
 function addLineForPointChange(currentCode, newNoteValue, rhythmIndex, instrumentIndex) {
     //generate new line for changed note
-    newLine = "  b.rhythm" + (instrumentIndex + 1) + "[" + rhythmIndex + "] = " + newNoteValue + ";\n"
-    existingLineLoc = currentCode.indexOf("  b.rhythm" + (instrumentIndex + 1) + "[" + rhythmIndex + "] =")
+    // newLine = "  b.rhythm" + (instrumentIndex + 1) + "[" + rhythmIndex + "] = " + newNoteValue + ";\n"
+    // existingLineLoc = currentCode.indexOf("  b.rhythm" + (instrumentIndex + 1) + "[" + rhythmIndex + "] =")
+    newLine = "  b." + instrument[instrumentIndex+1] + "[" + rhythmIndex + "] = " + newNoteValue + ";\n"
+    existingLineLoc = currentCode.indexOf("  b." + instrument[instrumentIndex+1] + "[" + rhythmIndex + "] =")
     //if code has a line explicitly changed this point, then we update its value
     if (existingLineLoc >= 0) {
         var lineChPos = codeMirrorInstance.posFromIndex(existingLineLoc);
@@ -1703,12 +1712,13 @@ function updatePatternFromCode(currentBeat, rhythmIndex) {
     var updatedCode = codeMirrorInstance.getValue()
     try {
         //TODO if(codeChanged) {
-        let f = new Function("theBeat", "rhythmIndex", '"use strict"; ' + pattern.toString() + setAll.toString() + backBeat.toString() + p.toString() + updatedCode + ' return (genBeat(theBeat, {}, rhythmIndex));');
+        let f = new Function("theBeat", "rhythmIndex", '"use strict"; ' + pattern.toString() + setAll.toString() + backBeat.toString() + p.toString() + every_beat.toString() + updatedCode + ' return (genBeat(theBeat, {}, rhythmIndex));');
         let newData = f(currentBeat, rhythmIndex);
         let newBeat = newData.beat;
         let newSliders = newData.sliders;
         for (i = 1; i <= 6; i++) {
             newBeat['rhythm' + i.toString()] = newBeat['rhythm' + i.toString()].map((note) => { if (Number.isNaN(note)) { return 0; } else { return note } });
+            newBeat[instrument[i]] = newBeat[instrument[i]].map((note) => { if (Number.isNaN(note)) { return 0; } else { return note } });
         }
         if (isValidBeat(newBeat) && isValidSliders(newSliders)) { // && theBeat != newBeat){
             return { beat: newBeat, sliders: newSliders };
@@ -1758,12 +1768,22 @@ function backBeat(){
     return new Array(16).fill(0).map((val,i) => i%2);
 }
 
+function every_beat(val, noteVal){
+    let res = new Array(16).fill(0);
+    for(i=0; i<res.length; i+=val){
+        res[i] = noteVal;
+    }
+    return res;
+}
+
 function isValidBeat(beat) {
     var valid = true;
     for (i = 1; i <= 6; i++) {
         valid = valid &&
             Array.isArray(beat['rhythm' + i.toString()]) &&
             beat['rhythm' + i.toString()].every((v) => v <= 2 && v >= 0);
+            // Array.isArray(beat[instrument[i]]) &&
+            // beat[instrument[i]].every((v) => v <= 2 && v >= 0);
     }
     return valid;
 }
@@ -1787,4 +1807,4 @@ exports.updatePatternFromCode = updatePatternFromCode
 
 //
 
-},{"./kit":8}]},{},[9]);
+},{}]},{},[9]);

@@ -6,9 +6,9 @@ const instrument = {
     1: "Kick",
     2: "Snare",
     3: "Hi-Hat",
-    4: "Tom 1",
-    5: "Tom 2",
-    6: "Tom 3"
+    4: "Tom1",
+    5: "Tom2",
+    6: "Tom3"
 };
 
 class ParseError extends Error {
@@ -40,9 +40,9 @@ process.on('message', (data) => {
 })
     
 function parseCodeLine(line) {
-    var indexOperation = new RegExp(/b\.rhythm([1-6])\[(1?[0-9])\] ?= ?([0-2])[;,\n]/);
+    var indexOperation = new RegExp(/b\.\(.*)\[(1?[0-9])\] ?= ?([0-2])[;,\n]/);
     //TODO, relax assumption that all maps are of the form "b.rhythm1 = b.rhythm1.map"
-    var mapOperation = new RegExp(/(b\.rhythm([1-6])(\s?))=(\s?)pattern\((.*)=>(.*)\);/g);
+    var mapOperation = new RegExp(/(b\.\(.*)(\s?))=(\s?)pattern\((.*)=>(.*)\);/g);
     //g-tag: matches only contain results that match the COMPLETE regExp
 
     //if line has match with indexOp
@@ -62,8 +62,12 @@ function parseCodeLine(line) {
 
 //check if we have inserted a array index manipulation line of code 
 function hasPatternEdit(parsedCode, whichPattern) {
+    // const matchesP = (codeLine) => codeLine["instIndex"] == whichPattern-1;
     const matchesP = (codeLine) => codeLine["instIndex"] == whichPattern-1;
+    console.log(matchesP);
     console.log(whichPattern-1 + ": " + parsedCode.some(matchesP));
+    console.log(parsedCode.some(matchesP));
+    console.log(parsedCode);
     return parsedCode.some(matchesP);
 }
 
@@ -89,12 +93,15 @@ simplifyCode = async function(codeAndBeat) {
     //that subseq can then be added with templated code
     //TODO, do this for all patterns & refactor to fxn
     for (whichPattern = 1; whichPattern <= 6; whichPattern++) {
-        var singleEditInfo = checkForSingleEdit(codeAndBeat["beat"]["rhythm" + whichPattern])
+        var singleEditInfo = checkForSingleEdit(codeAndBeat["beat"]["rhythm"+whichPattern])
         if (singleEditInfo["hasOneChangedIndex"]) {
             console.log("Pattern " + whichPattern + " has singleEdit");
-            newCode = newCode.replace(new RegExp(".*rhythm"+whichPattern+".*\n", "g"), '')
-            newCode += "  b.rhythm" + whichPattern + " = new Array(16).fill(" + singleEditInfo["fillVal"] + ")\n"
-            newCode += "  b.rhythm" + whichPattern + "[" + singleEditInfo["editLoc"] + "] = " + singleEditInfo["editVal"] + ";\n"
+            // newCode = newCode.replace(new RegExp(".*rhythm"+whichPattern+".*\n", "g"), '')
+            // newCode += "  b.rhythm" + whichPattern + " = new Array(16).fill(" + singleEditInfo["fillVal"] + ")\n"
+            // newCode += "  b.rhythm" + whichPattern + "[" + singleEditInfo["editLoc"] + "] = " + singleEditInfo["editVal"] + ";\n"
+            newCode = newCode.replace(new RegExp("  b."+instrument[whichPattern]+".*\n", "g"), '')
+            newCode += "  b." + instrument[whichPattern] + " = new Array(16).fill(" + singleEditInfo["fillVal"] + ")\n"
+            newCode += "  b." + instrument[whichPattern] + "[" + singleEditInfo["editLoc"] + "] = " + singleEditInfo["editVal"] + ";\n"
 
         }
         else if (hasPatternEdit(parsedCode, whichPattern)) {
@@ -111,10 +118,14 @@ simplifyCode = async function(codeAndBeat) {
                 var fxnName = sygusSolution.split(" ")[1];
                 var newFxn = fxnDefs[0];
                 var newNewJsFxnBody = astToJs(smt_parser(newFxn));
-                newCode = newCode.replace(new RegExp(".*rhythm"+whichPattern+".*\n", "g"), '')
+                // newCode = newCode.replace(new RegExp(".*rhythm"+whichPattern+".*\n", "g"), '')
+                // //corresponds to the new .pattern() in synthesis.js
+                // newCode += displayPattern(whichPattern,newNewJsFxnBody);
+                // newCode += "  b.rhythm" + whichPattern + ".splice(" + subseq['startMaxSubseq'] + "," + subseq['lengthMaxSubseq'] + ",...Array(" + subseq['lengthMaxSubseq'] + ").fill(" + subseq['valMaxSubseq'] + "));\n"
+                newCode = newCode.replace(new RegExp("."+instrument[whichPattern]+".*\n", "g"), '')
                 //corresponds to the new .pattern() in synthesis.js
                 newCode += displayPattern(whichPattern,newNewJsFxnBody);
-                newCode += "  b.rhythm" + whichPattern + ".splice(" + subseq['startMaxSubseq'] + "," + subseq['lengthMaxSubseq'] + ",...Array(" + subseq['lengthMaxSubseq'] + ").fill(" + subseq['valMaxSubseq'] + "));\n"
+                newCode += "  b." + instrument[whichPattern] + ".splice(" + subseq['startMaxSubseq'] + "," + subseq['lengthMaxSubseq'] + ",...Array(" + subseq['lengthMaxSubseq'] + ").fill(" + subseq['valMaxSubseq'] + "));\n"
             }
         }
     }
@@ -129,8 +140,8 @@ function displayPattern(whichPattern, newNewJsFxnBody) {
    console.log("newFxn: "+newNewJsFxnBody);
    var equation = newNewJsFxnBody.replace('return', '').replace(';','').trim();
    console.log("new .pattern() added");
-//    return "  " + instrument[whichPattern] + " = pattern((val,i) => " + equation+");\n";
-   return "  b.rhythm" + whichPattern + " = pattern((val,i) => " + equation+");\n";
+//    return "  b.rhythm" + whichPattern + " = pattern((val,i) => " + equation+");\n";
+    return "  b." + instrument[whichPattern] + " = pattern((val,i) => " + equation+");\n";
 }
 
 function sygusOnePattern(codeAndBeat, whichPattern) {
