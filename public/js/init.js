@@ -218,10 +218,25 @@ function initControls(timerWorker) {
     demos.map(demoName => setMouseDownHandler(demoName, handlersMod.handleDemoMouseDown));
 
     var elBody = document.getElementById('body');
+    
     elBody.addEventListener('mousemove', handlersMod.handleMouseMove, true);
     elBody.addEventListener('mouseup', handlersMod.handleMouseUp, true);
 
-}
+    var standardView = document.getElementById('standardView');
+    var liveCodingView = document.getElementById('liveCodingView');
+    var DrumRackView = document.getElementById('drumRackView');
+
+    standardView.addEventListener('Standard View', stateInterface('standardView'), true);
+    liveCodingView.addEventListener('Live Coding View', stateInterface('liveCodingView'), true);
+    DrumRackView.addEventListener('Drum Rack View', stateInterface('drumRackView'), true);
+
+}   
+
+var currentState;
+
+function stateInterface(state){
+    currentState = state;
+ }
 
 function initButtons() {
     var elButton;
@@ -263,6 +278,8 @@ function makeKitList() {
     }
 }
 
+exports.currentState = currentState;
+exports.stateInterface = stateInterface;
 
 
 
