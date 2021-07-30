@@ -232,10 +232,23 @@ function initControls(timerWorker) {
 
 }   
 
+//var stateInterface = function(state){return state;}
+
+var storestate = 'test';
+
 
 function stateInterface(state){
-    const currentState = state;
-    console.log(currentState);
+    storestate = state;
+    console.log("init state: ", storestate);
+    var drumrackclick = document.getElementById("codingWindow");
+    if(storestate == 'drumRackView'){
+        drumrackclick.style.display = "none";
+    }
+}
+
+function getStoreState(){
+    console.log("getter: ", storestate);
+    return storestate;
 }
 
 function initButtons() {
@@ -278,10 +291,5 @@ function makeKitList() {
     }
 }
 
-exports.currentState = currentState;
-exports.stateInterface = stateInterface;
-
-
-
-
+exports.getStoreState = getStoreState;
 //
