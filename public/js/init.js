@@ -240,8 +240,10 @@ var storestate = 'test';
 function stateInterface(state){
     storestate = state;
     console.log("init state: ", storestate);
-    var drumrackclick = document.getElementById("codingWindow");
+    var drumrackclick = document.getElementsByClassName("CodeMirror");
+    console.log("display", drumrackclick.style.display);
     if(storestate == 'drumRackView'){
+        console.log("display", drumrackclick.style.display);
         drumrackclick.style.display = "none";
     }
 }
