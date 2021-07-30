@@ -224,19 +224,19 @@ function initControls(timerWorker) {
 
     var standardView = document.getElementById('standardView');
     var liveCodingView = document.getElementById('liveCodingView');
-    var DrumRackView = document.getElementById('drumRackView');
+    var drumRackView = document.getElementById('drumRackView');
 
-    standardView.addEventListener('Standard View', stateInterface('standardView'), true);
-    liveCodingView.addEventListener('Live Coding View', stateInterface('liveCodingView'), true);
-    DrumRackView.addEventListener('Drum Rack View', stateInterface('drumRackView'), true);
+    standardView.addEventListener('click', function(){stateInterface('standardView')});
+    liveCodingView.addEventListener('click', function(){stateInterface('liveCodingView')});
+    drumRackView.addEventListener('click', function(){stateInterface('drumRackView')});
 
 }   
 
-var currentState;
 
 function stateInterface(state){
-    currentState = state;
- }
+    const currentState = state;
+    console.log(currentState);
+}
 
 function initButtons() {
     var elButton;
