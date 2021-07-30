@@ -57,7 +57,7 @@
 		Live Coding Web Drum Machine <span id='version'>0.1</span>
 	</div>
 	<div class="grid-container">
-		<div>
+		<div id="leftSide">
 			<textarea id="codingWindow" rows="10" cols="120" style="border:1px solid black" class="boxsizingBorder">
 		</textarea>
 		<section>
@@ -346,12 +346,12 @@
 				</select>
 			</div>
 			<div class="switch-toggle switch-3 switch-candy">
-
-				<input id="standardView" name="state-d" type="radio" checked="" />
-				<label for="standardView" onclick="">Standard View</label>
 			  
 				<input id="liveCodingView" name="state-d" type="radio" checked="checked" />
 				<label for="liveCodingView" class="disabled" onclick="">Live Coding View</label>
+
+				<input id="standardView" name="state-d" type="radio" checked="" />
+				<label for="standardView" onclick="">Standard View</label>
 			  
 				<input id="drumRackView" name="state-d" type="radio" />
 				<label for="drumRackView" onclick="">Drum Rack View</label>
