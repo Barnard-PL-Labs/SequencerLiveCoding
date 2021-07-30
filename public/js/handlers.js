@@ -90,9 +90,9 @@ function handleMouseUp() {
 }
 
 function handleButtonMouseDown(event) {
-    console.log(init.stateInterface.currentState);
-    if(init.stateInterface.currentState == 'liveCodingView'){
-        console.log(init.stateInterface.currentState);
+    console.log(init.getStoreState());
+    if(init.getStoreState() == 'liveCodingView'){
+        console.log(init.getStoreState());
         return
     }
     var notes = beatManager.theBeat.rhythm1;
@@ -323,7 +323,6 @@ exports.handleDemoMouseDown = handleDemoMouseDown;
 exports.handlePlay = handlePlay;
 exports.handleStop = handleStop;
 exports.loadBeat = loadBeat;
-
 
 
 //
