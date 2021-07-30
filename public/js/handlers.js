@@ -118,28 +118,28 @@ function handleButtonMouseDown(event) {
     if (newNoteValue) {
         switch (instrumentIndex) {
             case 0:  // Kick
-                play.playNote(kit.currentKit.kickBuffer, false, 0, 0, -2, 0.5 * beatManager.theBeat.effectMix, kit.volumes[newNoteValue] * 1.0, kit.kickPitch, 0);
+                play.playNote(kit.currentKit.kickBuffer, false, 0, 0, -2, 0.5 * beatManager.theBeat.effectMix, kit.volumes[newNoteValue] * 1.0, kit.kickPitch, 0, play.getDuration());
                 break;
 
             case 1:  // Snare
-                play.playNote(kit.currentKit.snareBuffer, false, 0, 0, -2, beatManager.theBeat.effectMix, kit.volumes[newNoteValue] * 0.6, kit.snarePitch, 0);
+                play.playNote(kit.currentKit.snareBuffer, false, 0, 0, -2, beatManager.theBeat.effectMix, kit.volumes[newNoteValue] * 0.6, kit.snarePitch, 0, play.getDuration());
                 break;
 
             case 2:  // Hihat
                 // Pan the hihat according to sequence position.
-                play.playNote(kit.currentKit.hihatBuffer, true, 0.5 * rhythmIndex - 4, 0, -1.0, beatManager.theBeat.effectMix, kit.volumes[newNoteValue] * 0.7, kit.hihatPitch, 0);
+                play.playNote(kit.currentKit.hihatBuffer, true, 0.5 * rhythmIndex - 4, 0, -1.0, beatManager.theBeat.effectMix, kit.volumes[newNoteValue] * 0.7, kit.hihatPitch, 0, play.getDuration());
                 break;
 
             case 3:  // Tom 1
-                play.playNote(kit.currentKit.tom1, false, 0, 0, -2, beatManager.theBeat.effectMix, kit.volumes[newNoteValue] * 0.6, kit.tom1Pitch, 0);
+                play.playNote(kit.currentKit.tom1, false, 0, 0, -2, beatManager.theBeat.effectMix, kit.volumes[newNoteValue] * 0.6, kit.tom1Pitch, 0, play.getDuration());
                 break;
 
             case 4:  // Tom 2
-                play.playNote(kit.currentKit.tom2, false, 0, 0, -2, beatManager.theBeat.effectMix, kit.volumes[newNoteValue] * 0.6, kit.tom2Pitch, 0);
+                play.playNote(kit.currentKit.tom2, false, 0, 0, -2, beatManager.theBeat.effectMix, kit.volumes[newNoteValue] * 0.6, kit.tom2Pitch, 0, play.getDuration());
                 break;
 
             case 5:  // Tom 3
-                play.playNote(kit.currentKit.tom3, false, 0, 0, -2, beatManager.theBeat.effectMix, kit.volumes[newNoteValue] * 0.6, kit.tom3Pitch, 0);
+                play.playNote(kit.currentKit.tom3, false, 0, 0, -2, beatManager.theBeat.effectMix, kit.volumes[newNoteValue] * 0.6, kit.tom3Pitch, 0, play.getDuration());
                 break;
         }
     }

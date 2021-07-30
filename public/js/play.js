@@ -16,6 +16,7 @@ function setNoteTime(t) {
 function secondsPerBeat() {
     // Advance time by a 16th note...
      var secondsPerBeat = 60.0 / beatManager.theBeat.tempo;
+     return secondsPerBeat;
 }
 
 function advanceNote() {
@@ -71,11 +72,24 @@ function playNote(buffer, pan, x, y, z, sendGain, mainGain, playbackRate, noteTi
     context.connectNodes(wetGainNode, context.convolver);
 
     voice.start(noteTime); 
+    console.log("durationval playnote first", durationVal);
+    getDuration(durationVal);
+    //console.log("seconds", secondsPerBeat());
     voice.stop(noteTime + (durationVal * secondsPerBeat()));
 }
 
+var durationTrue;
+
+function getDuration(duration){
+    durationTrue = duration;
+    return durationTrue;
+}
+
+var dur = getDuration();
+
 function schedule() {
     var currentTime = context.context.currentTime;
+    console.log("beatmanager duration: ", beatManager.theBeat.rhythm1duration[beatManager.rhythmIndex]);
 
     // The sequence starts at startTime, so normalize currentTime so that it's 0 at the start of the sequence.
     currentTime -= beatManager.startTime;
@@ -125,24 +139,25 @@ function schedule() {
 }
 
 function playDrum(noteNumber, velocity) {
+    console.log("playdrum dur", dur);
     switch (noteNumber) {
         case 0x24:
-            playNote(kit.currentKit.kickBuffer, false, 0, 0, -2, 0.5, (velocity / 127), kit.kickPitch, 0);
+            playNote(kit.currentKit.kickBuffer, false, 0, 0, -2, 0.5, (velocity / 127), kit.kickPitch, 0, dur);
             break;
         case 0x26:
-            playNote(kit.currentKit.snareBuffer, false, 0, 0, -2, 1, (velocity / 127), kit.snarePitch, 0);
+            playNote(kit.currentKit.snareBuffer, false, 0, 0, -2, 1, (velocity / 127), kit.snarePitch, 0, dur);
             break;
         case 0x28:
-            playNote(kit.currentKit.hihatBuffer, true, 0, 0, -1.0, 1, (velocity / 127), kit.hihatPitch, 0);
+            playNote(kit.currentKit.hihatBuffer, true, 0, 0, -1.0, 1, (velocity / 127), kit.hihatPitch, 0, dur);
             break;
         case 0x2d:
-            playNote(kit.currentKit.tom1, false, 0, 0, -2, 1, (velocity / 127), kit.tom1Pitch, 0);
+            playNote(kit.currentKit.tom1, false, 0, 0, -2, 1, (velocity / 127), kit.tom1Pitch, 0, dur);
             break;
         case 0x2f:
-            playNote(kit.currentKit.tom2, false, 0, 0, -2, 1, (velocity / 127), kit.tom2Pitch, 0);
+            playNote(kit.currentKit.tom2, false, 0, 0, -2, 1, (velocity / 127), kit.tom2Pitch, 0, dur);
             break;
         case 0x32:
-            playNote(kit.currentKit.tom3, false, 0, 0, -2, 1, (velocity / 127), kit.tom3Pitch, 0);
+            playNote(kit.currentKit.tom3, false, 0, 0, -2, 1, (velocity / 127), kit.tom3Pitch, 0, dur);
             break;
         default:
             console.log("note:0x" + noteNumber.toString(16));
@@ -160,7 +175,7 @@ exports.setNoteTime = setNoteTime;
 
 // variables
 exports.noteTime = noteTime;
-
+exports.getDuration = getDuration;
 
 
 //

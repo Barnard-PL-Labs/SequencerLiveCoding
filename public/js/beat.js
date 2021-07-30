@@ -50,7 +50,7 @@ function cloneBeat(source) {
     beat.rhythm4 = source.rhythm4.slice(0);
     beat.rhythm5 = source.rhythm5.slice(0);
     beat.rhythm6 = source.rhythm6.slice(0);
-    beat.rhythm1durration = source.rhythm1duration.slice(0);        // slice(0) is an easy way to copy the full array
+    beat.rhythm1duration = source.rhythm1duration.slice(0);        // slice(0) is an easy way to copy the full array
     beat.rhythm2duration = source.rhythm2duration.slice(0);
     beat.rhythm3duration = source.rhythm3duration.slice(0);
     beat.rhythm4duration = source.rhythm4duration.slice(0);

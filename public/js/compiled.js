@@ -20,14 +20,14 @@ function setRhythmIndex(idx) {
     rhythmIndex = idx;
     exports.rhythmIndex = rhythmIndex;
 }
-//what are the different elements of array beatDemo?
-var beatReset = {"kitIndex":0,"effectIndex":0,"tempo":100,"swingFactor":0,"effectMix":0.25,"kickPitchVal":0.5,"snarePitchVal":0.5,"hihatPitchVal":0.5,"tom1PitchVal":0.5,"tom2PitchVal":0.5,"tom3PitchVal":0.5,"rhythm1":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"rhythm2":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"rhythm3":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"rhythm4":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"rhythm5":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"rhythm6":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]};
-var beatDemo = [ //default, add duration val
-    {"kitIndex":13,"effectIndex":18,"tempo":120,"swingFactor":0,"effectMix":0.19718309859154926,"kickPitchVal":0.5,"snarePitchVal":0.5,"hihatPitchVal":0.5,"tom1PitchVal":0.5,"tom2PitchVal":0.5,"tom3PitchVal":0.5,"rhythm1":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"rhythm2":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"rhythm3":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"rhythm4":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"rhythm5":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"rhythm6":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0], "rhythm1duration":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0], "rhythm2duration":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0], "rhythm3duration":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0], "rhythm4duration":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0], "rhythm5duration":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0], "rhythm6duration":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]}, //rhythm1-duration [0000]
+
+var beatReset = {"kitIndex":0,"effectIndex":0,"tempo":100,"swingFactor":0,"effectMix":0.25,"kickPitchVal":0.5,"snarePitchVal":0.5,"hihatPitchVal":0.5,"tom1PitchVal":0.5,"tom2PitchVal":0.5,"tom3PitchVal":0.5,"rhythm1":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"rhythm2":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"rhythm3":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"rhythm4":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"rhythm5":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"rhythm6":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0], "rhythm1duration":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0], "rhythm2duration":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0], "rhythm3duration":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0], "rhythm4duration":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0], "rhythm5duration":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0], "rhythm6duration":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]};
+var beatDemo = [ 
+    {"kitIndex":13,"effectIndex":18,"tempo":120,"swingFactor":0,"effectMix":0.19718309859154926,"kickPitchVal":0.5,"snarePitchVal":0.5,"hihatPitchVal":0.5,"tom1PitchVal":0.5,"tom2PitchVal":0.5,"tom3PitchVal":0.5,"rhythm1":[1,0,0,0,1,0,0,0,1,0,0,0,1,0,0,0],"rhythm2":[0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1],"rhythm3":[1,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0],"rhythm4":[1,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0],"rhythm5":[1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0],"rhythm6":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0], "rhythm1duration":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0], "rhythm2duration":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0], "rhythm3duration":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0], "rhythm4duration":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0], "rhythm5duration":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0], "rhythm6duration":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]}, 
     {"kitIndex":4,"effectIndex":12,"tempo":100,"swingFactor":0,"effectMix":0.2,"kickPitchVal":0.46478873239436624,"snarePitchVal":0.45070422535211263,"hihatPitchVal":0.15492957746478875,"tom1PitchVal":0.7183098591549295,"tom2PitchVal":0.704225352112676,"tom3PitchVal":0.8028169014084507,"rhythm1":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"rhythm2":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"rhythm3":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"rhythm4":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"rhythm5":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"rhythm6":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0], "rhythm1duration":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0], "rhythm2duration":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0], "rhythm3duration":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0], "rhythm4duration":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0], "rhythm5duration":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0], "rhythm6duration":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]},
     {"kitIndex":2,"effectIndex":5,"tempo":100,"swingFactor":0,"effectMix":0.25,"kickPitchVal":0.5,"snarePitchVal":0.5,"hihatPitchVal":0.5211267605633803,"tom1PitchVal":0.23943661971830987,"tom2PitchVal":0.21126760563380287,"tom3PitchVal":0.2535211267605634,"rhythm1":[2,0,0,0,2,0,0,0,2,0,0,0,2,0,0,0],"rhythm2":[0,0,0,0,2,0,0,0,0,0,0,0,2,0,0,0],"rhythm3":[0,0,1,0,0,0,1,0,0,0,1,0,0,0,1,0],"rhythm4":[1,1,0,1,1,1,0,1,1,1,0,1,1,1,0,1],"rhythm5":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,0],"rhythm6":[0,0,1,0,1,0,0,2,0,2,0,0,1,0,0,0], "rhythm1duration":[2,0,0,0,2,0,0,0,2,0,0,0,2,0,0,0],"rhythm2duration":[0,0,0,0,2,0,0,0,0,0,0,0,2,0,0,0],"rhythm3duration":[0,0,1,0,0,0,1,0,0,0,1,0,0,0,1,0],"rhythm4duration":[1,1,0,1,1,1,0,1,1,1,0,1,1,1,0,1],"rhythm5duration":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,0],"rhythm6duration":[0,0,1,0,1,0,0,2,0,2,0,0,1,0,0,0]},
     {"kitIndex":1,"effectIndex":4,"tempo":120,"swingFactor":0,"effectMix":0.25,"kickPitchVal":0.7887323943661972,"snarePitchVal":0.49295774647887325,"hihatPitchVal":0.5,"tom1PitchVal":0.323943661971831,"tom2PitchVal":0.3943661971830986,"tom3PitchVal":0.323943661971831,"rhythm1":[2,0,0,0,0,0,0,2,2,0,0,0,0,0,0,1],"rhythm2":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"rhythm3":[0,0,1,0,2,0,1,0,1,0,1,0,2,0,2,0],"rhythm4":[2,0,2,0,0,0,0,0,2,0,0,0,0,2,0,0],"rhythm5":[0,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0],"rhythm6":[0,2,0,0,0,2,0,0,0,2,0,0,0,0,0,0], "rhythm1duration":[2,0,0,0,0,0,0,2,2,0,0,0,0,0,0,1],"rhythm2duration":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"rhythm3duration":[0,0,1,0,2,0,1,0,1,0,1,0,2,0,2,0],"rhythm4duration":[2,0,2,0,0,0,0,0,2,0,0,0,0,2,0,0],"rhythm5":[0,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0],"rhythm6":[0,2,0,0,0,2,0,0,0,2,0,0,0,0,0,0]},
-    {"kitIndex":0,"effectIndex":1,"tempo":60,"swingFactor":0.5419847328244275,"effectMix":0.25,"kickPitchVal":0.5,"snarePitchVal":0.5,"hihatPitchVal":0.5,"tom1PitchVal":0.5,"tom2PitchVal":0.5,"tom3PitchVal":0.5,"rhythm1":[2,2,0,1,2,2,0,1,2,2,0,1,2,2,0,1],"rhythm2":[0,0,2,0,0,0,2,0,0,0,2,0,0,0,2,0],"rhythm3":[2,1,1,1,2,1,1,1,2,1,1,1,2,1,1,1],"rhythm4":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"rhythm5":[0,0,1,0,0,1,0,1,0,0,1,0,0,0,1,0],"rhythm6":[1,0,0,1,0,1,0,1,1,0,0,1,1,1,1,0]},
+    {"kitIndex":0,"effectIndex":1,"tempo":60,"swingFactor":0.5419847328244275,"effectMix":0.25,"kickPitchVal":0.5,"snarePitchVal":0.5,"hihatPitchVal":0.5,"tom1PitchVal":0.5,"tom2PitchVal":0.5,"tom3PitchVal":0.5,"rhythm1":[2,2,0,1,2,2,0,1,2,2,0,1,2,2,0,1],"rhythm2":[0,0,2,0,0,0,2,0,0,0,2,0,0,0,2,0],"rhythm3":[2,1,1,1,2,1,1,1,2,1,1,1,2,1,1,1],"rhythm4":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"rhythm5":[0,0,1,0,0,1,0,1,0,0,1,0,0,0,1,0],"rhythm6":[1,0,0,1,0,1,0,1,1,0,0,1,1,1,1,0], "rhythm1duration":[2,2,0,1,2,2,0,1,2,2,0,1,2,2,0,1],"rhythm2duration":[0,0,2,0,0,0,2,0,0,0,2,0,0,0,2,0],"rhythm3duration":[2,1,1,1,2,1,1,1,2,1,1,1,2,1,1,1],"rhythm4duration":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"rhythm5duration":[0,0,1,0,0,1,0,1,0,0,1,0,0,0,1,0],"rhythm6duration":[1,0,0,1,0,1,0,1,1,0,0,1,1,1,1,0]},
 ];
 
 
@@ -51,6 +51,12 @@ function cloneBeat(source) {
     beat.rhythm4 = source.rhythm4.slice(0);
     beat.rhythm5 = source.rhythm5.slice(0);
     beat.rhythm6 = source.rhythm6.slice(0);
+    beat.rhythm1duration = source.rhythm1duration.slice(0);        // slice(0) is an easy way to copy the full array
+    beat.rhythm2duration = source.rhythm2duration.slice(0);
+    beat.rhythm3duration = source.rhythm3duration.slice(0);
+    beat.rhythm4duration = source.rhythm4duration.slice(0);
+    beat.rhythm5duration = source.rhythm5duration.slice(0);
+    beat.rhythm6duration = source.rhythm6duration.slice(0);
 
     return beat;
 }
@@ -568,28 +574,28 @@ function handleButtonMouseDown(event) {
     if (newNoteValue) {
         switch (instrumentIndex) {
             case 0:  // Kick
-                play.playNote(kit.currentKit.kickBuffer, false, 0, 0, -2, 0.5 * beatManager.theBeat.effectMix, kit.volumes[newNoteValue] * 1.0, kit.kickPitch, 0);
+                play.playNote(kit.currentKit.kickBuffer, false, 0, 0, -2, 0.5 * beatManager.theBeat.effectMix, kit.volumes[newNoteValue] * 1.0, kit.kickPitch, 0, play.getDuration());
                 break;
 
             case 1:  // Snare
-                play.playNote(kit.currentKit.snareBuffer, false, 0, 0, -2, beatManager.theBeat.effectMix, kit.volumes[newNoteValue] * 0.6, kit.snarePitch, 0);
+                play.playNote(kit.currentKit.snareBuffer, false, 0, 0, -2, beatManager.theBeat.effectMix, kit.volumes[newNoteValue] * 0.6, kit.snarePitch, 0, play.getDuration());
                 break;
 
             case 2:  // Hihat
                 // Pan the hihat according to sequence position.
-                play.playNote(kit.currentKit.hihatBuffer, true, 0.5 * rhythmIndex - 4, 0, -1.0, beatManager.theBeat.effectMix, kit.volumes[newNoteValue] * 0.7, kit.hihatPitch, 0);
+                play.playNote(kit.currentKit.hihatBuffer, true, 0.5 * rhythmIndex - 4, 0, -1.0, beatManager.theBeat.effectMix, kit.volumes[newNoteValue] * 0.7, kit.hihatPitch, 0, play.getDuration());
                 break;
 
             case 3:  // Tom 1
-                play.playNote(kit.currentKit.tom1, false, 0, 0, -2, beatManager.theBeat.effectMix, kit.volumes[newNoteValue] * 0.6, kit.tom1Pitch, 0);
+                play.playNote(kit.currentKit.tom1, false, 0, 0, -2, beatManager.theBeat.effectMix, kit.volumes[newNoteValue] * 0.6, kit.tom1Pitch, 0, play.getDuration());
                 break;
 
             case 4:  // Tom 2
-                play.playNote(kit.currentKit.tom2, false, 0, 0, -2, beatManager.theBeat.effectMix, kit.volumes[newNoteValue] * 0.6, kit.tom2Pitch, 0);
+                play.playNote(kit.currentKit.tom2, false, 0, 0, -2, beatManager.theBeat.effectMix, kit.volumes[newNoteValue] * 0.6, kit.tom2Pitch, 0, play.getDuration());
                 break;
 
             case 5:  // Tom 3
-                play.playNote(kit.currentKit.tom3, false, 0, 0, -2, beatManager.theBeat.effectMix, kit.volumes[newNoteValue] * 0.6, kit.tom3Pitch, 0);
+                play.playNote(kit.currentKit.tom3, false, 0, 0, -2, beatManager.theBeat.effectMix, kit.volumes[newNoteValue] * 0.6, kit.tom3Pitch, 0, play.getDuration());
                 break;
         }
     }
@@ -1423,6 +1429,12 @@ function setNoteTime(t) {
     exports.noteTime = noteTime;
 }
 
+function secondsPerBeat() {
+    // Advance time by a 16th note...
+     var secondsPerBeat = 60.0 / beatManager.theBeat.tempo;
+     return secondsPerBeat;
+}
+
 function advanceNote() {
 
     newData = synth.updatePatternFromCode(beatManager.cloneBeat(beatManager.theBeat), beatManager.rhythmIndex);
@@ -1431,8 +1443,6 @@ function advanceNote() {
         beatManager.setBeat(newData.beat)
         drawer.redrawAllNotes();
     }
-    // Advance time by a 16th note...
-    var secondsPerBeat = 60.0 / beatManager.theBeat.tempo;
 
     beatManager.setRhythmIndex(beatManager.rhythmIndex + 1);
     if (beatManager.rhythmIndex == beatManager.loopLength) {
@@ -1441,13 +1451,13 @@ function advanceNote() {
 
     // apply swing
     if (beatManager.rhythmIndex % 2) {
-        noteTime += (0.25 + beatManager.kMaxSwing * beatManager.theBeat.swingFactor) * secondsPerBeat;
+        noteTime += (0.25 + beatManager.kMaxSwing * beatManager.theBeat.swingFactor) * secondsPerBeat();
     } else {
-        noteTime += (0.25 - beatManager.kMaxSwing * beatManager.theBeat.swingFactor) * secondsPerBeat;
+        noteTime += (0.25 - beatManager.kMaxSwing * beatManager.theBeat.swingFactor) * secondsPerBeat();
     }
 }
-//change play.js to support durationVal
-function playNote(buffer, pan, x, y, z, sendGain, mainGain, playbackRate, noteTime) { //add durationVal
+
+function playNote(buffer, pan, x, y, z, sendGain, mainGain, playbackRate, noteTime, durationVal) { 
     // Create the note
     var voice = context.context.createBufferSource();
     voice.buffer = buffer;
@@ -1477,12 +1487,25 @@ function playNote(buffer, pan, x, y, z, sendGain, mainGain, playbackRate, noteTi
     finalNode.connect(wetGainNode);
     context.connectNodes(wetGainNode, context.convolver);
 
-    voice.start(noteTime); //doesn't cut off, 
-    //voice.stop(noteTime + durationval)
+    voice.start(noteTime); 
+    console.log("durationval playnote first", durationVal);
+    getDuration(durationVal);
+    //console.log("seconds", secondsPerBeat());
+    voice.stop(noteTime + (durationVal * secondsPerBeat()));
 }
+
+var durationTrue;
+
+function getDuration(duration){
+    durationTrue = duration;
+    return durationTrue;
+}
+
+var dur = getDuration();
 
 function schedule() {
     var currentTime = context.context.currentTime;
+    console.log("beatmanager duration: ", beatManager.theBeat.rhythm1duration[beatManager.rhythmIndex]);
 
     // The sequence starts at startTime, so normalize currentTime so that it's 0 at the start of the sequence.
     currentTime -= beatManager.startTime;
@@ -1493,31 +1516,31 @@ function schedule() {
 
         // Kick
         if (beatManager.theBeat.rhythm1[beatManager.rhythmIndex] && instrumentActive[0]) { //kick
-            playNote(kit.currentKit.kickBuffer, false, 0, 0, -2, 0.5, kit.volumes[beatManager.theBeat.rhythm1[beatManager.rhythmIndex]] * 1.0, kit.kickPitch, contextPlayTime);
+            playNote(kit.currentKit.kickBuffer, false, 0, 0, -2, 0.5, kit.volumes[beatManager.theBeat.rhythm1[beatManager.rhythmIndex]] * 1.0, kit.kickPitch, contextPlayTime, beatManager.theBeat.rhythm1duration[beatManager.rhythmIndex]);
         }
 
         // Snare
         if (beatManager.theBeat.rhythm2[beatManager.rhythmIndex] && instrumentActive[1]) {
-            playNote(kit.currentKit.snareBuffer, false, 0, 0, -2, 1, kit.volumes[beatManager.theBeat.rhythm2[beatManager.rhythmIndex]] * 0.6, kit.snarePitch, contextPlayTime);
+            playNote(kit.currentKit.snareBuffer, false, 0, 0, -2, 1, kit.volumes[beatManager.theBeat.rhythm2[beatManager.rhythmIndex]] * 0.6, kit.snarePitch, contextPlayTime, beatManager.theBeat.rhythm2duration[beatManager.rhythmIndex]);
         }
 
         // Hihat
         if (beatManager.theBeat.rhythm3[beatManager.rhythmIndex] && instrumentActive[2]) {
             // Pan the hihat according to sequence position.
-            playNote(kit.currentKit.hihatBuffer, true, 0.5 * beatManager.rhythmIndex - 4, 0, -1.0, 1, kit.volumes[beatManager.theBeat.rhythm3[beatManager.rhythmIndex]] * 0.7, kit.hihatPitch, contextPlayTime);
+            playNote(kit.currentKit.hihatBuffer, true, 0.5 * beatManager.rhythmIndex - 4, 0, -1.0, 1, kit.volumes[beatManager.theBeat.rhythm3[beatManager.rhythmIndex]] * 0.7, kit.hihatPitch, contextPlayTime, beatManager.theBeat.rhythm3duration[beatManager.rhythmIndex]);
         }
 
         // Toms
         if (beatManager.theBeat.rhythm4[beatManager.rhythmIndex] && instrumentActive[3]) {
-            playNote(kit.currentKit.tom1, false, 0, 0, -2, 1, kit.volumes[beatManager.theBeat.rhythm4[beatManager.rhythmIndex]] * 0.6, kit.tom1Pitch, contextPlayTime);
+            playNote(kit.currentKit.tom1, false, 0, 0, -2, 1, kit.volumes[beatManager.theBeat.rhythm4[beatManager.rhythmIndex]] * 0.6, kit.tom1Pitch, contextPlayTime, beatManager.theBeat.rhythm4duration[beatManager.rhythmIndex]);
         }
 
         if (beatManager.theBeat.rhythm5[beatManager.rhythmIndex] && instrumentActive[4]) {
-            playNote(kit.currentKit.tom2, false, 0, 0, -2, 1, kit.volumes[beatManager.theBeat.rhythm5[beatManager.rhythmIndex]] * 0.6, kit.tom2Pitch, contextPlayTime);
+            playNote(kit.currentKit.tom2, false, 0, 0, -2, 1, kit.volumes[beatManager.theBeat.rhythm5[beatManager.rhythmIndex]] * 0.6, kit.tom2Pitch, contextPlayTime, beatManager.theBeat.rhythm5duration[beatManager.rhythmIndex]);
         }
 
         if (beatManager.theBeat.rhythm6[beatManager.rhythmIndex] && instrumentActive[5]) {
-            playNote(kit.currentKit.tom3, false, 0, 0, -2, 1, kit.volumes[beatManager.theBeat.rhythm6[beatManager.rhythmIndex]] * 0.6, kit.tom3Pitch, contextPlayTime);
+            playNote(kit.currentKit.tom3, false, 0, 0, -2, 1, kit.volumes[beatManager.theBeat.rhythm6[beatManager.rhythmIndex]] * 0.6, kit.tom3Pitch, contextPlayTime, beatManager.theBeat.rhythm6duration[beatManager.rhythmIndex]);
         }
 
 
@@ -1532,24 +1555,25 @@ function schedule() {
 }
 
 function playDrum(noteNumber, velocity) {
+    console.log("playdrum dur", dur);
     switch (noteNumber) {
         case 0x24:
-            playNote(kit.currentKit.kickBuffer, false, 0, 0, -2, 0.5, (velocity / 127), kit.kickPitch, 0);
+            playNote(kit.currentKit.kickBuffer, false, 0, 0, -2, 0.5, (velocity / 127), kit.kickPitch, 0, dur);
             break;
         case 0x26:
-            playNote(kit.currentKit.snareBuffer, false, 0, 0, -2, 1, (velocity / 127), kit.snarePitch, 0);
+            playNote(kit.currentKit.snareBuffer, false, 0, 0, -2, 1, (velocity / 127), kit.snarePitch, 0, dur);
             break;
         case 0x28:
-            playNote(kit.currentKit.hihatBuffer, true, 0, 0, -1.0, 1, (velocity / 127), kit.hihatPitch, 0);
+            playNote(kit.currentKit.hihatBuffer, true, 0, 0, -1.0, 1, (velocity / 127), kit.hihatPitch, 0, dur);
             break;
         case 0x2d:
-            playNote(kit.currentKit.tom1, false, 0, 0, -2, 1, (velocity / 127), kit.tom1Pitch, 0);
+            playNote(kit.currentKit.tom1, false, 0, 0, -2, 1, (velocity / 127), kit.tom1Pitch, 0, dur);
             break;
         case 0x2f:
-            playNote(kit.currentKit.tom2, false, 0, 0, -2, 1, (velocity / 127), kit.tom2Pitch, 0);
+            playNote(kit.currentKit.tom2, false, 0, 0, -2, 1, (velocity / 127), kit.tom2Pitch, 0, dur);
             break;
         case 0x32:
-            playNote(kit.currentKit.tom3, false, 0, 0, -2, 1, (velocity / 127), kit.tom3Pitch, 0);
+            playNote(kit.currentKit.tom3, false, 0, 0, -2, 1, (velocity / 127), kit.tom3Pitch, 0, dur);
             break;
         default:
             console.log("note:0x" + noteNumber.toString(16));
@@ -1567,7 +1591,7 @@ exports.setNoteTime = setNoteTime;
 
 // variables
 exports.noteTime = noteTime;
-
+exports.getDuration = getDuration;
 
 
 //
