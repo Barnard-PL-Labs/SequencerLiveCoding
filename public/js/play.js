@@ -73,8 +73,10 @@ function playNote(buffer, pan, x, y, z, sendGain, mainGain, playbackRate, noteTi
 
     voice.start(noteTime); 
     console.log("durationval playnote first", durationVal);
+    console.log("notetime", noteTime);
     getDuration(durationVal);
-    //console.log("seconds", secondsPerBeat());
+    console.log("seconds", secondsPerBeat());
+    console.log("stop", durationVal);
     voice.stop(noteTime + (durationVal * secondsPerBeat()));
 }
 

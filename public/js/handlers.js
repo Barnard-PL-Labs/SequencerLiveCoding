@@ -234,6 +234,7 @@ function loadBeat(beat) {
     slidersManager.sliderSetValue('swing_thumb', beatManager.theBeat.swingFactor);
 
     drawer.updateControls();
+    console.log("thebeat handlers", beatManager.theBeat);
     setActiveInstrument(0);
 
     return true;
