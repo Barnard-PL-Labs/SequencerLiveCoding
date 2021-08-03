@@ -132,8 +132,7 @@ exports.initDrums = function (cmInstance) {
         finalMixNode = contextMod.context.destination;
     }
 
-    //TODO @hannahcmacias add webaudiorecorder here to finalMixNode?
-    recorder = new WebAudioRecorder(finalMixNode, {workerDir: "js/web-audio-recorder-js/lib/"});
+    recorder = new WebAudioRecorder(finalMixNode, {workerDir: "js/web-audio-recorder/lib/"});
 
       //add buttons (start/stop, play, save)
       const recordButton = document.querySelector('.record-button');
