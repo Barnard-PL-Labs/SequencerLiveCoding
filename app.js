@@ -28,6 +28,7 @@ io.on('connection', (socket) => {
   console.log('a user connected');
   socket.on('disconnect', () => {
       console.log('user disconnected');
+      synth.disconnect();
     });
   
   //When a client asks for new code, we run synthesis and send the result back

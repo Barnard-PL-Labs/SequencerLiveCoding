@@ -36,8 +36,8 @@ function advanceNote() {
         noteTime += (0.25 - beatManager.kMaxSwing * beatManager.theBeat.swingFactor) * secondsPerBeat;
     }
 }
-
-function playNote(buffer, pan, x, y, z, sendGain, mainGain, playbackRate, noteTime) {
+//change play.js to support durationVal
+function playNote(buffer, pan, x, y, z, sendGain, mainGain, playbackRate, noteTime) { //add durationVal
     // Create the note
     var voice = context.context.createBufferSource();
     voice.buffer = buffer;
@@ -67,7 +67,8 @@ function playNote(buffer, pan, x, y, z, sendGain, mainGain, playbackRate, noteTi
     finalNode.connect(wetGainNode);
     context.connectNodes(wetGainNode, context.convolver);
 
-    voice.start(noteTime);
+    voice.start(noteTime); //doesn't cut off, 
+    //voice.stop(noteTime + durationval)
 }
 
 function schedule() {
@@ -81,7 +82,7 @@ function schedule() {
         var contextPlayTime = noteTime + beatManager.startTime;
 
         // Kick
-        if (beatManager.theBeat.rhythm1[beatManager.rhythmIndex] && instrumentActive[0]) {
+        if (beatManager.theBeat.rhythm1[beatManager.rhythmIndex] && instrumentActive[0]) { //kick
             playNote(kit.currentKit.kickBuffer, false, 0, 0, -2, 0.5, kit.volumes[beatManager.theBeat.rhythm1[beatManager.rhythmIndex]] * 1.0, kit.kickPitch, contextPlayTime);
         }
 

@@ -374,3 +374,11 @@ li {
 
 img.preload { display: none; }
 #MIDIPlugin { visibility: hidden; }
+
+#instructionsForAddedFunctions {
+	padding-top: 2%;
+	color: rgb(176, 176, 176);
+	font-family: 'Droid Sans', Arial, sans-serif;
+	font-weight: lighter;
+	font-size: small;
+}
