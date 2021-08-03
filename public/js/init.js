@@ -133,6 +133,72 @@ exports.initDrums = function (cmInstance) {
     }
 
     //TODO @hannahcmacias add webaudiorecorder here to finalMixNode?
+    recorder = new WebAudioRecorder(finalMixNode, {workerDir: "js/web-audio-recorder-js/lib/"});
+
+      //add buttons (start/stop, play, save)
+      const recordButton = document.querySelector('.record-button');
+      const playButton = document.querySelector('.play-button');
+      const saveButton = document.querySelector('.save-button');
+      //var pressed = document.querySelector(".active");
+
+      recordButton.addEventListener('click', function() {
+        recordButton.classList.toggle('active');
+        txtChange();
+
+        if(recorder.isRecording()){
+          recorder.finishRecording();
+          playButton.classList.add('show')
+          saveButton.classList.add('show')
+        }
+        else{
+          recorder.startRecording();
+          playButton.classList.remove('show') 
+          saveButton.classList.remove('show')          
+        } 
+      });
+
+      playButton.addEventListener('click', function(){
+          recordedAudio.play()
+      });
+
+      saveButton.addEventListener('click', function(){
+	    var au = document.createElement('audio');
+	    var li = document.createElement('li');
+	    var link = document.createElement('a');
+        
+	    //name of .wav file to use during upload and download
+	    var filename = new Date().toISOString();
+
+	    //add controls to the <audio> element
+	    au.controls = true;
+	    au.src = recordedAudio.src;
+
+        //save to disk link
+        link.href = recordedAudio;
+        link.download = filename + ".wav"; //download forces the browser to donwload the file using the  filename
+        
+        //add the new audio element to li
+        li.appendChild(au);
+        
+        //add the filename to the li
+        li.appendChild(document.createTextNode(filename + ".wav "))
+
+        //add the save to disk link to li
+        li.appendChild(link);
+
+        //add the li element to the ol
+        recordingsList.appendChild(li);  
+      });
+
+      function txtChange(){
+          if(document.getElementById("recBtn").innerHTML=="Record Sound"){
+              document.getElementById("recBtn").innerHTML = "Stop Recording";
+          }
+          else{
+            document.getElementById("recBtn").innerHTML = "Record Sound";
+          }
+      }
+
 
     // create master filter node
     let tmp = contextMod.context.createBiquadFilter();

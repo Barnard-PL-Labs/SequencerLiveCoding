@@ -22,6 +22,7 @@
 	<script src="js/codemirrorDeps/codemirror.js"></script>
 	<script src="js/codemirrorDeps/javascript.js"></script>
 
+	<script src="js/web-audio-recorder-js/lib/WebAudioRecorder.js"></script> 
 
 	<!-- Set up Web MIDI polyfill -->
 	<script type="text/javascript" src="js/WebMIDIAPI.js"></script>
@@ -56,6 +57,18 @@
 	<div id='title'>
 		Live Coding Web Drum Machine <span id='version'>0.1</span>
 	</div>
+
+	<div class = "recordingButtons">
+		<button class = "record-button bttn" id= "recBtn">Record Sound</button>
+		<button class = "play-button bttn">Play last recording</button>
+		<button class = "save-button bttn">Save to recordings list</button>
+	</div>
+
+	<audio id= recordedAudio></audio>
+	<p id = listLabel><strong>Recordings:</strong></p>
+	<ol id= recordingsList></ol>
+	
+
 	<div class="grid-container">
 		<div>
 			<textarea id="codingWindow" rows="10" cols="120" style="border:1px solid black" class="boxsizingBorder">

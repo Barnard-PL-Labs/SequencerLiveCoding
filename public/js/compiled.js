@@ -926,7 +926,7 @@ function startLoadingAssets() {
     // Initialize drum kits
     var numKits = kitMod.kitName.length;
     tmp = new Array(numKits);
-    for (var i  = 0; i < numKits; i++) {
+    for (var i = 0; i < numKits; i++) {
         tmp[i] = new kitMod.Kit(kitMod.kitName[i]);
     }
     kitMod.setKits(tmp)
@@ -947,7 +947,7 @@ function startLoadingAssets() {
 
     // Then load the remaining assets.
     // Note that any assets which have previously started loading will be skipped over.
-    for (var i  = 0; i < numKits; i++) {
+    for (var i = 0; i < numKits; i++) {
         kitMod.kits[i].load();
     }
 
@@ -980,8 +980,8 @@ function showDemoAvailable(demoIndex /* zero-based */) {
         showPlayAvailable();
         handlersMod.loadBeat(beatMod.beatDemo[1]);
 
-    // Uncomment to allow autoplay
-    //     handlePlay();
+        // Uncomment to allow autoplay
+        //     handlePlay();
     }
 }
 
@@ -991,7 +991,7 @@ function showPlayAvailable() {
     play.src = "images/btn_play.png";
 }
 
-exports.initDrums = function(cmInstance) {
+exports.initDrums = function (cmInstance) {
 
     // Let the beat demos know when all of their assets have been loaded.
     // Add some new methods to support this.
@@ -1000,23 +1000,23 @@ exports.initDrums = function(cmInstance) {
         beatMod.beatDemo[i].isKitLoaded = false;
         beatMod.beatDemo[i].isEffectLoaded = false;
 
-        beatMod.beatDemo[i].setKitLoaded = function() {
+        beatMod.beatDemo[i].setKitLoaded = function () {
             this.isKitLoaded = true;
             this.checkIsLoaded();
         };
 
-        beatMod.beatDemo[i].setEffectLoaded = function() {
+        beatMod.beatDemo[i].setEffectLoaded = function () {
             this.isEffectLoaded = true;
             this.checkIsLoaded();
         };
 
-        beatMod.beatDemo[i].checkIsLoaded = function() {
+        beatMod.beatDemo[i].checkIsLoaded = function () {
             if (this.isLoaded()) {
                 showDemoAvailable(this.index);
             }
         };
 
-        beatMod.beatDemo[i].isLoaded = function() {
+        beatMod.beatDemo[i].isLoaded = function () {
             return this.isKitLoaded && this.isEffectLoaded;
         };
     }
@@ -1037,6 +1037,74 @@ exports.initDrums = function(cmInstance) {
         // No compressor available in this implementation.
         finalMixNode = contextMod.context.destination;
     }
+
+    //TODO @hannahcmacias add webaudiorecorder here to finalMixNode?
+    recorder = new WebAudioRecorder(finalMixNode, {workerDir: "js/web-audio-recorder-js/lib/"});
+
+      //add buttons (start/stop, play, save)
+      const recordButton = document.querySelector('.record-button');
+      const playButton = document.querySelector('.play-button');
+      const saveButton = document.querySelector('.save-button');
+      //var pressed = document.querySelector(".active");
+
+      recordButton.addEventListener('click', function() {
+        recordButton.classList.toggle('active');
+        txtChange();
+
+        if(recorder.isRecording()){
+          recorder.finishRecording();
+          playButton.classList.add('show')
+          saveButton.classList.add('show')
+        }
+        else{
+          recorder.startRecording();
+          playButton.classList.remove('show') 
+          saveButton.classList.remove('show')          
+        } 
+      });
+
+      playButton.addEventListener('click', function(){
+          recordedAudio.play()
+      });
+
+      saveButton.addEventListener('click', function(){
+	    var au = document.createElement('audio');
+	    var li = document.createElement('li');
+	    var link = document.createElement('a');
+        
+	    //name of .wav file to use during upload and download
+	    var filename = new Date().toISOString();
+
+	    //add controls to the <audio> element
+	    au.controls = true;
+	    au.src = recordedAudio.src;
+
+        //save to disk link
+        link.href = recordedAudio;
+        link.download = filename + ".wav"; //download forces the browser to donwload the file using the  filename
+        
+        //add the new audio element to li
+        li.appendChild(au);
+        
+        //add the filename to the li
+        li.appendChild(document.createTextNode(filename + ".wav "))
+
+        //add the save to disk link to li
+        li.appendChild(link);
+
+        //add the li element to the ol
+        recordingsList.appendChild(li);  
+      });
+
+      function txtChange(){
+          if(document.getElementById("recBtn").innerHTML=="Record Sound"){
+              document.getElementById("recBtn").innerHTML = "Stop Recording";
+          }
+          else{
+            document.getElementById("recBtn").innerHTML = "Record Sound";
+          }
+      }
+
 
     // create master filter node
     let tmp = contextMod.context.createBiquadFilter();
@@ -1079,8 +1147,8 @@ exports.initDrums = function(cmInstance) {
     var timerWorkerBlobURL = window.URL.createObjectURL(timerWorkerBlob);
 
     timerWorker = new Worker(timerWorkerBlobURL);
-    timerWorker.onmessage = function(e) {
-      playMod.schedule();
+    timerWorker.onmessage = function (e) {
+        playMod.schedule();
     };
     timerWorker.postMessage('init'); // Start the worker.
 
@@ -1132,8 +1200,8 @@ function initButtons() {
 
     for (i = 0; i < beatMod.loopLength; ++i) {
         for (j = 0; j < kitMod.kNumInstruments; j++) {
-                elButton = document.getElementById(kitMod.instruments[j] + '_' + i);
-                elButton.addEventListener("mousedown", handlersMod.handleButtonMouseDown, true);
+            elButton = document.getElementById(kitMod.instruments[j] + '_' + i);
+            elButton.addEventListener("mousedown", handlersMod.handleButtonMouseDown, true);
         }
     }
 }
