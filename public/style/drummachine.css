@@ -97,6 +97,68 @@ body {
 	border: 0;
 }
 
+.recordingButtons{
+	margin-bottom: .5rem;
+	display: flex;
+	position: relative;
+	left: 12px;
+}
+
+.bttn{
+	--hue: 100;
+	--saturation: 100%;
+
+	padding: .25rem 1rem;
+	border: none;
+	background-color: hsl(var(--hue), var(--saturation), 80%);
+	margin-left: 1rem;
+}
+
+.bttn:first-child{
+	margin-left: 0;
+}
+
+.bttn:hover,
+.bttn:focus{
+	background-color: hsl(var(--hue), var(--saturation), 60%);
+}
+
+.record-button{
+	--hue: 0;
+	--saturation: 0%;
+}
+
+.record-button.active{
+	--saturation: 100%;
+}
+
+.play-button,
+.save-button{
+	display: none;
+}
+
+.play-button.show,
+.save-button.show{
+	display: block;
+}
+
+li {
+	list-style: none;
+	margin-bottom: 1rem;
+  }
+
+  #listLabel{
+	position: absolute;
+	top: 400px;
+	left: 17px;
+  }
+
+  #recordingsList{
+	max-width: 30em;
+	position: absolute;
+	top: 425px;
+}
+
 #kitlabel, #effectlabel, #swinglabel {
 	top: 6px;
 }
