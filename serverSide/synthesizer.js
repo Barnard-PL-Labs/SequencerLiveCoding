@@ -63,17 +63,17 @@ function parseCodeLine(line) {
 //check if we have inserted a array index manipulation line of code 
 function hasPatternEdit(parsedCode, whichPattern) {
     // const matchesP = (codeLine) => codeLine["instIndex"] == whichPattern-1;
-    const matchesP = (codeLine) => codeLine["instIndex"] == whichPattern-1;
-    console.log(matchesP);
-    console.log(whichPattern-1 + ": " + parsedCode.some(matchesP));
-    console.log(parsedCode.some(matchesP));
-    console.log(parsedCode);
+    const matchesP = (codeLine) => codeLine["instIndex"] == instrument[whichPattern-1];
+    // console.log(matchesP);
+    // console.log(whichPattern-1 + ": " + parsedCode.some(matchesP));
+    console.log((codeLine) => codeLine["instIndex"]);
+    console.log("matches: " + parsedCode.some(matchesP));
+    // console.log(parsedCode);
     return parsedCode.some(matchesP);
 }
 
 simplifyCode = async function(codeAndBeat) {
     var code = codeAndBeat["code"]
-    console.log("test")
     var arrayOfLines = code.match(/[^\r\n]+/g);
     //TODO merge multiline commands (e.g. .map w/ fxn over multiple lines) into a single line
 
@@ -94,6 +94,7 @@ simplifyCode = async function(codeAndBeat) {
     //TODO, do this for all patterns & refactor to fxn
     for (whichPattern = 1; whichPattern <= 6; whichPattern++) {
         var singleEditInfo = checkForSingleEdit(codeAndBeat["beat"]["rhythm"+whichPattern])
+        console.log("pattern edit?" + hasPatternEdit(parsedCode, instrument[whichPattern]))
         if (singleEditInfo["hasOneChangedIndex"]) {
             console.log("Pattern " + whichPattern + " has singleEdit");
             // newCode = newCode.replace(new RegExp(".*rhythm"+whichPattern+".*\n", "g"), '')
@@ -111,6 +112,7 @@ simplifyCode = async function(codeAndBeat) {
             var subseq = synthSolution["subseq"]
             //turn sygus sol'n to JS code
             //TODO refactor to fxn
+            console.log(sygusSolution);
             if (sygusSolution != "unknown") {
                 var fxnDefs = sygusSolution.split("\n").slice(1);
                 var extractDef = new RegExp(/\(.*?\)\) [^ ]* /);

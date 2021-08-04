@@ -83,7 +83,7 @@ function updatePatternFromCode(currentBeat, rhythmIndex) {
         let newSliders = newData.sliders;
         for (i = 1; i <= 6; i++) {
             newBeat['rhythm' + i.toString()] = newBeat['rhythm' + i.toString()].map((note) => { if (Number.isNaN(note)) { return 0; } else { return note } });
-            newBeat[instrument[i]] = newBeat[instrument[i]].map((note) => { if (Number.isNaN(note)) { return 0; } else { return note } });
+            // newBeat[instrument[i]] = newBeat[instrument[i]].map((note) => { if (Number.isNaN(note)) { return 0; } else { return note } });
         }
         if (isValidBeat(newBeat) && isValidSliders(newSliders)) { // && theBeat != newBeat){
             return { beat: newBeat, sliders: newSliders };
