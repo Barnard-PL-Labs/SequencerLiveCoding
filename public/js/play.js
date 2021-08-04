@@ -14,7 +14,6 @@ function setNoteTime(t) {
 }
 
 function secondsPerBeat() {
-    // Advance time by a 16th note...
      var secondsPerBeat = 60.0 / beatManager.theBeat.tempo;
      return secondsPerBeat;
 }
@@ -35,6 +34,7 @@ function advanceNote() {
 
     // apply swing
     if (beatManager.rhythmIndex % 2) {
+        // Advance time by a 16th note...
         noteTime += (0.25 + beatManager.kMaxSwing * beatManager.theBeat.swingFactor) * secondsPerBeat();
     } else {
         noteTime += (0.25 - beatManager.kMaxSwing * beatManager.theBeat.swingFactor) * secondsPerBeat();
@@ -77,14 +77,14 @@ function playNote(buffer, pan, x, y, z, sendGain, mainGain, playbackRate, noteTi
     getDuration(durationVal);
     console.log("seconds", secondsPerBeat());
     console.log("stop", durationVal);
-    voice.stop(noteTime + (durationVal * secondsPerBeat()));
+    //voice.stop(noteTime + (0.6/4.0));
+    voice.stop(noteTime + (durationVal * secondsPerBeat() * 0.25));
 }
 
 var durationTrue;
 
-function getDuration(duration){
-    durationTrue = duration;
-    return durationTrue;
+function getDuration(){
+    return 12;
 }
 
 var dur = getDuration();

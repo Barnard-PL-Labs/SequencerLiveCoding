@@ -46,7 +46,7 @@ function startLoadingAssets() {
     }
 
     // Start at 1 to skip "No Effect"
-    for (i = 1; i < impulseMod.impulseResponseInfoList.length; i++) {
+    for (i = 0; i < impulseMod.impulseResponseInfoList.length; i++) {
         impulseMod.impulseResponseList[i].load();
     }
 

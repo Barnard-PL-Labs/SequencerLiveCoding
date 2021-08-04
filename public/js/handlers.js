@@ -198,7 +198,6 @@ function handleEffectComboMouseDown(event) {
 function handleEffectMouseDown(event) {
     for (var i = 0; i < impulse.impulseResponseInfoList.length; ++i) {
         if (impulse.impulseResponseInfoList[i].name == event.target.innerHTML) {
-
             // Hack - if effect is turned all the way down - turn up effect slider.
             // ... since they just explicitly chose an effect from the list.
             if (beatManager.theBeat.effectMix == 0)
