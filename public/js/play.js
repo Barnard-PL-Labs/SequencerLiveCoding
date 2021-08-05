@@ -72,19 +72,21 @@ function playNote(buffer, pan, x, y, z, sendGain, mainGain, playbackRate, noteTi
     context.connectNodes(wetGainNode, context.convolver);
 
     voice.start(noteTime); 
-    console.log("durationval playnote first", durationVal);
     console.log("notetime", noteTime);
-    getDuration(durationVal);
     console.log("seconds", secondsPerBeat());
     console.log("stop", durationVal);
     //voice.stop(noteTime + (0.6/4.0));
-    voice.stop(noteTime + (durationVal * secondsPerBeat() * 0.25));
+    console.log("getDuration()", getDuration());
+    voice.stop(noteTime + (getDuration() * secondsPerBeat() * 0.25));
 }
 
 var durationTrue;
 
 function getDuration(){
-    return 12;
+    durationVal = 1;
+    return durationVal;
+    //durationTrue = durationVal;
+    //return durationVal;
 }
 
 var dur = getDuration();
