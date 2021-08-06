@@ -73,27 +73,22 @@ function playNote(buffer, pan, x, y, z, sendGain, mainGain, playbackRate, noteTi
 
     voice.start(noteTime); 
     console.log("notetime", noteTime);
-    console.log("seconds", secondsPerBeat());
-    console.log("stop", durationVal);
+    console.log("durationVal", durationVal);
     //voice.stop(noteTime + (0.6/4.0));
-    //console.log("durationVal", getDuration());
+    console.log("stop count", durationVal);
     voice.stop(noteTime + (durationVal * secondsPerBeat() * 0.25));
 }
 
 var durationTrue;
 
 function getDuration(){
-    durationVal = 1;
-    return durationVal;
-    //durationTrue = durationVal;
-    //return durationVal;
+    return 1;
 }
 
 var dur = getDuration();
 
 function schedule() {
     var currentTime = context.context.currentTime;
-    console.log("beatmanager duration: ", beatManager.theBeat.rhythm1duration[beatManager.rhythmIndex]);
 
     // The sequence starts at startTime, so normalize currentTime so that it's 0 at the start of the sequence.
     currentTime -= beatManager.startTime;
