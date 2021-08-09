@@ -10,6 +10,15 @@ const instrument = {
     6: "Tom3"
 };
 
+const reverseInstrument = {
+    "Kick" : 1,
+    "Snare" : 2,
+    "Hi-Hat" : 3,
+    "Tom1" : 4,
+    "Tom2" : 5,
+    "Tom3" : 6
+}
+
 //We pull this in on init, which allows us to grab code as the drum machine runs
 var codeMirrorInstance = null
 
@@ -79,12 +88,14 @@ function updatePatternFromCode(currentBeat, rhythmIndex) {
         //TODO if(codeChanged) {
         let f = new Function("theBeat", "rhythmIndex", '"use strict"; ' + pattern.toString() + setAll.toString() + backBeat.toString() + p.toString() + every_beat.toString() + updatedCode + ' return (genBeat(theBeat, {}, rhythmIndex));');
         let newData = f(currentBeat, rhythmIndex);
+        console.log("newData: "+newData);
         let newBeat = newData.beat;
         let newSliders = newData.sliders;
         for (i = 1; i <= 6; i++) {
             newBeat['rhythm' + i.toString()] = newBeat['rhythm' + i.toString()].map((note) => { if (Number.isNaN(note)) { return 0; } else { return note } });
             // newBeat[instrument[i]] = newBeat[instrument[i]].map((note) => { if (Number.isNaN(note)) { return 0; } else { return note } });
         }
+        console.log("keys: "+Object.keys(newBeat));
         if (isValidBeat(newBeat) && isValidSliders(newSliders)) { // && theBeat != newBeat){
             return { beat: newBeat, sliders: newSliders };
         }
@@ -145,10 +156,10 @@ function isValidBeat(beat) {
     var valid = true;
     for (i = 1; i <= 6; i++) {
         valid = valid &&
-            Array.isArray(beat['rhythm' + i.toString()]) &&
-            beat['rhythm' + i.toString()].every((v) => v <= 2 && v >= 0);
-            // Array.isArray(beat[instrument[i]]) &&
-            // beat[instrument[i]].every((v) => v <= 2 && v >= 0);
+            // Array.isArray(beat['rhythm' + i.toString()]) &&
+            // beat['rhythm' + i.toString()].every((v) => v <= 2 && v >= 0);
+            Array.isArray(beat[instrument[i]]) &&
+            beat[instrument[i]].every((v) => v <= 2 && v >= 0);
     }
     return valid;
 }
