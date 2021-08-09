@@ -109,7 +109,7 @@ body {
 	--saturation: 100%;
 
 	padding: .25rem 1rem;
-	border: none;
+	border: thick;
 	background-color: hsl(var(--hue), var(--saturation), 80%);
 	margin-left: 1rem;
 }
