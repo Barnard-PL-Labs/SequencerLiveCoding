@@ -149,14 +149,14 @@ li {
 
   #listLabel{
 	position: absolute;
-	top: 400px;
+	top: 725px; 
 	left: 17px;
   }
 
   #recordingsList{
 	max-width: 30em;
 	position: absolute;
-	top: 425px;
+	top: 750px;
 }
 
 #kitlabel, #effectlabel, #swinglabel {
