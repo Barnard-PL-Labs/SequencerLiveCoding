@@ -107,7 +107,7 @@ function handleButtonMouseDown(event) {
             case 5: durations = beatManager.theBeat.rhythm6duration; break;
         }
         var newNoteDuration = (durations[rhythmIndex] + 1) % 5;
-        durations[rhythmIndex] = newNoteDuration
+        durations[rhythmIndex] = newNoteDuration;
 
     }
     else { //else vol

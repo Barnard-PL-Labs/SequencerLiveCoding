@@ -13,6 +13,7 @@ function setLastDrawTime(time) {
 
 
 function drawNote(volume, duration, xindex, yindex) {
+    console.log("volume", volume, "duration", duration, "xindex", xindex, "yindex", yindex);
     var elButton = document.getElementById(kitMod.instruments[yindex] + '_' + xindex);
     var button_name = "images/buttons/button_v" + volume + "_d" + duration + ".png"
     elButton.src = button_name;
@@ -66,17 +67,36 @@ function sliderSetPosition(slider, value) {
 function updateControls() {
     for (i = 0; i < beatMod.loopLength; ++i) {
         for (j = 0; j < kitMod.kNumInstruments; j++) {
-            switch (j) {
-                case 0: notes = beatMod.theBeat.rhythm1; break;
-                case 1: notes = beatMod.theBeat.rhythm2; break;
-                case 2: notes = beatMod.theBeat.rhythm3; break;
-                case 3: notes = beatMod.theBeat.rhythm4; break;
-                case 4: notes = beatMod.theBeat.rhythm5; break;
-                case 5: notes = beatMod.theBeat.rhythm6; break;
+            //switch (j) {
+                if(j == 0) {
+                notes = beatMod.theBeat.rhythm1; 
+                durations = beatMod.theBeat.rhythm1duration; break;
+                }
+                if(j == 1) {
+                notes = beatMod.theBeat.rhythm2; 
+                durations = beatMod.theBeat.rhythm2duration; break;
+                }
+                if(j == 2) {
+                notes = beatMod.theBeat.rhythm3; 
+                durations = beatMod.theBeat.rhythm3duration; break;
+                }
+                if(j == 3) {
+                notes = beatMod.theBeat.rhythm4; 
+                durations = beatMod.theBeat.rhythm4duration; break;
+                }
+                if(j == 4){
+                notes = beatMod.theBeat.rhythm5; 
+                durations = beatMod.theBeat.rhythm5duration; break;
+                }
+                //case 5:
+                if(j == 5){ 
+                notes = beatMod.theBeat.rhythm6; 
+                durations = beatMod.theBeat.rhythm6duration; break;
+                }
             }
-
-            drawNote(notes[i], i, j);
-        }
+            console.log("notes[i]", notes[i], "notes", notes, "durations[i]", durations[i], "durations", durations);
+            drawNote(notes[i], durtations[i], i, j);
+        //}
     }
 
     document.getElementById('kitname').innerHTML = kitMod.kitNamePretty[beatMod.theBeat.kitIndex];

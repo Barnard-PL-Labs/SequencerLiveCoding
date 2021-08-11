@@ -84,7 +84,6 @@ function showPlayAvailable() {
     var play = document.getElementById("play");
     play.src = "images/btn_play.png";
 }
-
 exports.initDrums = function (cmInstance) {
 
     // Let the beat demos know when all of their assets have been loaded.
