@@ -12,23 +12,20 @@ function setLastDrawTime(time) {
 }
 
 
-function drawNote(draw, xindex, yindex) {
+function drawNote(volume, duration, xindex, yindex) {
     var elButton = document.getElementById(kitMod.instruments[yindex] + '_' + xindex);
-    switch (draw) {
-        case 0: elButton.src = 'images/button_off.png'; break;
-        case 1: elButton.src = 'images/button_half.png'; break;
-        case 2: elButton.src = 'images/button_on.png'; break;
-    }
+    var button_name = "images/buttons/button_v" + volume + "_d" + duration + ".png"
+    elButton.src = button_name;
 }
 
 function redrawAllNotes() {
     for (y = 0; y < 6; y++) { //6 rhythm patterns in theBeat
         for (x = 0; x < 16; x++)  { //16 beat subdivisions
             if(x >= beatMod.theBeat['rhythm'+(y+1).toString()].length){
-                drawNote(0, x, y);
+                drawNote(0, 0, x, y);
             }
             else {
-                drawNote(beatMod.theBeat['rhythm'+(y+1).toString()][x], x, y);
+                drawNote(beatMod.theBeat['rhythm'+(y+1).toString()][x], beatMod.theBeat['rhythm'+(y+1).toString()][x]+'duration', x, y);
             }
         }
     }

@@ -97,23 +97,36 @@ function handleButtonMouseDown(event) {
     rhythmIndex = elId.substr(elId.indexOf('_') + 1, 2);
     instrumentIndex = kit.instruments.indexOf(elId.substr(0, elId.indexOf('_')));
 
-    switch (instrumentIndex) {
-        case 0: notes = beatManager.theBeat.rhythm1; break;
-        case 1: notes = beatManager.theBeat.rhythm2; break;
-        case 2: notes = beatManager.theBeat.rhythm3; break;
-        case 3: notes = beatManager.theBeat.rhythm4; break;
-        case 4: notes = beatManager.theBeat.rhythm5; break;
-        case 5: notes = beatManager.theBeat.rhythm6; break;
+    if (event.ctrlKey) { //if ctrl, we are modifying duration
+        switch (instrumentIndex) {
+            case 0: durations = beatManager.theBeat.rhythm1duration; break;
+            case 1: durations = beatManager.theBeat.rhythm2duration; break;
+            case 2: durations = beatManager.theBeat.rhythm3duration; break;
+            case 3: durations = beatManager.theBeat.rhythm4duration; break;
+            case 4: durations = beatManager.theBeat.rhythm5duration; break;
+            case 5: durations = beatManager.theBeat.rhythm6duration; break;
+        }
+        var newNoteDuration = (durations[rhythmIndex] + 1) % 5;
+        durations[rhythmIndex] = newNoteDuration
+
     }
+    else { //else vol
+        switch (instrumentIndex) {
+            case 0: notes = beatManager.theBeat.rhythm1; break;
+            case 1: notes = beatManager.theBeat.rhythm2; break;
+            case 2: notes = beatManager.theBeat.rhythm3; break;
+            case 3: notes = beatManager.theBeat.rhythm4; break;
+            case 4: notes = beatManager.theBeat.rhythm5; break;
+            case 5: notes = beatManager.theBeat.rhythm6; break;
+        }
+        var newNoteValue = (notes[rhythmIndex] + 1) % 3;
+        notes[rhythmIndex] = newNoteValue;
 
-    var newNoteValue = (notes[rhythmIndex] + 1) % 3;
-
-    notes[rhythmIndex] = newNoteValue
-
+    }
     if (instrumentIndex == currentlyActiveInstrument)
         showCorrectNote(rhythmIndex, notes[rhythmIndex]);
 
-    drawer.drawNote(notes[rhythmIndex], rhythmIndex, instrumentIndex);
+    drawer.drawNote(notes[rhythmIndex], durations[rhythmIndex], rhythmIndex, instrumentIndex);
 
     if (newNoteValue) {
         switch (instrumentIndex) {
