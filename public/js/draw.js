@@ -95,7 +95,7 @@ function updateControls() {
                 }
             }
             console.log("notes[i]", notes[i], "notes", notes, "durations[i]", durations[i], "durations", durations);
-            drawNote(notes[i], durtations[i], i, j);
+            drawNote(notes[i], durations[i], i, j);
         //}
     }
 

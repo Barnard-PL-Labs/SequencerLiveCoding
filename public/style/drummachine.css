@@ -93,8 +93,10 @@ body {
 
 .btn {
 	padding: 0;
-	margin: 0;
+	margin: 5px;
 	border: 0;
+	height: 20px;
+	width: 20px;
 }
 
 .recordingButtons{
