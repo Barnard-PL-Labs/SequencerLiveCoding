@@ -26,7 +26,7 @@ function redrawAllNotes() {
                 drawNote(0, 0, x, y);
             }
             else {
-                drawNote(beatMod.theBeat['rhythm'+(y+1).toString()][x], beatMod.theBeat['rhythm'+(y+1).toString()][x]+'duration', x, y);
+                drawNote(beatMod.theBeat['rhythm'+(y+1).toString()][x], beatMod.theBeat['rhythm'+(y+1).toString()][x], x, y);
             }
         }
     }
