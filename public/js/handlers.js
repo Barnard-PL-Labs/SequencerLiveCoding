@@ -89,6 +89,7 @@ function handleMouseUp() {
 
 function handleButtonMouseDown(event) {
     var notes = beatManager.theBeat.rhythm1;
+    var duration = beatManager.theBeat.rhythm1duration;
 
     var instrumentIndex;
     var rhythmIndex;
@@ -97,7 +98,7 @@ function handleButtonMouseDown(event) {
     rhythmIndex = elId.substr(elId.indexOf('_') + 1, 2);
     instrumentIndex = kit.instruments.indexOf(elId.substr(0, elId.indexOf('_')));
 
-    if (event.ctrlKey) { //if ctrl, we are modifying duration
+    if (event.shiftKey) { //if shift, we are modifying duration
         switch (instrumentIndex) {
             case 0: durations = beatManager.theBeat.rhythm1duration; break;
             case 1: durations = beatManager.theBeat.rhythm2duration; break;
@@ -128,7 +129,8 @@ function handleButtonMouseDown(event) {
 
     drawer.drawNote(notes[rhythmIndex], durations[rhythmIndex], rhythmIndex, instrumentIndex);
 
-    if (newNoteValue) {
+    //plays the note when you click on it
+    if (newNoteValue && false) { //commented out, not sure we want to enable
         switch (instrumentIndex) {
             case 0:  // Kick
                 play.playNote(kit.currentKit.kickBuffer, false, 0, 0, -2, 0.5 * beatManager.theBeat.effectMix, kit.volumes[newNoteValue] * 1.0, kit.kickPitch, 0, play.getDuration());
