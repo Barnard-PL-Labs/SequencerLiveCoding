@@ -40,25 +40,20 @@ function addLineForPointChangeDuration(currentCode, newDurationValue, rhythmInde
     //TODO this is currently whitespace dependent - make this a regex to give a bit of flexibility at least
     newLine = "  b.rhythm" + (instrumentIndex + 1) + "duration[" + rhythmIndex + "] = " + newDurationValue + ";\n"
     existingLineLoc = currentCode.indexOf("  b.rhythm" + (instrumentIndex + 1) + "duration[" + rhythmIndex + "] =")
-    //if code has a line explicitly changed this point, then we update its value
-    if (existingLineLoc >= 0) {
-        var lineChPos = codeMirrorInstance.posFromIndex(existingLineLoc);
-        var endReplacePos = JSON.parse(JSON.stringify(lineChPos));
-        endReplacePos.ch = newLine.length + 1;
-        codeMirrorInstance
-            .replaceRange(newLine.slice(0, -1), lineChPos, endReplacePos);
-    }
-    //else code currently has no effect on manually changed pattern, so we can just add a line
-    else {
-        codeMirrorInstance.replaceRange(newLine, { line: codeMirrorInstance.lineCount() - 2, ch: 0 })
-    }
-    return codeMirrorInstance.getValue();
+    return replaceCode(existingLineLoc, newLine);
 }
 
 function addLineForPointChange(currentCode, newNoteValue, rhythmIndex, instrumentIndex) {
     //generate new line for changed note
+    //TODO also whitespace dependent as in addLineForPointChangeDuration
     newLine = "  b.rhythm" + (instrumentIndex + 1) + "[" + rhythmIndex + "] = " + newNoteValue + ";\n"
     existingLineLoc = currentCode.indexOf("  b.rhythm" + (instrumentIndex + 1) + "[" + rhythmIndex + "] =")
+    //if code has a line explicitly changed this point, then we update its value
+    return replaceCode(existingLineLoc, newLine);
+
+}
+
+function replaceCode(existingLineLoc, newLine) {
     //if code has a line explicitly changed this point, then we update its value
     if (existingLineLoc >= 0) {
         var lineChPos = codeMirrorInstance.posFromIndex(existingLineLoc);
@@ -69,7 +64,7 @@ function addLineForPointChange(currentCode, newNoteValue, rhythmIndex, instrumen
     }
     //else code currently has no effect on manually changed pattern, so we can just add a line
     else {
-        codeMirrorInstance.replaceRange(newLine, { line: codeMirrorInstance.lineCount() - 2, ch: 0 })
+        codeMirrorInstance.replaceRange(newLine, { line: codeMirrorInstance.lineCount() - 2, ch: 0 });
     }
     return codeMirrorInstance.getValue();
 }
