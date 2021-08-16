@@ -122,12 +122,12 @@ function handleButtonMouseDown(event) {
     if (event.shiftKey) { //if shift, we are modifying duration
         var newNoteDuration = (durations[rhythmIndex] + 1) % 5;
         durations[rhythmIndex] = newNoteDuration;
-
+        synth.synthDurationCode(newNoteDuration, rhythmIndex, instrumentIndex, beatManager.theBeat)
     }
     else { //else vol
         var newNoteValue = (notes[rhythmIndex] + 1) % 3;
         notes[rhythmIndex] = newNoteValue;
-        synth.synthCode(newNoteValue, rhythmIndex, instrumentIndex, beatManager.theBeat)
+        synth.synthNoteCode(newNoteValue, rhythmIndex, instrumentIndex, beatManager.theBeat)
 
     }
     if (instrumentIndex == currentlyActiveInstrument)

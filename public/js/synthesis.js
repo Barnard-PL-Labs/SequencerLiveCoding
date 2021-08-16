@@ -1,14 +1,58 @@
-// const { setBeatSnarePitchVal, setBeatTom2PitchVal, setBeatTom1PitchVal, setBeatHihatPitchVal, setBeatTom3PitchVal} = require("./beat");
-// const beatMod = require('./beat')
-
-const { connectNodes } = require("./context");
-const { kickPitch } = require("./kit");
-
 //We pull this in on init, which allows us to grab code as the drum machine runs
 var codeMirrorInstance = null
 
 function setCMInstance(cm) {
     codeMirrorInstance = cm;
+}
+
+function synthNoteCode(newValue, rhythmIndex, instrumentIndex, theBeat) {
+    synthCode(false, newValue, rhythmIndex, instrumentIndex, theBeat) 
+}
+function synthDurationCode(newDurationValue, rhythmIndex, instrumentIndex, theBeat) {
+    synthCode(true, newDurationValue, rhythmIndex, instrumentIndex, theBeat) 
+}
+
+function synthCode(isNewDuration, newValue, rhythmIndex, instrumentIndex, theBeat) {
+    //get current code
+    var currentCode = codeMirrorInstance.getValue()
+
+    if (isNewDuration) {
+        var updatedCode = addLineForPointChangeDuration(currentCode, newValue, rhythmIndex, instrumentIndex)
+    }
+    else {
+        var updatedCode = addLineForPointChange(currentCode, newValue, rhythmIndex, instrumentIndex)
+        initiateServerSideSynthesis(updatedCode, theBeat)
+    }
+
+}
+
+function initiateServerSideSynthesis(updatedCode, theBeat) {
+    socket.emit('code', { "code": updatedCode, "beat": theBeat });
+    // currently, if we get new code any time, we replace code with synthesized code
+    // TODO we need something a bit more tasteful - e.g. put new code in a "proposed change" box 
+    socket.on('newCode', function (c) {
+        codeMirrorInstance.replaceRange(c, { line: 2, ch: 0 }, { line: codeMirrorInstance.lineCount() - 2, ch: 0 });
+    });
+}
+
+function addLineForPointChangeDuration(currentCode, newDurationValue, rhythmIndex, instrumentIndex) {
+    //generate new line for changed note
+    //TODO this is currently whitespace dependent - make this a regex to give a bit of flexibility at least
+    newLine = "  b.rhythm" + (instrumentIndex + 1) + "duration[" + rhythmIndex + "] = " + newDurationValue + ";\n"
+    existingLineLoc = currentCode.indexOf("  b.rhythm" + (instrumentIndex + 1) + "duration[" + rhythmIndex + "] =")
+    //if code has a line explicitly changed this point, then we update its value
+    if (existingLineLoc >= 0) {
+        var lineChPos = codeMirrorInstance.posFromIndex(existingLineLoc);
+        var endReplacePos = JSON.parse(JSON.stringify(lineChPos));
+        endReplacePos.ch = newLine.length + 1;
+        codeMirrorInstance
+            .replaceRange(newLine.slice(0, -1), lineChPos, endReplacePos);
+    }
+    //else code currently has no effect on manually changed pattern, so we can just add a line
+    else {
+        codeMirrorInstance.replaceRange(newLine, { line: codeMirrorInstance.lineCount() - 2, ch: 0 })
+    }
+    return codeMirrorInstance.getValue();
 }
 
 function addLineForPointChange(currentCode, newNoteValue, rhythmIndex, instrumentIndex) {
@@ -28,21 +72,6 @@ function addLineForPointChange(currentCode, newNoteValue, rhythmIndex, instrumen
         codeMirrorInstance.replaceRange(newLine, { line: codeMirrorInstance.lineCount() - 2, ch: 0 })
     }
     return codeMirrorInstance.getValue();
-}
-
-function synthCode(newNoteValue, rhythmIndex, instrumentIndex, theBeat) {
-    //get current code
-    var currentCode = codeMirrorInstance.getValue()
-
-    var updatedCode = addLineForPointChange(currentCode, newNoteValue, rhythmIndex, instrumentIndex)
-
-    socket.emit('code', { "code": updatedCode, "beat": theBeat });
-
-    // currently, if we get new code any time, we replace code with synthesized code
-    // TODO we need something a bit more tasteful - e.g. put new code in a "proposed change" box 
-    socket.on('newCode', function (c) {
-        codeMirrorInstance.replaceRange(c, { line: 2, ch: 0 }, { line: codeMirrorInstance.lineCount() - 2, ch: 0 });
-    });
 }
 
 function synthSliderCode(sliderTarget, value) {
@@ -145,7 +174,8 @@ function isValidSliders(sliders) {
 
 
 exports.setCMInstance = setCMInstance
-exports.synthCode = synthCode
+exports.synthDurationCode = synthDurationCode
+exports.synthNoteCode = synthNoteCode
 exports.synthSliderCode = synthSliderCode
 exports.updatePatternFromCode = updatePatternFromCode
 
