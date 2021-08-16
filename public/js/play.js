@@ -72,10 +72,6 @@ function playNote(buffer, pan, x, y, z, sendGain, mainGain, playbackRate, noteTi
     context.connectNodes(wetGainNode, context.convolver);
 
     voice.start(noteTime); 
-    console.log("notetime", noteTime);
-    console.log("durationVal", durationVal);
-    //voice.stop(noteTime + (0.6/4.0));
-    console.log("stop count", durationVal);
     voice.stop(noteTime + (durationVal * secondsPerBeat() * 0.25));
 }
 
@@ -110,6 +106,7 @@ function schedule() {
         // Hihat
         if (beatManager.theBeat.rhythm3[beatManager.rhythmIndex] && instrumentActive[2]) {
             // Pan the hihat according to sequence position.
+            console.log(kit.volumes[beatManager.theBeat.rhythm3[beatManager.rhythmIndex]])
             playNote(kit.currentKit.hihatBuffer, true, 0.5 * beatManager.rhythmIndex - 4, 0, -1.0, 1, kit.volumes[beatManager.theBeat.rhythm3[beatManager.rhythmIndex]] * 0.7, kit.hihatPitch, contextPlayTime, beatManager.theBeat.rhythm3duration[beatManager.rhythmIndex]);
         }
 
@@ -138,7 +135,6 @@ function schedule() {
 }
 
 function playDrum(noteNumber, velocity) {
-    console.log("playdrum dur", dur);
     switch (noteNumber) {
         case 0x24:
             playNote(kit.currentKit.kickBuffer, false, 0, 0, -2, 0.5, (velocity / 127), kit.kickPitch, 0, dur);

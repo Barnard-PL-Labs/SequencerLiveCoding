@@ -13,7 +13,6 @@ function setLastDrawTime(time) {
 
 
 function drawNote(volume, duration, xindex, yindex) {
-    console.log("volume", volume, "duration", duration, "xindex", xindex, "yindex", yindex);
     var elButton = document.getElementById(kitMod.instruments[yindex] + '_' + xindex);
     var button_name = "images/buttons/button_v" + volume + "_d" + duration + ".png"
     elButton.src = button_name;
@@ -26,7 +25,7 @@ function redrawAllNotes() {
                 drawNote(0, 0, x, y);
             }
             else {
-                drawNote(beatMod.theBeat['rhythm'+(y+1).toString()][x], beatMod.theBeat['rhythm'+(y+1).toString()][x], x, y);
+                drawNote(beatMod.theBeat['rhythm'+(y+1).toString()][x], beatMod.theBeat['rhythm'+(y+1).toString()+'duration'][x], x, y);
             }
         }
     }
@@ -94,7 +93,6 @@ function updateControls() {
                 durations = beatMod.theBeat.rhythm6duration; break;
                 }
             }
-            console.log("notes[i]", notes[i], "notes", notes, "durations[i]", durations[i], "durations", durations);
             drawNote(notes[i], durations[i], i, j);
         //}
     }

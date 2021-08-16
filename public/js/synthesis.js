@@ -1,6 +1,7 @@
 // const { setBeatSnarePitchVal, setBeatTom2PitchVal, setBeatTom1PitchVal, setBeatHihatPitchVal, setBeatTom3PitchVal} = require("./beat");
 // const beatMod = require('./beat')
 
+const { connectNodes } = require("./context");
 const { kickPitch } = require("./kit");
 
 //We pull this in on init, which allows us to grab code as the drum machine runs
@@ -114,7 +115,6 @@ function p(val){
     }else{
         val = val%1;
     }   
-    console.log("pitchVal: " + val);
     return val;
 }
 
@@ -140,7 +140,6 @@ function isValidSliders(sliders) {
             typeof val == 'number' &&
             val >= 0 && val <= 1
     });
-    console.log("Slider: " + valid)
     return valid;
 }
 

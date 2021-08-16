@@ -88,40 +88,46 @@ function handleMouseUp() {
 }
 
 function handleButtonMouseDown(event) {
-    var notes = beatManager.theBeat.rhythm1;
-    var duration = beatManager.theBeat.rhythm1duration;
-
-    var instrumentIndex;
-    var rhythmIndex;
-
     var elId = event.target.id;
-    rhythmIndex = elId.substr(elId.indexOf('_') + 1, 2);
-    instrumentIndex = kit.instruments.indexOf(elId.substr(0, elId.indexOf('_')));
+    var rhythmIndex = elId.substr(elId.indexOf('_') + 1, 2);
+    var instrumentIndex = kit.instruments.indexOf(elId.substr(0, elId.indexOf('_')));
+    
+    var notes;
+    var durations;
+    if (instrumentIndex == 0) {
+        durations = beatManager.theBeat.rhythm1duration;
+        notes = beatManager.theBeat.rhythm1;
+    }
+    else if (instrumentIndex == 1) {
+        durations = beatManager.theBeat.rhythm2duration;
+        notes = beatManager.theBeat.rhythm2; 
+    }
+    else if (instrumentIndex == 2) {
+        durations = beatManager.theBeat.rhythm3duration;
+        notes = beatManager.theBeat.rhythm3;
+    }
+    else if (instrumentIndex == 3) {
+        durations = beatManager.theBeat.rhythm4duration;
+        notes = beatManager.theBeat.rhythm4;
+    }
+    else if (instrumentIndex == 4) {
+        durations = beatManager.theBeat.rhythm5duration;
+        notes = beatManager.theBeat.rhythm5;
+    }
+    else if (instrumentIndex == 5) {
+        durations = beatManager.theBeat.rhythm6duration; 
+        notes = beatManager.theBeat.rhythm6;
+    }
 
     if (event.shiftKey) { //if shift, we are modifying duration
-        switch (instrumentIndex) {
-            case 0: durations = beatManager.theBeat.rhythm1duration; break;
-            case 1: durations = beatManager.theBeat.rhythm2duration; break;
-            case 2: durations = beatManager.theBeat.rhythm3duration; break;
-            case 3: durations = beatManager.theBeat.rhythm4duration; break;
-            case 4: durations = beatManager.theBeat.rhythm5duration; break;
-            case 5: durations = beatManager.theBeat.rhythm6duration; break;
-        }
         var newNoteDuration = (durations[rhythmIndex] + 1) % 5;
         durations[rhythmIndex] = newNoteDuration;
 
     }
     else { //else vol
-        switch (instrumentIndex) {
-            case 0: notes = beatManager.theBeat.rhythm1; break;
-            case 1: notes = beatManager.theBeat.rhythm2; break;
-            case 2: notes = beatManager.theBeat.rhythm3; break;
-            case 3: notes = beatManager.theBeat.rhythm4; break;
-            case 4: notes = beatManager.theBeat.rhythm5; break;
-            case 5: notes = beatManager.theBeat.rhythm6; break;
-        }
         var newNoteValue = (notes[rhythmIndex] + 1) % 3;
         notes[rhythmIndex] = newNoteValue;
+        synth.synthCode(newNoteValue, rhythmIndex, instrumentIndex, beatManager.theBeat)
 
     }
     if (instrumentIndex == currentlyActiveInstrument)
@@ -159,7 +165,6 @@ function handleButtonMouseDown(event) {
         }
     }
 
-    synth.synthCode(newNoteValue, rhythmIndex, instrumentIndex, beatManager.theBeat)
 }
 
 function handleKitComboMouseDown(event) {
