@@ -88,63 +88,83 @@ function handleMouseUp() {
 }
 
 function handleButtonMouseDown(event) {
-    var notes = beatManager.theBeat.rhythm1;
-
-    var instrumentIndex;
-    var rhythmIndex;
-
     var elId = event.target.id;
-    rhythmIndex = elId.substr(elId.indexOf('_') + 1, 2);
-    instrumentIndex = kit.instruments.indexOf(elId.substr(0, elId.indexOf('_')));
-
-    switch (instrumentIndex) {
-        case 0: notes = beatManager.theBeat.rhythm1; break;
-        case 1: notes = beatManager.theBeat.rhythm2; break;
-        case 2: notes = beatManager.theBeat.rhythm3; break;
-        case 3: notes = beatManager.theBeat.rhythm4; break;
-        case 4: notes = beatManager.theBeat.rhythm5; break;
-        case 5: notes = beatManager.theBeat.rhythm6; break;
+    var rhythmIndex = elId.substr(elId.indexOf('_') + 1, 2);
+    var instrumentIndex = kit.instruments.indexOf(elId.substr(0, elId.indexOf('_')));
+    
+    var notes;
+    var durations;
+    if (instrumentIndex == 0) {
+        durations = beatManager.theBeat.rhythm1duration;
+        notes = beatManager.theBeat.rhythm1;
+    }
+    else if (instrumentIndex == 1) {
+        durations = beatManager.theBeat.rhythm2duration;
+        notes = beatManager.theBeat.rhythm2; 
+    }
+    else if (instrumentIndex == 2) {
+        durations = beatManager.theBeat.rhythm3duration;
+        notes = beatManager.theBeat.rhythm3;
+    }
+    else if (instrumentIndex == 3) {
+        durations = beatManager.theBeat.rhythm4duration;
+        notes = beatManager.theBeat.rhythm4;
+    }
+    else if (instrumentIndex == 4) {
+        durations = beatManager.theBeat.rhythm5duration;
+        notes = beatManager.theBeat.rhythm5;
+    }
+    else if (instrumentIndex == 5) {
+        durations = beatManager.theBeat.rhythm6duration; 
+        notes = beatManager.theBeat.rhythm6;
     }
 
-    var newNoteValue = (notes[rhythmIndex] + 1) % 3;
+    if (event.shiftKey) { //if shift, we are modifying duration
+        var newNoteDuration = (durations[rhythmIndex] + 1) % 5;
+        durations[rhythmIndex] = newNoteDuration;
+        synth.synthDurationCode(newNoteDuration, rhythmIndex, instrumentIndex, beatManager.theBeat)
+    }
+    else { //else vol
+        var newNoteValue = (notes[rhythmIndex] + 1) % 3;
+        notes[rhythmIndex] = newNoteValue;
+        synth.synthNoteCode(newNoteValue, rhythmIndex, instrumentIndex, beatManager.theBeat)
 
-    notes[rhythmIndex] = newNoteValue
-
+    }
     if (instrumentIndex == currentlyActiveInstrument)
         showCorrectNote(rhythmIndex, notes[rhythmIndex]);
 
-    drawer.drawNote(notes[rhythmIndex], rhythmIndex, instrumentIndex);
+    drawer.drawNote(notes[rhythmIndex], durations[rhythmIndex], rhythmIndex, instrumentIndex);
 
-    if (newNoteValue) {
+    //plays the note when you click on it
+    if (newNoteValue && false) { //commented out, not sure we want to enable
         switch (instrumentIndex) {
             case 0:  // Kick
-                play.playNote(kit.currentKit.kickBuffer, false, 0, 0, -2, 0.5 * beatManager.theBeat.effectMix, kit.volumes[newNoteValue] * 1.0, kit.kickPitch, 0);
+                play.playNote(kit.currentKit.kickBuffer, false, 0, 0, -2, 0.5 * beatManager.theBeat.effectMix, kit.volumes[newNoteValue] * 1.0, kit.kickPitch, 0, play.getDuration());
                 break;
 
             case 1:  // Snare
-                play.playNote(kit.currentKit.snareBuffer, false, 0, 0, -2, beatManager.theBeat.effectMix, kit.volumes[newNoteValue] * 0.6, kit.snarePitch, 0);
+                play.playNote(kit.currentKit.snareBuffer, false, 0, 0, -2, beatManager.theBeat.effectMix, kit.volumes[newNoteValue] * 0.6, kit.snarePitch, 0, play.getDuration());
                 break;
 
             case 2:  // Hihat
                 // Pan the hihat according to sequence position.
-                play.playNote(kit.currentKit.hihatBuffer, true, 0.5 * rhythmIndex - 4, 0, -1.0, beatManager.theBeat.effectMix, kit.volumes[newNoteValue] * 0.7, kit.hihatPitch, 0);
+                play.playNote(kit.currentKit.hihatBuffer, true, 0.5 * rhythmIndex - 4, 0, -1.0, beatManager.theBeat.effectMix, kit.volumes[newNoteValue] * 0.7, kit.hihatPitch, 0, play.getDuration());
                 break;
 
             case 3:  // Tom 1
-                play.playNote(kit.currentKit.tom1, false, 0, 0, -2, beatManager.theBeat.effectMix, kit.volumes[newNoteValue] * 0.6, kit.tom1Pitch, 0);
+                play.playNote(kit.currentKit.tom1, false, 0, 0, -2, beatManager.theBeat.effectMix, kit.volumes[newNoteValue] * 0.6, kit.tom1Pitch, 0, play.getDuration());
                 break;
 
             case 4:  // Tom 2
-                play.playNote(kit.currentKit.tom2, false, 0, 0, -2, beatManager.theBeat.effectMix, kit.volumes[newNoteValue] * 0.6, kit.tom2Pitch, 0);
+                play.playNote(kit.currentKit.tom2, false, 0, 0, -2, beatManager.theBeat.effectMix, kit.volumes[newNoteValue] * 0.6, kit.tom2Pitch, 0, play.getDuration());
                 break;
 
             case 5:  // Tom 3
-                play.playNote(kit.currentKit.tom3, false, 0, 0, -2, beatManager.theBeat.effectMix, kit.volumes[newNoteValue] * 0.6, kit.tom3Pitch, 0);
+                play.playNote(kit.currentKit.tom3, false, 0, 0, -2, beatManager.theBeat.effectMix, kit.volumes[newNoteValue] * 0.6, kit.tom3Pitch, 0, play.getDuration());
                 break;
         }
     }
 
-    synth.synthCode(newNoteValue, rhythmIndex, instrumentIndex, beatManager.theBeat)
 }
 
 function handleKitComboMouseDown(event) {
@@ -198,7 +218,6 @@ function handleEffectComboMouseDown(event) {
 function handleEffectMouseDown(event) {
     for (var i = 0; i < impulse.impulseResponseInfoList.length; ++i) {
         if (impulse.impulseResponseInfoList[i].name == event.target.innerHTML) {
-
             // Hack - if effect is turned all the way down - turn up effect slider.
             // ... since they just explicitly chose an effect from the list.
             if (beatManager.theBeat.effectMix == 0)
@@ -234,6 +253,7 @@ function loadBeat(beat) {
     slidersManager.sliderSetValue('swing_thumb', beatManager.theBeat.swingFactor);
 
     drawer.updateControls();
+    console.log("thebeat handlers", beatManager.theBeat);
     setActiveInstrument(0);
 
     return true;

@@ -46,7 +46,7 @@ function startLoadingAssets() {
     }
 
     // Start at 1 to skip "No Effect"
-    for (i = 1; i < impulseMod.impulseResponseInfoList.length; i++) {
+    for (i = 0; i < impulseMod.impulseResponseInfoList.length; i++) {
         impulseMod.impulseResponseList[i].load();
     }
 
@@ -84,7 +84,6 @@ function showPlayAvailable() {
     var play = document.getElementById("play");
     play.src = "images/btn_play.png";
 }
-
 exports.initDrums = function (cmInstance) {
 
     // Let the beat demos know when all of their assets have been loaded.
