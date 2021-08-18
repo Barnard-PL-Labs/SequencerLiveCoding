@@ -3,6 +3,7 @@ const drawMod = require('./draw')
 const kitMod = require('./kit')
 const impulseMod = require('./impulse')
 const handlersMod = require('./handlers')
+const logger = require('./logger')
 const playMod = require('./play')
 const contextMod = require('./context')
 
@@ -231,6 +232,9 @@ exports.initDrums = function (cmInstance) {
     elEffectCombo.addEventListener("mousedown", handlersMod.handleEffectComboMouseDown, true);
 
     document.body.addEventListener("mousedown", handlersMod.handleBodyMouseDown, true);
+
+    document.body.addEventListener("keydown", logger.logKeyEvent, true);
+    document.body.addEventListener("mousedown", logger.logMouseEvent, true);
 
     var timerWorkerBlob = new Blob([
         "var timeoutID=0;function schedule(){timeoutID=setTimeout(function(){postMessage('schedule'); schedule();},100);} onmessage = function(e) { if (e.data == 'start') { if (!timeoutID) schedule();} else if (e.data == 'stop') {if (timeoutID) clearTimeout(timeoutID); timeoutID=0;};}"]);
