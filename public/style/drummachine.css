@@ -98,6 +98,13 @@ body {
 	width: 25.2px;
 }
 
+.clickInstuctions{
+	text-align: center;
+	color: rgb(176, 176, 176);
+	font-family: 'Droid Sans', Arial, sans-serif;
+	font-weight: lighter;
+	font-size: small;
+}
 .recordingButtons{
 	margin-bottom: .5rem;
 	display: flex;
