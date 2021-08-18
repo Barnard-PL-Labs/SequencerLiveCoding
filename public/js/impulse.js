@@ -5,7 +5,7 @@ const slidersMod = require('./sliders')
 
 var impulseResponseInfoList = [
     // Impulse responses - each one represents a unique linear effect.
-    {"name":"No Effect", "url":"undefined", "dryMix":1, "wetMix":0},
+    {"name":"No Effect", "url":"impulse-responses/noeffect.wav", "dryMix":1, "wetMix":0},
     {"name":"Spreader 2", "url":"impulse-responses/noise-spreader1.wav",        "dryMix":1, "wetMix":1},
     {"name":"Spring Reverb", "url":"impulse-responses/feedback-spring.wav",     "dryMix":1, "wetMix":1},
     {"name":"Space Oddity", "url":"impulse-responses/filter-rhythm3.wav",       "dryMix":1, "wetMix":0.7},
@@ -94,7 +94,7 @@ function setEffect(index) {
         return;
     }
 
-    beatMod.setBeatEffectIndex(index)
+    beatMod.setBeatEffectIndex(index);
     contextMod.setEffectDryMix(impulseResponseInfoList[index].dryMix);
     contextMod.setEffectWetMix(impulseResponseInfoList[index].wetMix);
     contextMod.setConvolverBuffer(impulseResponseList[index].buffer);

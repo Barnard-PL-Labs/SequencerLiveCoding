@@ -89,6 +89,7 @@ simplifyCode = async function(codeAndBeat) {
     //that subseq can then be added with templated code
     //TODO, do this for all patterns & refactor to fxn
     for (whichPattern = 1; whichPattern <= 6; whichPattern++) {
+        console.log(codeAndBeat["beat"]["rhythm" + whichPattern])
         var singleEditInfo = checkForSingleEdit(codeAndBeat["beat"]["rhythm" + whichPattern])
         if (singleEditInfo["hasOneChangedIndex"]) {
             console.log("Pattern " + whichPattern + " has singleEdit");

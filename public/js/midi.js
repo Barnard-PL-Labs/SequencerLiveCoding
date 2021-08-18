@@ -227,6 +227,7 @@ function updateActiveInstruments() {
  }
 
 function setActiveInstrument(index) {
+  //console.log("midi beat", theBeat);
   //turn off the last lit-up instrument
   if (midiOut&&outputIsLivid)
     midiOut.send( [0x80, keyForInstrument(currentlyActiveInstrument), 0x00] );
