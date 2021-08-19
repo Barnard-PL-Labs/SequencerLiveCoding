@@ -2,3 +2,4 @@ cvc4
 node_modules
 logs
 paper
+public/js/compiled.js

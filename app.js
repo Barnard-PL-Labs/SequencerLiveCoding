@@ -8,6 +8,7 @@ const { fork } = require('child_process');
 
 const { simplifyCode } = require('./serverSide/synthesizer');
 const { response } = require('express');
+const { mkdir } = require('fs');
 
 var mostRecentToken;
 
@@ -26,6 +27,11 @@ io.on('connection', (socket) => {
   const synth = fork('serverSide/synthesizer.js');
 
   console.log('a user connected');
+  const uuid = ""+Date.now()
+  mkdir("logs/" + uuid, function(e) {
+    console.log(e)
+  })
+
   socket.on('disconnect', () => {
       console.log('user disconnected');
       synth.disconnect();

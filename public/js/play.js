@@ -13,6 +13,11 @@ function setNoteTime(t) {
     exports.noteTime = noteTime;
 }
 
+function secondsPerBeat() {
+     var secondsPerBeat = 60.0 / beatManager.theBeat.tempo;
+     return secondsPerBeat;
+}
+
 function advanceNote() {
 
     newData = synth.updatePatternFromCode(beatManager.cloneBeat(beatManager.theBeat), beatManager.rhythmIndex);
@@ -21,8 +26,6 @@ function advanceNote() {
         beatManager.setBeat(newData.beat)
         drawer.redrawAllNotes();
     }
-    // Advance time by a 16th note...
-    var secondsPerBeat = 60.0 / beatManager.theBeat.tempo;
 
     beatManager.setRhythmIndex(beatManager.rhythmIndex + 1);
     if (beatManager.rhythmIndex == beatManager.loopLength) {
@@ -31,13 +34,14 @@ function advanceNote() {
 
     // apply swing
     if (beatManager.rhythmIndex % 2) {
-        noteTime += (0.25 + beatManager.kMaxSwing * beatManager.theBeat.swingFactor) * secondsPerBeat;
+        // Advance time by a 16th note...
+        noteTime += (0.25 + beatManager.kMaxSwing * beatManager.theBeat.swingFactor) * secondsPerBeat();
     } else {
-        noteTime += (0.25 - beatManager.kMaxSwing * beatManager.theBeat.swingFactor) * secondsPerBeat;
+        noteTime += (0.25 - beatManager.kMaxSwing * beatManager.theBeat.swingFactor) * secondsPerBeat();
     }
 }
-//change play.js to support durationVal
-function playNote(buffer, pan, x, y, z, sendGain, mainGain, playbackRate, noteTime) { //add durationVal
+
+function playNote(buffer, pan, x, y, z, sendGain, mainGain, playbackRate, noteTime, durationVal) { 
     // Create the note
     var voice = context.context.createBufferSource();
     voice.buffer = buffer;
@@ -67,9 +71,17 @@ function playNote(buffer, pan, x, y, z, sendGain, mainGain, playbackRate, noteTi
     finalNode.connect(wetGainNode);
     context.connectNodes(wetGainNode, context.convolver);
 
-    voice.start(noteTime); //doesn't cut off, 
-    //voice.stop(noteTime + durationval)
+    voice.start(noteTime); 
+    voice.stop(noteTime + (durationVal * secondsPerBeat() * 0.25));
 }
+
+var durationTrue;
+
+function getDuration(){
+    return 1;
+}
+
+var dur = getDuration();
 
 function schedule() {
     var currentTime = context.context.currentTime;
@@ -83,31 +95,32 @@ function schedule() {
 
         // Kick
         if (beatManager.theBeat.rhythm1[beatManager.rhythmIndex] && instrumentActive[0]) { //kick
-            playNote(kit.currentKit.kickBuffer, false, 0, 0, -2, 0.5, kit.volumes[beatManager.theBeat.rhythm1[beatManager.rhythmIndex]] * 1.0, kit.kickPitch, contextPlayTime);
+            playNote(kit.currentKit.kickBuffer, false, 0, 0, -2, 0.5, kit.volumes[beatManager.theBeat.rhythm1[beatManager.rhythmIndex]] * 1.0, kit.kickPitch, contextPlayTime, beatManager.theBeat.rhythm1duration[beatManager.rhythmIndex]);
         }
 
         // Snare
         if (beatManager.theBeat.rhythm2[beatManager.rhythmIndex] && instrumentActive[1]) {
-            playNote(kit.currentKit.snareBuffer, false, 0, 0, -2, 1, kit.volumes[beatManager.theBeat.rhythm2[beatManager.rhythmIndex]] * 0.6, kit.snarePitch, contextPlayTime);
+            playNote(kit.currentKit.snareBuffer, false, 0, 0, -2, 1, kit.volumes[beatManager.theBeat.rhythm2[beatManager.rhythmIndex]] * 0.6, kit.snarePitch, contextPlayTime, beatManager.theBeat.rhythm2duration[beatManager.rhythmIndex]);
         }
 
         // Hihat
         if (beatManager.theBeat.rhythm3[beatManager.rhythmIndex] && instrumentActive[2]) {
             // Pan the hihat according to sequence position.
-            playNote(kit.currentKit.hihatBuffer, true, 0.5 * beatManager.rhythmIndex - 4, 0, -1.0, 1, kit.volumes[beatManager.theBeat.rhythm3[beatManager.rhythmIndex]] * 0.7, kit.hihatPitch, contextPlayTime);
+            console.log(kit.volumes[beatManager.theBeat.rhythm3[beatManager.rhythmIndex]])
+            playNote(kit.currentKit.hihatBuffer, true, 0.5 * beatManager.rhythmIndex - 4, 0, -1.0, 1, kit.volumes[beatManager.theBeat.rhythm3[beatManager.rhythmIndex]] * 0.7, kit.hihatPitch, contextPlayTime, beatManager.theBeat.rhythm3duration[beatManager.rhythmIndex]);
         }
 
         // Toms
         if (beatManager.theBeat.rhythm4[beatManager.rhythmIndex] && instrumentActive[3]) {
-            playNote(kit.currentKit.tom1, false, 0, 0, -2, 1, kit.volumes[beatManager.theBeat.rhythm4[beatManager.rhythmIndex]] * 0.6, kit.tom1Pitch, contextPlayTime);
+            playNote(kit.currentKit.tom1, false, 0, 0, -2, 1, kit.volumes[beatManager.theBeat.rhythm4[beatManager.rhythmIndex]] * 0.6, kit.tom1Pitch, contextPlayTime, beatManager.theBeat.rhythm4duration[beatManager.rhythmIndex]);
         }
 
         if (beatManager.theBeat.rhythm5[beatManager.rhythmIndex] && instrumentActive[4]) {
-            playNote(kit.currentKit.tom2, false, 0, 0, -2, 1, kit.volumes[beatManager.theBeat.rhythm5[beatManager.rhythmIndex]] * 0.6, kit.tom2Pitch, contextPlayTime);
+            playNote(kit.currentKit.tom2, false, 0, 0, -2, 1, kit.volumes[beatManager.theBeat.rhythm5[beatManager.rhythmIndex]] * 0.6, kit.tom2Pitch, contextPlayTime, beatManager.theBeat.rhythm5duration[beatManager.rhythmIndex]);
         }
 
         if (beatManager.theBeat.rhythm6[beatManager.rhythmIndex] && instrumentActive[5]) {
-            playNote(kit.currentKit.tom3, false, 0, 0, -2, 1, kit.volumes[beatManager.theBeat.rhythm6[beatManager.rhythmIndex]] * 0.6, kit.tom3Pitch, contextPlayTime);
+            playNote(kit.currentKit.tom3, false, 0, 0, -2, 1, kit.volumes[beatManager.theBeat.rhythm6[beatManager.rhythmIndex]] * 0.6, kit.tom3Pitch, contextPlayTime, beatManager.theBeat.rhythm6duration[beatManager.rhythmIndex]);
         }
 
 
@@ -124,22 +137,22 @@ function schedule() {
 function playDrum(noteNumber, velocity) {
     switch (noteNumber) {
         case 0x24:
-            playNote(kit.currentKit.kickBuffer, false, 0, 0, -2, 0.5, (velocity / 127), kit.kickPitch, 0);
+            playNote(kit.currentKit.kickBuffer, false, 0, 0, -2, 0.5, (velocity / 127), kit.kickPitch, 0, dur);
             break;
         case 0x26:
-            playNote(kit.currentKit.snareBuffer, false, 0, 0, -2, 1, (velocity / 127), kit.snarePitch, 0);
+            playNote(kit.currentKit.snareBuffer, false, 0, 0, -2, 1, (velocity / 127), kit.snarePitch, 0, dur);
             break;
         case 0x28:
-            playNote(kit.currentKit.hihatBuffer, true, 0, 0, -1.0, 1, (velocity / 127), kit.hihatPitch, 0);
+            playNote(kit.currentKit.hihatBuffer, true, 0, 0, -1.0, 1, (velocity / 127), kit.hihatPitch, 0, dur);
             break;
         case 0x2d:
-            playNote(kit.currentKit.tom1, false, 0, 0, -2, 1, (velocity / 127), kit.tom1Pitch, 0);
+            playNote(kit.currentKit.tom1, false, 0, 0, -2, 1, (velocity / 127), kit.tom1Pitch, 0, dur);
             break;
         case 0x2f:
-            playNote(kit.currentKit.tom2, false, 0, 0, -2, 1, (velocity / 127), kit.tom2Pitch, 0);
+            playNote(kit.currentKit.tom2, false, 0, 0, -2, 1, (velocity / 127), kit.tom2Pitch, 0, dur);
             break;
         case 0x32:
-            playNote(kit.currentKit.tom3, false, 0, 0, -2, 1, (velocity / 127), kit.tom3Pitch, 0);
+            playNote(kit.currentKit.tom3, false, 0, 0, -2, 1, (velocity / 127), kit.tom3Pitch, 0, dur);
             break;
         default:
             console.log("note:0x" + noteNumber.toString(16));
@@ -157,7 +170,7 @@ exports.setNoteTime = setNoteTime;
 
 // variables
 exports.noteTime = noteTime;
-
+exports.getDuration = getDuration;
 
 
 //
