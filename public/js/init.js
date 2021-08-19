@@ -132,53 +132,53 @@ exports.initDrums = function (cmInstance) {
         finalMixNode = contextMod.context.destination;
     }
 
-    recorder = new WebAudioRecorder(finalMixNode, {workerDir: "js/web-audio-recorder/lib/"});
+    recorder = new WebAudioRecorder(finalMixNode, { workerDir: "js/web-audio-recorder/lib/" });
 
-      //add buttons (start/stop, play, save)
-      const recordButton = document.querySelector('.record-button');
-      const playButton = document.querySelector('.play-button');
-      const saveButton = document.querySelector('.save-button');
-      //var pressed = document.querySelector(".active");
+    //add buttons (start/stop, play, save)
+    const recordButton = document.querySelector('.record-button');
+    const playButton = document.querySelector('.play-button');
+    const saveButton = document.querySelector('.save-button');
+    //var pressed = document.querySelector(".active");
 
-      recordButton.addEventListener('click', function() {
+    recordButton.addEventListener('click', function () {
         recordButton.classList.toggle('active');
         txtChange();
 
-        if(recorder.isRecording()){
-          recorder.finishRecording();
-          playButton.classList.add('show')
-          saveButton.classList.add('show')
+        if (recorder.isRecording()) {
+            recorder.finishRecording();
+            playButton.classList.add('show')
+            saveButton.classList.add('show')
         }
-        else{
-          recorder.startRecording();
-          playButton.classList.remove('show') 
-          saveButton.classList.remove('show')          
-        } 
-      });
+        else {
+            recorder.startRecording();
+            playButton.classList.remove('show')
+            saveButton.classList.remove('show')
+        }
+    });
 
-      playButton.addEventListener('click', function(){
-          recordedAudio.play()
-      });
+    playButton.addEventListener('click', function () {
+        recordedAudio.play()
+    });
 
-      saveButton.addEventListener('click', function(){
-	    var au = document.createElement('audio');
-	    var li = document.createElement('li');
-	    var link = document.createElement('a');
-        
-	    //name of .wav file to use during upload and download
-	    var filename = new Date().toISOString();
+    saveButton.addEventListener('click', function () {
+        var au = document.createElement('audio');
+        var li = document.createElement('li');
+        var link = document.createElement('a');
 
-	    //add controls to the <audio> element
-	    au.controls = true;
-	    au.src = recordedAudio.src;
+        //name of .wav file to use during upload and download
+        var filename = new Date().toISOString();
+
+        //add controls to the <audio> element
+        au.controls = true;
+        au.src = recordedAudio.src;
 
         //save to disk link
         link.href = recordedAudio;
         link.download = filename + ".wav"; //download forces the browser to donwload the file using the  filename
-        
+
         //add the new audio element to li
         li.appendChild(au);
-        
+
         //add the filename to the li
         li.appendChild(document.createTextNode(filename + ".wav "))
 
@@ -186,17 +186,17 @@ exports.initDrums = function (cmInstance) {
         li.appendChild(link);
 
         //add the li element to the ol
-        recordingsList.appendChild(li);  
-      });
+        recordingsList.appendChild(li);
+    });
 
-      function txtChange(){
-          if(document.getElementById("recBtn").innerHTML=="Record Sound"){
-              document.getElementById("recBtn").innerHTML = "Stop Recording";
-          }
-          else{
+    function txtChange() {
+        if (document.getElementById("recBtn").innerHTML == "Record Sound") {
+            document.getElementById("recBtn").innerHTML = "Stop Recording";
+        }
+        else {
             document.getElementById("recBtn").innerHTML = "Record Sound";
-          }
-      }
+        }
+    }
 
 
     // create master filter node
@@ -286,7 +286,7 @@ function initControls(timerWorker) {
     demos.map(demoName => setMouseDownHandler(demoName, handlersMod.handleDemoMouseDown));
 
     var elBody = document.getElementById('body');
-    
+
     elBody.addEventListener('mousemove', handlersMod.handleMouseMove, true);
     elBody.addEventListener('mouseup', handlersMod.handleMouseUp, true);
 
@@ -294,31 +294,34 @@ function initControls(timerWorker) {
     var liveCodingView = document.getElementById('liveCodingView');
     var drumRackView = document.getElementById('drumRackView');
 
-    standardView.addEventListener('click', function(){stateInterface('standardView')});
-    liveCodingView.addEventListener('click', function(){stateInterface('liveCodingView')});
-    drumRackView.addEventListener('click', function(){stateInterface('drumRackView')});
+    standardView.addEventListener('click', function () { stateInterface('standardView') });
+    liveCodingView.addEventListener('click', function () { stateInterface('liveCodingView') });
+    drumRackView.addEventListener('click', function () { stateInterface('drumRackView') });
 
-}   
+}
 
 //var stateInterface = function(state){return state;}
 
 var storestate = 'test';
 
 
-function stateInterface(state){
+function stateInterface(state) {
     storestate = state;
-    console.log("init state: ", storestate);
-    var x = document.getElementById("leftSide");
-    console.log("display", x.style.display);
-    if(storestate == 'drumRackView'){
-        console.log("display", x.style.display);
-        x.style.display = "none";
-    }else{
-        x.style.display = "block";
+    var x = document.getElementById("liveCodeWindow");
+    if (storestate == 'drumRackView') {
+        x.style.visibility = "hidden";
+    } else {
+        x.style.visibility = "visible";
+    }
+    var buttonDiv = document.getElementById("pad")
+    if (storestate == "liveCodingView") {
+        buttonDiv.style.visibility = "hidden";
+    } else {
+        buttonDiv.style.visibility = "visible";
     }
 }
 
-function getStoreState(){
+function getStoreState() {
     console.log("getter: ", storestate);
     return storestate;
 }
