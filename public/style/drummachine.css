@@ -54,6 +54,9 @@ body {
 .container.active {
 	display: block;
 }
+.container.inactive {
+	visibility: hidden;
+}
 
 .buttons_row {
 	background: #E5E5E5
@@ -122,7 +125,7 @@ body {
 
 .bttn:hover,
 .bttn:focus{
-	background-color: hsl(var(--hue), var(--saturation), 60%);
+	background-color: hsl(var(--hue), var(--saturation), 40%);
 }
 
 .record-button{
@@ -387,7 +390,7 @@ img.preload { display: none; }
 
 .switch-toggle {
 	float: left;
-	background: #242729;
+	background: #CCCCCC;
 }
 .switch-toggle input {
 	position: absolute;
@@ -396,7 +399,7 @@ img.preload { display: none; }
 .switch-toggle input + label {
 	padding: 7px;
 	float:left;
-	color: #fff;
+	color: rgb(0, 0, 0);
 	cursor: pointer;
 }
 .switch-toggle input:checked + label {
