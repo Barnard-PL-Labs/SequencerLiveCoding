@@ -286,9 +286,41 @@ function initControls(timerWorker) {
     demos.map(demoName => setMouseDownHandler(demoName, handlersMod.handleDemoMouseDown));
 
     var elBody = document.getElementById('body');
+    
     elBody.addEventListener('mousemove', handlersMod.handleMouseMove, true);
     elBody.addEventListener('mouseup', handlersMod.handleMouseUp, true);
 
+    var standardView = document.getElementById('standardView');
+    var liveCodingView = document.getElementById('liveCodingView');
+    var drumRackView = document.getElementById('drumRackView');
+
+    standardView.addEventListener('click', function(){stateInterface('standardView')});
+    liveCodingView.addEventListener('click', function(){stateInterface('liveCodingView')});
+    drumRackView.addEventListener('click', function(){stateInterface('drumRackView')});
+
+}   
+
+//var stateInterface = function(state){return state;}
+
+var storestate = 'test';
+
+
+function stateInterface(state){
+    storestate = state;
+    console.log("init state: ", storestate);
+    var x = document.getElementById("leftSide");
+    console.log("display", x.style.display);
+    if(storestate == 'drumRackView'){
+        console.log("display", x.style.display);
+        x.style.display = "none";
+    }else{
+        x.style.display = "block";
+    }
+}
+
+function getStoreState(){
+    console.log("getter: ", storestate);
+    return storestate;
 }
 
 function initButtons() {
@@ -331,8 +363,5 @@ function makeKitList() {
     }
 }
 
-
-
-
-
+exports.getStoreState = getStoreState;
 //
