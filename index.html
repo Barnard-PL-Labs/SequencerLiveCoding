@@ -74,7 +74,7 @@
 	
 
 	<div class="grid-container">
-		<div>
+		<div id="leftSide">
 			<textarea id="codingWindow" rows="10" cols="120" style="border:1px solid black" class="boxsizingBorder">
 		</textarea>
 		<section>
@@ -113,7 +113,6 @@
 		<p id = listLabel><strong>Recordings:</strong></p>
 		<ol id= recordingsList></ol>
 		</div>
-
 		<div>
 			<section class='container active' id='pad'>
 				<div class='buttons_row'>
@@ -329,7 +328,6 @@
 						src='images/btn_demo5_loading.gif' width='45' height='33'>
 				</span>
 			</section>
-
 			<div class='container' id='save_container'>
 				<h3>
 					Save a Beat
@@ -366,6 +364,18 @@
 				<select id=midiOut onchange='changeMidiOut();'>
 					<option value="">Not connected</option>
 				</select>
+			</div>
+			<div class="switch-toggle switch-3 switch-candy">
+			  
+				<input id="liveCodingView" name="state-d" type="radio" checked="checked" />
+				<label for="liveCodingView" class="disabled" onclick="">Live Coding View</label>
+
+				<input id="standardView" name="state-d" type="radio" checked="" />
+				<label for="standardView" onclick="">Standard View</label>
+			  
+				<input id="drumRackView" name="state-d" type="radio" />
+				<label for="drumRackView" onclick="">Drum Rack View</label>
+			  
 			</div>
 		</div>
 	</div>
