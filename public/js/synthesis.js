@@ -101,11 +101,12 @@ function updatePatternFromCode(currentBeat, rhythmIndex) {
             newBeat['rhythm' + i.toString()] = newBeat['rhythm' + i.toString()].map((note) => { if (Number.isNaN(note)) { return 0; } else { return note } });
         }
         if (isValidBeat(newBeat) && isValidSliders(newSliders)) { // && theBeat != newBeat){
+            console.log(newBeat);
             return { beat: newBeat, sliders: newSliders };
         }
     }
     catch (err) {
-        console.log("updatePatternFromCode error")
+        console.log("updatePatternFromCode error, skipping beat state update")
         console.log(err)
     }
     return null;
@@ -150,9 +151,12 @@ function backBeat(){
 function isValidBeat(beat) {
     var valid = true;
     for (i = 1; i <= 6; i++) {
+        let currentPattern = 'rhythm' + i.toString()
         valid = valid &&
-            Array.isArray(beat['rhythm' + i.toString()]) &&
-            beat['rhythm' + i.toString()].every((v) => v <= 2 && v >= 0);
+            Array.isArray(beat[currentPattern]) &&
+            beat[currentPattern + 'duration'].every((v) => v <= 2 && v >= 0) &&
+            Array.isArray(beat[currentPattern + 'duration']) &&
+            beat[currentPattern + 'duration'].every((v) => v <= 4 && v >= 0);
     }
     return valid;
 }
