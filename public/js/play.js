@@ -20,6 +20,8 @@ function secondsPerBeat() {
 
 function advanceNote() {
 
+    //TODO should we be passing beat reset here instead so that we ensure the code window always reflects the gui?
+    //does doing this mean we cannot have a gui that has state that the code does not?
     newData = synth.updatePatternFromCode(beatManager.cloneBeat(beatManager.theBeat), beatManager.rhythmIndex);
     if (newData != null) {
         sliders.updateSliderVals(newData.sliders);
