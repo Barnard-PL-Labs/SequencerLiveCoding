@@ -106,25 +106,25 @@
 							<li>pattern(): takes in an equations that is used to map beats.
 								<ul>
 									<li>The equation must take in the form of "(val,i)=>_____".</li>
-									<li>Example: b.rhythm4 = pattern((val,i)=>1-i%2);</li>
+									<li>Example: b.track4vol = pattern((val,i)=>1-i%2);</li>
 								</ul>
 							</li>
 							<div></div>
 							<li>setAll() : creates a 16-length array with the given value
 								<ul>
-									<li>Example: b.rhythm4 = setAll(1);</li>
+									<li>Example: b.track4vol = setAll(1);</li>
 								</ul>
 							</li>
-							<li>backBeat(): takes no parameter, creates a rhythm that sounds on beats 2,4, 6,... etc.
+							<li>backBeat(): takes no parameter, creates a track that sounds on beats 2,4, 6,... etc.
 								<ul>
-									<li>Example: b.rhythm4 = backBeat();</li>
+									<li>Example: b.track4vol = backBeat();</li>
 								</ul>
 							</li>
 							<li>p(): takes in a String parameter or a numeric value to change the pitch.
 								<ul>
 									<li>Numeric value: should be between 0 to 1(inclusive)</li>
 									<li>String value: should be a letter between A and G(inclusive)</li>
-									<li>Example: s.kick_thumb = p(0.5); s.kick_thumb = p("C"); </li>
+									<li>Example: s.track6_thumb = p(0.5); s.track6_thumb = p("C"); </li>
 								</ul>
 							</li>
 						</ul>
@@ -138,117 +138,117 @@
 		<div>
 			<section class='container active' id='pad'>
 				<div class='buttons_row'>
-					<span class='label'>Tom 1</span>
-					<img id='Tom1_0' class='btn' src='images/buttons/button_v0_d0.png'><img id='Tom1_1' class='btn'
-						src='images/buttons/button_v0_d0.png'><img id='Tom1_2' class='btn'
-						src='images/buttons/button_v0_d0.png'><img id='Tom1_3' class='btn'
-						src='images/buttons/button_v0_d0.png'><img id='Tom1_4' class='btn'
-						src='images/buttons/button_v0_d0.png'><img id='Tom1_5' class='btn'
-						src='images/buttons/button_v0_d0.png'><img id='Tom1_6' class='btn'
-						src='images/buttons/button_v0_d0.png'><img id='Tom1_7' class='btn'
-						src='images/buttons/button_v0_d0.png'><img id='Tom1_8' class='btn'
-						src='images/buttons/button_v0_d0.png'><img id='Tom1_9' class='btn'
-						src='images/buttons/button_v0_d0.png'><img id='Tom1_10' class='btn'
-						src='images/buttons/button_v0_d0.png'><img id='Tom1_11' class='btn'
-						src='images/buttons/button_v0_d0.png'><img id='Tom1_12' class='btn'
-						src='images/buttons/button_v0_d0.png'><img id='Tom1_13' class='btn'
-						src='images/buttons/button_v0_d0.png'><img id='Tom1_14' class='btn'
-						src='images/buttons/button_v0_d0.png'><img id='Tom1_15' class='btn'
+					<span class='label'>Track 1</span>
+					<img id='track1_0' class='btn' src='images/buttons/button_v0_d0.png'><img id='track1_1' class='btn'
+						src='images/buttons/button_v0_d0.png'><img id='track1_2' class='btn'
+						src='images/buttons/button_v0_d0.png'><img id='track1_3' class='btn'
+						src='images/buttons/button_v0_d0.png'><img id='track1_4' class='btn'
+						src='images/buttons/button_v0_d0.png'><img id='track1_5' class='btn'
+						src='images/buttons/button_v0_d0.png'><img id='track1_6' class='btn'
+						src='images/buttons/button_v0_d0.png'><img id='track1_7' class='btn'
+						src='images/buttons/button_v0_d0.png'><img id='track1_8' class='btn'
+						src='images/buttons/button_v0_d0.png'><img id='track1_9' class='btn'
+						src='images/buttons/button_v0_d0.png'><img id='track1_10' class='btn'
+						src='images/buttons/button_v0_d0.png'><img id='track1_11' class='btn'
+						src='images/buttons/button_v0_d0.png'><img id='track1_12' class='btn'
+						src='images/buttons/button_v0_d0.png'><img id='track1_13' class='btn'
+						src='images/buttons/button_v0_d0.png'><img id='track1_14' class='btn'
+						src='images/buttons/button_v0_d0.png'><img id='track1_15' class='btn'
 						src='images/buttons/button_v0_d0.png'>
 				</div>
 				<div class='buttons_row'>
-					<span class='label'>Tom 2</span>
-					<img id='Tom2_0' class='btn' src='images/buttons/button_v0_d0.png'><img id='Tom2_1' class='btn'
-						src='images/buttons/button_v0_d0.png'><img id='Tom2_2' class='btn'
-						src='images/buttons/button_v0_d0.png'><img id='Tom2_3' class='btn'
-						src='images/buttons/button_v0_d0.png'><img id='Tom2_4' class='btn'
-						src='images/buttons/button_v0_d0.png'><img id='Tom2_5' class='btn'
-						src='images/buttons/button_v0_d0.png'><img id='Tom2_6' class='btn'
-						src='images/buttons/button_v0_d0.png'><img id='Tom2_7' class='btn'
-						src='images/buttons/button_v0_d0.png'><img id='Tom2_8' class='btn'
-						src='images/buttons/button_v0_d0.png'><img id='Tom2_9' class='btn'
-						src='images/buttons/button_v0_d0.png'><img id='Tom2_10' class='btn'
-						src='images/buttons/button_v0_d0.png'><img id='Tom2_11' class='btn'
-						src='images/buttons/button_v0_d0.png'><img id='Tom2_12' class='btn'
-						src='images/buttons/button_v0_d0.png'><img id='Tom2_13' class='btn'
-						src='images/buttons/button_v0_d0.png'><img id='Tom2_14' class='btn'
-						src='images/buttons/button_v0_d0.png'><img id='Tom2_15' class='btn'
+					<span class='label'>Track 2</span>
+					<img id='track2_0' class='btn' src='images/buttons/button_v0_d0.png'><img id='track2_1' class='btn'
+						src='images/buttons/button_v0_d0.png'><img id='track2_2' class='btn'
+						src='images/buttons/button_v0_d0.png'><img id='track2_3' class='btn'
+						src='images/buttons/button_v0_d0.png'><img id='track2_4' class='btn'
+						src='images/buttons/button_v0_d0.png'><img id='track2_5' class='btn'
+						src='images/buttons/button_v0_d0.png'><img id='track2_6' class='btn'
+						src='images/buttons/button_v0_d0.png'><img id='track2_7' class='btn'
+						src='images/buttons/button_v0_d0.png'><img id='track2_8' class='btn'
+						src='images/buttons/button_v0_d0.png'><img id='track2_9' class='btn'
+						src='images/buttons/button_v0_d0.png'><img id='track2_10' class='btn'
+						src='images/buttons/button_v0_d0.png'><img id='track2_11' class='btn'
+						src='images/buttons/button_v0_d0.png'><img id='track2_12' class='btn'
+						src='images/buttons/button_v0_d0.png'><img id='track2_13' class='btn'
+						src='images/buttons/button_v0_d0.png'><img id='track2_14' class='btn'
+						src='images/buttons/button_v0_d0.png'><img id='track2_15' class='btn'
 						src='images/buttons/button_v0_d0.png'>
 				</div>
 				<div class='buttons_row'>
-					<span class='label'>Tom 3</span>
-					<img id='Tom3_0' class='btn' src='images/buttons/button_v0_d0.png'><img id='Tom3_1' class='btn'
-						src='images/buttons/button_v0_d0.png'><img id='Tom3_2' class='btn'
-						src='images/buttons/button_v0_d0.png'><img id='Tom3_3' class='btn'
-						src='images/buttons/button_v0_d0.png'><img id='Tom3_4' class='btn'
-						src='images/buttons/button_v0_d0.png'><img id='Tom3_5' class='btn'
-						src='images/buttons/button_v0_d0.png'><img id='Tom3_6' class='btn'
-						src='images/buttons/button_v0_d0.png'><img id='Tom3_7' class='btn'
-						src='images/buttons/button_v0_d0.png'><img id='Tom3_8' class='btn'
-						src='images/buttons/button_v0_d0.png'><img id='Tom3_9' class='btn'
-						src='images/buttons/button_v0_d0.png'><img id='Tom3_10' class='btn'
-						src='images/buttons/button_v0_d0.png'><img id='Tom3_11' class='btn'
-						src='images/buttons/button_v0_d0.png'><img id='Tom3_12' class='btn'
-						src='images/buttons/button_v0_d0.png'><img id='Tom3_13' class='btn'
-						src='images/buttons/button_v0_d0.png'><img id='Tom3_14' class='btn'
-						src='images/buttons/button_v0_d0.png'><img id='Tom3_15' class='btn'
+					<span class='label'>Track 3</span>
+					<img id='track3_0' class='btn' src='images/buttons/button_v0_d0.png'><img id='track3_1' class='btn'
+						src='images/buttons/button_v0_d0.png'><img id='track3_2' class='btn'
+						src='images/buttons/button_v0_d0.png'><img id='track3_3' class='btn'
+						src='images/buttons/button_v0_d0.png'><img id='track3_4' class='btn'
+						src='images/buttons/button_v0_d0.png'><img id='track3_5' class='btn'
+						src='images/buttons/button_v0_d0.png'><img id='track3_6' class='btn'
+						src='images/buttons/button_v0_d0.png'><img id='track3_7' class='btn'
+						src='images/buttons/button_v0_d0.png'><img id='track3_8' class='btn'
+						src='images/buttons/button_v0_d0.png'><img id='track3_9' class='btn'
+						src='images/buttons/button_v0_d0.png'><img id='track3_10' class='btn'
+						src='images/buttons/button_v0_d0.png'><img id='track3_11' class='btn'
+						src='images/buttons/button_v0_d0.png'><img id='track3_12' class='btn'
+						src='images/buttons/button_v0_d0.png'><img id='track3_13' class='btn'
+						src='images/buttons/button_v0_d0.png'><img id='track3_14' class='btn'
+						src='images/buttons/button_v0_d0.png'><img id='track3_15' class='btn'
 						src='images/buttons/button_v0_d0.png'>
 				</div>
 				<div class='buttons_row'>
-					<span class='label'>Hi-Hat</span>
-					<img id='HiHat_0' class='btn' src='images/buttons/button_v0_d0.png'><img id='HiHat_1' class='btn'
-						src='images/buttons/button_v0_d0.png'><img id='HiHat_2' class='btn'
-						src='images/buttons/button_v0_d0.png'><img id='HiHat_3' class='btn'
-						src='images/buttons/button_v0_d0.png'><img id='HiHat_4' class='btn'
-						src='images/buttons/button_v0_d0.png'><img id='HiHat_5' class='btn'
-						src='images/buttons/button_v0_d0.png'><img id='HiHat_6' class='btn'
-						src='images/buttons/button_v0_d0.png'><img id='HiHat_7' class='btn'
-						src='images/buttons/button_v0_d0.png'><img id='HiHat_8' class='btn'
-						src='images/buttons/button_v0_d0.png'><img id='HiHat_9' class='btn'
-						src='images/buttons/button_v0_d0.png'><img id='HiHat_10' class='btn'
-						src='images/buttons/button_v0_d0.png'><img id='HiHat_11' class='btn'
-						src='images/buttons/button_v0_d0.png'><img id='HiHat_12' class='btn'
-						src='images/buttons/button_v0_d0.png'><img id='HiHat_13' class='btn'
-						src='images/buttons/button_v0_d0.png'><img id='HiHat_14' class='btn'
-						src='images/buttons/button_v0_d0.png'><img id='HiHat_15' class='btn'
+					<span class='label'>Track 4</span>
+					<img id='track4_0' class='btn' src='images/buttons/button_v0_d0.png'><img id='track4_1' class='btn'
+						src='images/buttons/button_v0_d0.png'><img id='track4_2' class='btn'
+						src='images/buttons/button_v0_d0.png'><img id='track4_3' class='btn'
+						src='images/buttons/button_v0_d0.png'><img id='track4_4' class='btn'
+						src='images/buttons/button_v0_d0.png'><img id='track4_5' class='btn'
+						src='images/buttons/button_v0_d0.png'><img id='track4_6' class='btn'
+						src='images/buttons/button_v0_d0.png'><img id='track4_7' class='btn'
+						src='images/buttons/button_v0_d0.png'><img id='track4_8' class='btn'
+						src='images/buttons/button_v0_d0.png'><img id='track4_9' class='btn'
+						src='images/buttons/button_v0_d0.png'><img id='track4_10' class='btn'
+						src='images/buttons/button_v0_d0.png'><img id='track4_11' class='btn'
+						src='images/buttons/button_v0_d0.png'><img id='track4_12' class='btn'
+						src='images/buttons/button_v0_d0.png'><img id='track4_13' class='btn'
+						src='images/buttons/button_v0_d0.png'><img id='track4_14' class='btn'
+						src='images/buttons/button_v0_d0.png'><img id='track4_15' class='btn'
 						src='images/buttons/button_v0_d0.png'>
 				</div>
 				<div class='buttons_row'>
-					<span class='label'>Snare</span>
-					<img id='Snare_0' class='btn' src='images/buttons/button_v0_d0.png'><img id='Snare_1' class='btn'
-						src='images/buttons/button_v0_d0.png'><img id='Snare_2' class='btn'
-						src='images/buttons/button_v0_d0.png'><img id='Snare_3' class='btn'
-						src='images/buttons/button_v0_d0.png'><img id='Snare_4' class='btn'
-						src='images/buttons/button_v0_d0.png'><img id='Snare_5' class='btn'
-						src='images/buttons/button_v0_d0.png'><img id='Snare_6' class='btn'
-						src='images/buttons/button_v0_d0.png'><img id='Snare_7' class='btn'
-						src='images/buttons/button_v0_d0.png'><img id='Snare_8' class='btn'
-						src='images/buttons/button_v0_d0.png'><img id='Snare_9' class='btn'
-						src='images/buttons/button_v0_d0.png'><img id='Snare_10' class='btn'
-						src='images/buttons/button_v0_d0.png'><img id='Snare_11' class='btn'
-						src='images/buttons/button_v0_d0.png'><img id='Snare_12' class='btn'
-						src='images/buttons/button_v0_d0.png'><img id='Snare_13' class='btn'
-						src='images/buttons/button_v0_d0.png'><img id='Snare_14' class='btn'
-						src='images/buttons/button_v0_d0.png'><img id='Snare_15' class='btn'
+					<span class='label'>Track 5</span>
+					<img id='track5_0' class='btn' src='images/buttons/button_v0_d0.png'><img id='track5_1' class='btn'
+						src='images/buttons/button_v0_d0.png'><img id='track5_2' class='btn'
+						src='images/buttons/button_v0_d0.png'><img id='track5_3' class='btn'
+						src='images/buttons/button_v0_d0.png'><img id='track5_4' class='btn'
+						src='images/buttons/button_v0_d0.png'><img id='track5_5' class='btn'
+						src='images/buttons/button_v0_d0.png'><img id='track5_6' class='btn'
+						src='images/buttons/button_v0_d0.png'><img id='track5_7' class='btn'
+						src='images/buttons/button_v0_d0.png'><img id='track5_8' class='btn'
+						src='images/buttons/button_v0_d0.png'><img id='track5_9' class='btn'
+						src='images/buttons/button_v0_d0.png'><img id='track5_10' class='btn'
+						src='images/buttons/button_v0_d0.png'><img id='track5_11' class='btn'
+						src='images/buttons/button_v0_d0.png'><img id='track5_12' class='btn'
+						src='images/buttons/button_v0_d0.png'><img id='track5_13' class='btn'
+						src='images/buttons/button_v0_d0.png'><img id='track5_14' class='btn'
+						src='images/buttons/button_v0_d0.png'><img id='track5_15' class='btn'
 						src='images/buttons/button_v0_d0.png'>
 				</div>
 				<div class='buttons_row'>
-					<span class='label'>Kick</span>
-					<img id='Kick_0' class='btn' src='images/buttons/button_v0_d0.png'><img id='Kick_1' class='btn'
-						src='images/buttons/button_v0_d0.png'><img id='Kick_2' class='btn'
-						src='images/buttons/button_v0_d0.png'><img id='Kick_3' class='btn'
-						src='images/buttons/button_v0_d0.png'><img id='Kick_4' class='btn'
-						src='images/buttons/button_v0_d0.png'><img id='Kick_5' class='btn'
-						src='images/buttons/button_v0_d0.png'><img id='Kick_6' class='btn'
-						src='images/buttons/button_v0_d0.png'><img id='Kick_7' class='btn'
-						src='images/buttons/button_v0_d0.png'><img id='Kick_8' class='btn'
-						src='images/buttons/button_v0_d0.png'><img id='Kick_9' class='btn'
-						src='images/buttons/button_v0_d0.png'><img id='Kick_10' class='btn'
-						src='images/buttons/button_v0_d0.png'><img id='Kick_11' class='btn'
-						src='images/buttons/button_v0_d0.png'><img id='Kick_12' class='btn'
-						src='images/buttons/button_v0_d0.png'><img id='Kick_13' class='btn'
-						src='images/buttons/button_v0_d0.png'><img id='Kick_14' class='btn'
-						src='images/buttons/button_v0_d0.png'><img id='Kick_15' class='btn'
+					<span class='label'>Track 6</span>
+					<img id='track6_0' class='btn' src='images/buttons/button_v0_d0.png'><img id='track6_1' class='btn'
+						src='images/buttons/button_v0_d0.png'><img id='track6_2' class='btn'
+						src='images/buttons/button_v0_d0.png'><img id='track6_3' class='btn'
+						src='images/buttons/button_v0_d0.png'><img id='track6_4' class='btn'
+						src='images/buttons/button_v0_d0.png'><img id='track6_5' class='btn'
+						src='images/buttons/button_v0_d0.png'><img id='track6_6' class='btn'
+						src='images/buttons/button_v0_d0.png'><img id='track6_7' class='btn'
+						src='images/buttons/button_v0_d0.png'><img id='track6_8' class='btn'
+						src='images/buttons/button_v0_d0.png'><img id='track6_9' class='btn'
+						src='images/buttons/button_v0_d0.png'><img id='track6_10' class='btn'
+						src='images/buttons/button_v0_d0.png'><img id='track6_11' class='btn'
+						src='images/buttons/button_v0_d0.png'><img id='track6_12' class='btn'
+						src='images/buttons/button_v0_d0.png'><img id='track6_13' class='btn'
+						src='images/buttons/button_v0_d0.png'><img id='track6_14' class='btn'
+						src='images/buttons/button_v0_d0.png'><img id='track6_15' class='btn'
 						src='images/buttons/button_v0_d0.png'>
 				</div>
 				<div class='buttons_row' id='LED_row'>
@@ -309,58 +309,58 @@
 					</div>
 				</div>
 				<div class='vrule'></div>
-				<div class='slider_container' id='kick_container'>
+				<div class='slider_container' id='track6_container'>
 					<div class='slider_groove'>
 						<img class='slider_track' src='images/slider_track.png'>
-						<img class='slider_thumb' id='kick_thumb' src='images/slider_thumb.png'>
+						<img class='slider_thumb' id='track6_thumb' src='images/slider_thumb.png'>
 					</div>
 					<div class='slider_label'>
-						Kick Pitch
+						track6 Pitch
 					</div>
 				</div>
-				<div class='slider_container' id='snare_container'>
+				<div class='slider_container' id='track5_container'>
 					<div class='slider_groove'>
 						<img class='slider_track' src='images/slider_track.png'>
-						<img class='slider_thumb' id='snare_thumb' src='images/slider_thumb.png'>
+						<img class='slider_thumb' id='track5_thumb' src='images/slider_thumb.png'>
 					</div>
 					<div class='slider_label'>
-						Snare Pitch
+						track5 Pitch
 					</div>
 				</div>
-				<div class='slider_container' id='hihat_container'>
+				<div class='slider_container' id='track4_container'>
 					<div class='slider_groove'>
 						<img class='slider_track' src='images/slider_track.png'>
-						<img class='slider_thumb' id='hihat_thumb' src='images/slider_thumb.png'>
+						<img class='slider_thumb' id='track4_thumb' src='images/slider_thumb.png'>
 					</div>
 					<div class='slider_label'>
-						Hi-Hat Pitch
+						track4 Pitch
 					</div>
 				</div>
-				<div class='slider_container' id='tom1_container'>
+				<div class='slider_container' id='track1_container'>
 					<div class='slider_groove'>
 						<img class='slider_track' src='images/slider_track.png'>
-						<img class='slider_thumb' id='tom1_thumb' src='images/slider_thumb.png'>
+						<img class='slider_thumb' id='track1_thumb' src='images/slider_thumb.png'>
 					</div>
 					<div class='slider_label'>
-						Tom 1 Pitch
+						track1 Pitch
 					</div>
 				</div>
-				<div class='slider_container' id='tom2_container'>
+				<div class='slider_container' id='track2_container'>
 					<div class='slider_groove'>
 						<img class='slider_track' src='images/slider_track.png'>
-						<img class='slider_thumb' id='tom2_thumb' src='images/slider_thumb.png'>
+						<img class='slider_thumb' id='track2_thumb' src='images/slider_thumb.png'>
 					</div>
 					<div class='slider_label'>
-						Tom 2 Pitch
+						track2 Pitch
 					</div>
 				</div>
-				<div class='slider_container' id='tom3_container'>
+				<div class='slider_container' id='track3_container'>
 					<div class='slider_groove'>
 						<img class='slider_track' src='images/slider_track.png'>
-						<img class='slider_thumb' id='tom3_thumb' src='images/slider_thumb.png'>
+						<img class='slider_thumb' id='track3_thumb' src='images/slider_thumb.png'>
 					</div>
 					<div class='slider_label'>
-						Tom 3 Pitch
+						track3 Pitch
 					</div>
 				</div>
 			</section>

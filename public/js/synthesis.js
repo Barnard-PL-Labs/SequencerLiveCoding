@@ -5,22 +5,22 @@ function setCMInstance(cm) {
     codeMirrorInstance = cm;
 }
 
-function synthNoteCode(newValue, rhythmIndex, instrumentIndex, theBeat) {
-    synthCode(false, newValue, rhythmIndex, instrumentIndex, theBeat) 
+function synthNoteCode(newValue, trackIndex, instrumentIndex, theBeat) {
+    synthCode(false, newValue, trackIndex, instrumentIndex, theBeat) 
 }
-function synthDurationCode(newDurationValue, rhythmIndex, instrumentIndex, theBeat) {
-    synthCode(true, newDurationValue, rhythmIndex, instrumentIndex, theBeat) 
+function synthDurationCode(newDurationValue, trackIndex, instrumentIndex, theBeat) {
+    synthCode(true, newDurationValue, trackIndex, instrumentIndex, theBeat) 
 }
 
-function synthCode(isNewDuration, newValue, rhythmIndex, instrumentIndex, theBeat) {
+function synthCode(isNewDuration, newValue, trackIndex, instrumentIndex, theBeat) {
     //get current code
     var currentCode = codeMirrorInstance.getValue()
 
     if (isNewDuration) {
-        var updatedCode = addLineForPointChangeDuration(currentCode, newValue, rhythmIndex, instrumentIndex)
+        var updatedCode = addLineForPointChangeDuration(currentCode, newValue, trackIndex, instrumentIndex)
     }
     else {
-        var updatedCode = addLineForPointChange(currentCode, newValue, rhythmIndex, instrumentIndex)
+        var updatedCode = addLineForPointChangeVolume(currentCode, newValue, trackIndex, instrumentIndex)
         initiateServerSideSynthesis(updatedCode, theBeat)
     }
 
@@ -35,19 +35,19 @@ function initiateServerSideSynthesis(updatedCode, theBeat) {
     });
 }
 
-function addLineForPointChangeDuration(currentCode, newDurationValue, rhythmIndex, instrumentIndex) {
+function addLineForPointChangeDuration(currentCode, newDurationValue, trackIndex, instrumentIndex) {
     //generate new line for changed note
     //TODO this is currently whitespace dependent - make this a regex to give a bit of flexibility at least
-    newLine = "  b.rhythm" + (instrumentIndex + 1) + "duration[" + rhythmIndex + "] = " + newDurationValue + ";\n"
-    existingLineLoc = currentCode.indexOf("  b.rhythm" + (instrumentIndex + 1) + "duration[" + rhythmIndex + "] =")
+    newLine = "  b.track" + (instrumentIndex + 1) + "dur[" + trackIndex + "] = " + newDurationValue + ";\n"
+    existingLineLoc = currentCode.indexOf("  b.track" + (instrumentIndex + 1) + "dur[" + trackIndex + "] =")
     return replaceCode(existingLineLoc, newLine);
 }
 
-function addLineForPointChange(currentCode, newNoteValue, rhythmIndex, instrumentIndex) {
+function addLineForPointChangeVolume(currentCode, newNoteValue, trackIndex, instrumentIndex) {
     //generate new line for changed note
     //TODO also whitespace dependent as in addLineForPointChangeDuration
-    newLine = "  b.rhythm" + (instrumentIndex + 1) + "[" + rhythmIndex + "] = " + newNoteValue + ";\n"
-    existingLineLoc = currentCode.indexOf("  b.rhythm" + (instrumentIndex + 1) + "[" + rhythmIndex + "] =")
+    newLine = "  b.track" + (instrumentIndex + 1) + "vol[" + trackIndex + "] = " + newNoteValue + ";\n"
+    existingLineLoc = currentCode.indexOf("  b.track" + (instrumentIndex + 1) + "vol[" + trackIndex + "] =")
     //if code has a line explicitly changed this point, then we update its value
     return replaceCode(existingLineLoc, newLine);
 
@@ -88,17 +88,21 @@ function synthSliderCode(sliderTarget, value) {
     }
 }
 
-function updatePatternFromCode(currentBeat, rhythmIndex) {
+function updatePatternFromCode(currentBeat, trackIndex) {
     //every time we advance a time step, pull latest code and update beat object
-    var updatedCode = codeMirrorInstance.getValue()
+    let updatedCode = codeMirrorInstance.getValue()
+    let dsl = pattern.toString() + setAll.toString() + backBeat.toString() + p.toString()
+    let fxnText = '"use strict"; ' + dsl + updatedCode + ' return (genBeat(theBeat, {}, trackIndex));'
     try {
         //TODO if(codeChanged) {
-        let f = new Function("theBeat", "rhythmIndex", '"use strict"; ' + pattern.toString() + setAll.toString() + backBeat.toString() + p.toString() + updatedCode + ' return (genBeat(theBeat, {}, rhythmIndex));');
-        let newData = f(currentBeat, rhythmIndex);
+        let f = new Function("theBeat", "trackIndex", fxnText);
+        let newData = f(currentBeat, trackIndex);
         let newBeat = newData.beat;
         let newSliders = newData.sliders;
         for (i = 1; i <= 6; i++) {
-            newBeat['rhythm' + i.toString()] = newBeat['rhythm' + i.toString()].map((note) => { if (Number.isNaN(note)) { return 0; } else { return note } });
+            newBeat['track' + i.toString() + 'vol'] = newBeat['track' + i.toString()  + 'vol'].map((note) => {
+                if (Number.isNaN(note)) { return 0; } else { return note }
+            });
         }
         if (isValidBeat(newBeat) && isValidSliders(newSliders)) { // && theBeat != newBeat){
             console.log(newBeat);
@@ -150,14 +154,16 @@ function backBeat(){
 function isValidBeat(beat) {
     var valid = true;
     for (i = 1; i <= 6; i++) {
-        let currentPattern = 'rhythm' + i.toString()
+        let currentPattern = 'track' + i.toString()
         valid = valid &&
-            Array.isArray(beat[currentPattern]) &&
-            beat[currentPattern].every((v) => v <= 2 && v >= 0) &&
-            Array.isArray(beat[currentPattern + 'duration']) &&
-            beat[currentPattern + 'duration'].every((v) => v <= 4 && v >= 0);   
+            Array.isArray(beat[currentPattern + 'vol']) &&
+            beat[currentPattern + 'vol'].every((v) => v <= 2 && v >= 0) &&
+            Array.isArray(beat[currentPattern + 'dur']) &&
+            beat[currentPattern + 'dur'].every((v) => v <= 4 && v >= 0);   
     }
-    
+    if (!valid) {
+        console.log("invalid beat")
+    }
     return valid;
 }
 

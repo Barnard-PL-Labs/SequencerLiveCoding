@@ -14,20 +14,20 @@ function setStartTime (t) {
 
 
 var loopLength = 16;
-var rhythmIndex = 0;
+var trackIndex = 0;
 
-function setRhythmIndex(idx) {
-    rhythmIndex = idx;
-    exports.rhythmIndex = rhythmIndex;
+function settrackIndex(idx) {
+    trackIndex = idx;
+    exports.trackIndex = trackIndex;
 }
 
-var beatReset = {"kitIndex":0,"effectIndex":0,"tempo":100,"swingFactor":0,"effectMix":0.25,"kickPitchVal":0.5,"snarePitchVal":0.5,"hihatPitchVal":0.5,"tom1PitchVal":0.5,"tom2PitchVal":0.5,"tom3PitchVal":0.5,"rhythm1":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"rhythm2":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"rhythm3":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"rhythm4":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"rhythm5":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"rhythm6":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]};
+var beatReset = {"kitIndex":0,"effectIndex":0,"tempo":100,"swingFactor":0,"effectMix":0.25,"track6PitchVal":0.5,"track5PitchVal":0.5,"track4PitchVal":0.5,"track1PitchVal":0.5,"track2PitchVal":0.5,"track3PitchVal":0.5,"track1vol":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"track2vol":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"track3vol":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"track4vol":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"track5vol":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"track6vol":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]};
 var beatDemo = [
-    {"kitIndex":13,"effectIndex":18,"tempo":120,"swingFactor":0,"effectMix":0.19718309859154926,"kickPitchVal":0.5,"snarePitchVal":0.5,"hihatPitchVal":0.5,"tom1PitchVal":0.5,"tom2PitchVal":0.5,"tom3PitchVal":0.5,"rhythm1":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"rhythm2":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"rhythm3":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"rhythm4":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"rhythm5":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"rhythm6":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]},
-    {"kitIndex":4,"effectIndex":12,"tempo":100,"swingFactor":0,"effectMix":0.2,"kickPitchVal":0.46478873239436624,"snarePitchVal":0.45070422535211263,"hihatPitchVal":0.15492957746478875,"tom1PitchVal":0.7183098591549295,"tom2PitchVal":0.704225352112676,"tom3PitchVal":0.8028169014084507,"rhythm1":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"rhythm2":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"rhythm3":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"rhythm4":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"rhythm5":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"rhythm6":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]},
-    {"kitIndex":2,"effectIndex":5,"tempo":100,"swingFactor":0,"effectMix":0.25,"kickPitchVal":0.5,"snarePitchVal":0.5,"hihatPitchVal":0.5211267605633803,"tom1PitchVal":0.23943661971830987,"tom2PitchVal":0.21126760563380287,"tom3PitchVal":0.2535211267605634,"rhythm1":[2,0,0,0,2,0,0,0,2,0,0,0,2,0,0,0],"rhythm2":[0,0,0,0,2,0,0,0,0,0,0,0,2,0,0,0],"rhythm3":[0,0,1,0,0,0,1,0,0,0,1,0,0,0,1,0],"rhythm4":[1,1,0,1,1,1,0,1,1,1,0,1,1,1,0,1],"rhythm5":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,0],"rhythm6":[0,0,1,0,1,0,0,2,0,2,0,0,1,0,0,0]},
-    {"kitIndex":1,"effectIndex":4,"tempo":120,"swingFactor":0,"effectMix":0.25,"kickPitchVal":0.7887323943661972,"snarePitchVal":0.49295774647887325,"hihatPitchVal":0.5,"tom1PitchVal":0.323943661971831,"tom2PitchVal":0.3943661971830986,"tom3PitchVal":0.323943661971831,"rhythm1":[2,0,0,0,0,0,0,2,2,0,0,0,0,0,0,1],"rhythm2":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"rhythm3":[0,0,1,0,2,0,1,0,1,0,1,0,2,0,2,0],"rhythm4":[2,0,2,0,0,0,0,0,2,0,0,0,0,2,0,0],"rhythm5":[0,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0],"rhythm6":[0,2,0,0,0,2,0,0,0,2,0,0,0,0,0,0]},
-    {"kitIndex":0,"effectIndex":1,"tempo":60,"swingFactor":0.5419847328244275,"effectMix":0.25,"kickPitchVal":0.5,"snarePitchVal":0.5,"hihatPitchVal":0.5,"tom1PitchVal":0.5,"tom2PitchVal":0.5,"tom3PitchVal":0.5,"rhythm1":[2,2,0,1,2,2,0,1,2,2,0,1,2,2,0,1],"rhythm2":[0,0,2,0,0,0,2,0,0,0,2,0,0,0,2,0],"rhythm3":[2,1,1,1,2,1,1,1,2,1,1,1,2,1,1,1],"rhythm4":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"rhythm5":[0,0,1,0,0,1,0,1,0,0,1,0,0,0,1,0],"rhythm6":[1,0,0,1,0,1,0,1,1,0,0,1,1,1,1,0]},
+    {"kitIndex":13,"effectIndex":18,"tempo":120,"swingFactor":0,"effectMix":0.19718309859154926,"track6PitchVal":0.5,"track5PitchVal":0.5,"track4PitchVal":0.5,"track1PitchVal":0.5,"track2PitchVal":0.5,"track3PitchVal":0.5,"track1vol":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"track2vol":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"track3vol":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"track4vol":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"track5vol":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"track6vol":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]},
+    {"kitIndex":4,"effectIndex":12,"tempo":100,"swingFactor":0,"effectMix":0.2,"track6PitchVal":0.46478873239436624,"track5PitchVal":0.45070422535211263,"track4PitchVal":0.15492957746478875,"track1PitchVal":0.7183098591549295,"track2PitchVal":0.704225352112676,"track3PitchVal":0.8028169014084507,"track1vol":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"track2vol":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"track3vol":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"track4vol":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"track5vol":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"track6vol":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]},
+    {"kitIndex":2,"effectIndex":5,"tempo":100,"swingFactor":0,"effectMix":0.25,"track6PitchVal":0.5,"track5PitchVal":0.5,"track4PitchVal":0.5211267605633803,"track1PitchVal":0.23943661971830987,"track2PitchVal":0.21126760563380287,"track3PitchVal":0.2535211267605634,"track1vol":[2,0,0,0,2,0,0,0,2,0,0,0,2,0,0,0],"track2vol":[0,0,0,0,2,0,0,0,0,0,0,0,2,0,0,0],"track3vol":[0,0,1,0,0,0,1,0,0,0,1,0,0,0,1,0],"track4vol":[1,1,0,1,1,1,0,1,1,1,0,1,1,1,0,1],"track5vol":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,0],"track6vol":[0,0,1,0,1,0,0,2,0,2,0,0,1,0,0,0]},
+    {"kitIndex":1,"effectIndex":4,"tempo":120,"swingFactor":0,"effectMix":0.25,"track6PitchVal":0.7887323943661972,"track5PitchVal":0.49295774647887325,"track4PitchVal":0.5,"track1PitchVal":0.323943661971831,"track2PitchVal":0.3943661971830986,"track3PitchVal":0.323943661971831,"track1vol":[2,0,0,0,0,0,0,2,2,0,0,0,0,0,0,1],"track2vol":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"track3vol":[0,0,1,0,2,0,1,0,1,0,1,0,2,0,2,0],"track4vol":[2,0,2,0,0,0,0,0,2,0,0,0,0,2,0,0],"track5vol":[0,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0],"track6vol":[0,2,0,0,0,2,0,0,0,2,0,0,0,0,0,0]},
+    {"kitIndex":0,"effectIndex":1,"tempo":60,"swingFactor":0.5419847328244275,"effectMix":0.25,"track6PitchVal":0.5,"track5PitchVal":0.5,"track4PitchVal":0.5,"track1PitchVal":0.5,"track2PitchVal":0.5,"track3PitchVal":0.5,"track1vol":[2,2,0,1,2,2,0,1,2,2,0,1,2,2,0,1],"track2vol":[0,0,2,0,0,0,2,0,0,0,2,0,0,0,2,0],"track3vol":[2,1,1,1,2,1,1,1,2,1,1,1,2,1,1,1],"track4vol":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"track5vol":[0,0,1,0,0,1,0,1,0,0,1,0,0,0,1,0],"track6vol":[1,0,0,1,0,1,0,1,1,0,0,1,1,1,1,0]},
 ];
 
 
@@ -39,18 +39,18 @@ function cloneBeat(source) {
     beat.tempo = source.tempo;
     beat.swingFactor = source.swingFactor;
     beat.effectMix = source.effectMix;
-    beat.kickPitchVal = source.kickPitchVal;
-    beat.snarePitchVal = source.snarePitchVal;
-    beat.hihatPitchVal = source.hihatPitchVal;
-    beat.tom1PitchVal = source.tom1PitchVal;
-    beat.tom2PitchVal = source.tom2PitchVal;
-    beat.tom3PitchVal = source.tom3PitchVal;
-    beat.rhythm1 = source.rhythm1.slice(0);        // slice(0) is an easy way to copy the full array
-    beat.rhythm2 = source.rhythm2.slice(0);
-    beat.rhythm3 = source.rhythm3.slice(0);
-    beat.rhythm4 = source.rhythm4.slice(0);
-    beat.rhythm5 = source.rhythm5.slice(0);
-    beat.rhythm6 = source.rhythm6.slice(0);
+    beat.track6PitchVal = source.track6PitchVal;
+    beat.track5PitchVal = source.track5PitchVal;
+    beat.track4PitchVal = source.track4PitchVal;
+    beat.track1PitchVal = source.track1PitchVal;
+    beat.track2PitchVal = source.track2PitchVal;
+    beat.track3PitchVal = source.track3PitchVal;
+    beat.track1vol = source.track1vol.slice(0);        // slice(0) is an easy way to copy the full array
+    beat.track2vol = source.track2vol.slice(0);
+    beat.track3vol = source.track3vol.slice(0);
+    beat.track4vol = source.track4vol.slice(0);
+    beat.track5vol = source.track5vol.slice(0);
+    beat.track6vol = source.track6vol.slice(0);
 
     return beat;
 }
@@ -69,33 +69,33 @@ function setBeatEffectMix(value) {
     exports.theBeat = theBeat
 }
 
-function setBeatKickPitchVal(value) {
-    theBeat.kickPitchVal = value;
+function setBeattrack6PitchVal(value) {
+    theBeat.track6PitchVal = value;
     exports.theBeat = theBeat
 }
 
-function setBeatSnarePitchVal(value) {
-    theBeat.snarePitchVal = value;
+function setBeattrack5PitchVal(value) {
+    theBeat.track5PitchVal = value;
     exports.theBeat = theBeat
 }
 
-function setBeatHihatPitchVal(value) {
-    theBeat.hihatPitchVal = value;
+function setBeattrack4PitchVal(value) {
+    theBeat.track4PitchVal = value;
     exports.theBeat = theBeat
 }
 
-function setBeatTom1PitchVal(value) {
-    theBeat.tom1PitchVal = value;
+function setBeattrack1PitchVal(value) {
+    theBeat.track1PitchVal = value;
     exports.theBeat = theBeat
 }
 
-function setBeatTom2PitchVal(value) {
-    theBeat.tom2PitchVal = value;
+function setBeattrack2PitchVal(value) {
+    theBeat.track2PitchVal = value;
     exports.theBeat = theBeat
 }
 
-function setBeatTom3PitchVal(value) {
-    theBeat.tom3PitchVal = value;
+function setBeattrack3PitchVal(value) {
+    theBeat.track3PitchVal = value;
     exports.theBeat = theBeat
 }
 
@@ -135,17 +135,17 @@ function tempoDecrease() {
 exports.setBeat = setBeat;
 
 exports.setBeatEffectMix = setBeatEffectMix;
-exports.setBeatKickPitchVal = setBeatKickPitchVal;
-exports.setBeatSnarePitchVal = setBeatSnarePitchVal;
-exports.setBeatHihatPitchVal = setBeatHihatPitchVal;
-exports.setBeatTom1PitchVal = setBeatTom1PitchVal;
-exports.setBeatTom2PitchVal = setBeatTom2PitchVal;
-exports.setBeatTom3PitchVal = setBeatTom3PitchVal;
+exports.setBeattrack6PitchVal = setBeattrack6PitchVal;
+exports.setBeattrack5PitchVal = setBeattrack5PitchVal;
+exports.setBeattrack4PitchVal = setBeattrack4PitchVal;
+exports.setBeattrack1PitchVal = setBeattrack1PitchVal;
+exports.setBeattrack2PitchVal = setBeattrack2PitchVal;
+exports.setBeattrack3PitchVal = setBeattrack3PitchVal;
 exports.setBeatSwingFactor = setBeatSwingFactor;
 
 exports.setBeatKitIndex = setBeatKitIndex;
 exports.setBeatEffectIndex = setBeatEffectIndex;
-exports.setRhythmIndex = setRhythmIndex;
+exports.settrackIndex = settrackIndex;
 exports.setStartTime = setStartTime;
 
 exports.cloneBeat = cloneBeat;
@@ -157,7 +157,7 @@ exports.theBeat = theBeat;
 exports.beatReset = beatReset;
 exports.beatDemo = beatDemo;
 exports.loopLength = loopLength;
-exports.rhythmIndex = rhythmIndex;
+exports.trackIndex = trackIndex;
 exports.kMaxSwing = kMaxSwing;
 
 },{}],2:[function(require,module,exports){
@@ -359,13 +359,13 @@ function drawNote(draw, xindex, yindex) {
 }
 
 function redrawAllNotes() {
-    for (y = 0; y < 6; y++) { //6 rhythm patterns in theBeat
+    for (y = 0; y < 6; y++) { //6 track patterns in theBeat
         for (x = 0; x < 16; x++)  { //16 beat subdivisions
-            if(x >= beatMod.theBeat['rhythm'+(y+1).toString()].length){
+            if(x >= beatMod.theBeat['track'+(y+1).toString()].length){
                 drawNote(0, x, y);
             }
             else {
-                drawNote(beatMod.theBeat['rhythm'+(y+1).toString()][x], x, y);
+                drawNote(beatMod.theBeat['track'+(y+1).toString()][x], x, y);
             }
         }
     }
@@ -407,12 +407,12 @@ function updateControls() {
     for (i = 0; i < beatMod.loopLength; ++i) {
         for (j = 0; j < kitMod.kNumInstruments; j++) {
             switch (j) {
-                case 0: notes = beatMod.theBeat.rhythm1; break;
-                case 1: notes = beatMod.theBeat.rhythm2; break;
-                case 2: notes = beatMod.theBeat.rhythm3; break;
-                case 3: notes = beatMod.theBeat.rhythm4; break;
-                case 4: notes = beatMod.theBeat.rhythm5; break;
-                case 5: notes = beatMod.theBeat.rhythm6; break;
+                case 0: notes = beatMod.theBeat.track1vol; break;
+                case 1: notes = beatMod.theBeat.track2vol; break;
+                case 2: notes = beatMod.theBeat.track3vol; break;
+                case 3: notes = beatMod.theBeat.track4vol; break;
+                case 4: notes = beatMod.theBeat.track5vol; break;
+                case 5: notes = beatMod.theBeat.track6vol; break;
             }
 
             drawNote(notes[i], i, j);
@@ -424,12 +424,12 @@ function updateControls() {
     document.getElementById('tempo').innerHTML = beatMod.theBeat.tempo;
     sliderSetPosition('swing_thumb', beatMod.theBeat.swingFactor);
     sliderSetPosition('effect_thumb', beatMod.theBeat.effectMix);
-    sliderSetPosition('kick_thumb', beatMod.theBeat.kickPitchVal);
-    sliderSetPosition('snare_thumb', beatMod.theBeat.snarePitchVal);
-    sliderSetPosition('hihat_thumb', beatMod.theBeat.hihatPitchVal);
-    sliderSetPosition('tom1_thumb', beatMod.theBeat.tom1PitchVal);
-    sliderSetPosition('tom2_thumb', beatMod.theBeat.tom2PitchVal);
-    sliderSetPosition('tom3_thumb', beatMod.theBeat.tom3PitchVal);
+    sliderSetPosition('track6_thumb', beatMod.theBeat.track6PitchVal);
+    sliderSetPosition('track5_thumb', beatMod.theBeat.track5PitchVal);
+    sliderSetPosition('track4_thumb', beatMod.theBeat.track4PitchVal);
+    sliderSetPosition('track1_thumb', beatMod.theBeat.track1PitchVal);
+    sliderSetPosition('track2_thumb', beatMod.theBeat.track2PitchVal);
+    sliderSetPosition('track3_thumb', beatMod.theBeat.track3PitchVal);
 }
 
 
@@ -537,63 +537,63 @@ function handleMouseUp() {
 
 
 function handleButtonMouseDown(event) {
-    var notes = beatMod.theBeat.rhythm1;
+    var notes = beatMod.theBeat.track1vol;
 
     var instrumentIndex;
-    var rhythmIndex;
+    var trackIndex;
 
     var elId = event.target.id;
-    rhythmIndex = elId.substr(elId.indexOf('_') + 1, 2);
+    trackIndex = elId.substr(elId.indexOf('_') + 1, 2);
     instrumentIndex = kitMod.instruments.indexOf(elId.substr(0, elId.indexOf('_')));
 
     switch (instrumentIndex) {
-        case 0: notes = beatMod.theBeat.rhythm1; break;
-        case 1: notes = beatMod.theBeat.rhythm2; break;
-        case 2: notes = beatMod.theBeat.rhythm3; break;
-        case 3: notes = beatMod.theBeat.rhythm4; break;
-        case 4: notes = beatMod.theBeat.rhythm5; break;
-        case 5: notes = beatMod.theBeat.rhythm6; break;
+        case 0: notes = beatMod.theBeat.track1vol; break;
+        case 1: notes = beatMod.theBeat.track2vol; break;
+        case 2: notes = beatMod.theBeat.track3vol; break;
+        case 3: notes = beatMod.theBeat.track4vol; break;
+        case 4: notes = beatMod.theBeat.track5vol; break;
+        case 5: notes = beatMod.theBeat.track6vol; break;
     }
 
-    var newNoteValue = (notes[rhythmIndex] + 1) % 3;
+    var newNoteValue = (notes[trackIndex] + 1) % 3;
 
-    notes[rhythmIndex] = newNoteValue
+    notes[trackIndex] = newNoteValue
 
     if (instrumentIndex == currentlyActiveInstrument)
-        showCorrectNote( rhythmIndex, notes[rhythmIndex] );
+        showCorrectNote( trackIndex, notes[trackIndex] );
 
-    drawMod.drawNote(notes[rhythmIndex], rhythmIndex, instrumentIndex);
+    drawMod.drawNote(notes[trackIndex], trackIndex, instrumentIndex);
 
     if (newNoteValue) {
         switch(instrumentIndex) {
-        case 0:  // Kick
-          playMod.playNote(kitMod.currentKit.kickBuffer, false, 0,0,-2, 0.5 * beatMod.theBeat.effectMix, kitMod.volumes[newNoteValue] * 1.0, kitMod.kickPitch, 0);
+        case 0:  // track6
+          playMod.playNote(kitMod.currentKit.track6Buffer, false, 0,0,-2, 0.5 * beatMod.theBeat.effectMix, kitMod.volumes[newNoteValue] * 1.0, kitMod.track6Pitch, 0);
           break;
 
-        case 1:  // Snare
-          playMod.playNote(kitMod.currentKit.snareBuffer, false, 0,0,-2, beatMod.theBeat.effectMix, kitMod.volumes[newNoteValue] * 0.6, kitMod.snarePitch, 0);
+        case 1:  // track5
+          playMod.playNote(kitMod.currentKit.track5Buffer, false, 0,0,-2, beatMod.theBeat.effectMix, kitMod.volumes[newNoteValue] * 0.6, kitMod.track5Pitch, 0);
           break;
 
-        case 2:  // Hihat
-          // Pan the hihat according to sequence position.
-          playMod.playNote(kitMod.currentKit.hihatBuffer, true, 0.5*rhythmIndex - 4, 0, -1.0, beatMod.theBeat.effectMix, kitMod.volumes[newNoteValue] * 0.7, kitMod.hihatPitch, 0);
+        case 2:  // track4
+          // Pan the track4 according to sequence position.
+          playMod.playNote(kitMod.currentKit.track4Buffer, true, 0.5*trackIndex - 4, 0, -1.0, beatMod.theBeat.effectMix, kitMod.volumes[newNoteValue] * 0.7, kitMod.track4Pitch, 0);
           break;
 
         case 3:  // Tom 1
-          playMod.playNote(kitMod.currentKit.tom1, false, 0,0,-2, beatMod.theBeat.effectMix, kitMod.volumes[newNoteValue] * 0.6, kitMod.tom1Pitch, 0);
+          playMod.playNote(kitMod.currentKit.track1, false, 0,0,-2, beatMod.theBeat.effectMix, kitMod.volumes[newNoteValue] * 0.6, kitMod.track1Pitch, 0);
           break;
 
-        case 4:  // Tom 2
-          playMod.playNote(kitMod.currentKit.tom2, false, 0,0,-2, beatMod.theBeat.effectMix, kitMod.volumes[newNoteValue] * 0.6, kitMod.tom2Pitch, 0);
+        case 4:  // track2
+          playMod.playNote(kitMod.currentKit.track2, false, 0,0,-2, beatMod.theBeat.effectMix, kitMod.volumes[newNoteValue] * 0.6, kitMod.track2Pitch, 0);
           break;
 
-        case 5:  // Tom 3
-          playMod.playNote(kitMod.currentKit.tom3, false, 0,0,-2, beatMod.theBeat.effectMix, kitMod.volumes[newNoteValue] * 0.6, kitMod.tom3Pitch, 0);
+        case 5:  // track3
+          playMod.playNote(kitMod.currentKit.track3, false, 0,0,-2, beatMod.theBeat.effectMix, kitMod.volumes[newNoteValue] * 0.6, kitMod.track3Pitch, 0);
           break;
         }
     }
 
-    synthMod.synthCode(newNoteValue, rhythmIndex, instrumentIndex, beatMod.theBeat)
+    synthMod.synthCode(newNoteValue, trackIndex, instrumentIndex, beatMod.theBeat)
 }
 
 function handleKitComboMouseDown(event) {
@@ -675,12 +675,12 @@ function loadBeat(beat) {
 
     // apply values from sliders
     slidersMod.sliderSetValue('effect_thumb', beatMod.theBeat.effectMix);
-    slidersMod.sliderSetValue('kick_thumb', beatMod.theBeat.kickPitchVal);
-    slidersMod.sliderSetValue('snare_thumb', beatMod.theBeat.snarePitchVal);
-    slidersMod.sliderSetValue('hihat_thumb', beatMod.theBeat.hihatPitchVal);
-    slidersMod.sliderSetValue('tom1_thumb', beatMod.theBeat.tom1PitchVal);
-    slidersMod.sliderSetValue('tom2_thumb', beatMod.theBeat.tom2PitchVal);
-    slidersMod.sliderSetValue('tom3_thumb', beatMod.theBeat.tom3PitchVal);
+    slidersMod.sliderSetValue('track6_thumb', beatMod.theBeat.track6PitchVal);
+    slidersMod.sliderSetValue('track5_thumb', beatMod.theBeat.track5PitchVal);
+    slidersMod.sliderSetValue('track4_thumb', beatMod.theBeat.track4PitchVal);
+    slidersMod.sliderSetValue('track1_thumb', beatMod.theBeat.track1PitchVal);
+    slidersMod.sliderSetValue('track2_thumb', beatMod.theBeat.track2PitchVal);
+    slidersMod.sliderSetValue('track3_thumb', beatMod.theBeat.track3PitchVal);
     slidersMod.sliderSetValue('swing_thumb', beatMod.theBeat.swingFactor);
 
     drawMod.updateControls();
@@ -734,12 +734,12 @@ function handlePlay(event) {
 function handleStop(event) {
     timerWorker.postMessage("stop");
 
-    var elOld = document.getElementById('LED_' + (beatMod.rhythmIndex + 14) % 16);
+    var elOld = document.getElementById('LED_' + (beatMod.trackIndex + 14) % 16);
     elOld.src = 'images/LED_off.png';
 
-    hideBeat( (beatMod.rhythmIndex + 14) % 16 );
+    hideBeat( (beatMod.trackIndex + 14) % 16 );
 
-    beatMod.setRhythmIndex(0);
+    beatMod.settrackIndex(0);
 
     document.getElementById('play').classList.remove('playing');
     document.getElementById('stop').classList.remove('playing');
@@ -782,12 +782,12 @@ function handleLoadOk(event) {
 
     // Apply values from sliders
     slidersMod.sliderSetValue('effect_thumb', beatMod.theBeat.effectMix);
-    slidersMod.sliderSetValue('kick_thumb', beatMod.theBeat.kickPitchVal);
-    slidersMod.sliderSetValue('snare_thumb', beatMod.theBeat.snarePitchVal);
-    slidersMod.sliderSetValue('hihat_thumb', beatMod.theBeat.hihatPitchVal);
-    slidersMod.sliderSetValue('tom1_thumb', beatMod.theBeat.tom1PitchVal);
-    slidersMod.sliderSetValue('tom2_thumb', beatMod.theBeat.tom2PitchVal);
-    slidersMod.sliderSetValue('tom3_thumb', beatMod.theBeat.tom3PitchVal);
+    slidersMod.sliderSetValue('track6_thumb', beatMod.theBeat.track6PitchVal);
+    slidersMod.sliderSetValue('track5_thumb', beatMod.theBeat.track5PitchVal);
+    slidersMod.sliderSetValue('track4_thumb', beatMod.theBeat.track4PitchVal);
+    slidersMod.sliderSetValue('track1_thumb', beatMod.theBeat.track1PitchVal);
+    slidersMod.sliderSetValue('track2_thumb', beatMod.theBeat.track2PitchVal);
+    slidersMod.sliderSetValue('track3_thumb', beatMod.theBeat.track3PitchVal);
     slidersMod.sliderSetValue('swing_thumb', beatMod.theBeat.swingFactor);
 
     // Clear out the text area post-processing
@@ -863,7 +863,7 @@ var impulseResponseInfoList = [
     {"name":"No Effect", "url":"undefined", "dryMix":1, "wetMix":0},
     {"name":"Spreader 2", "url":"impulse-responses/noise-spreader1.wav",        "dryMix":1, "wetMix":1},
     {"name":"Spring Reverb", "url":"impulse-responses/feedback-spring.wav",     "dryMix":1, "wetMix":1},
-    {"name":"Space Oddity", "url":"impulse-responses/filter-rhythm3.wav",       "dryMix":1, "wetMix":0.7},
+    {"name":"Space Oddity", "url":"impulse-responses/filter-track3vol.wav",       "dryMix":1, "wetMix":0.7},
     {"name":"Huge Reverse", "url":"impulse-responses/matrix6-backwards.wav",    "dryMix":0, "wetMix":0.7},
     {"name":"Telephone Filter", "url":"impulse-responses/filter-telephone.wav", "dryMix":0, "wetMix":1.2},
     {"name":"Lopass Filter", "url":"impulse-responses/filter-lopass160.wav",    "dryMix":0, "wetMix":0.5},
@@ -1183,7 +1183,7 @@ function initControls(timerWorker) {
         document.getElementById(elemId).addEventListener('dblclick', handlerFxn, true)
     }
     // sliders
-    sliderIdNames = ['effect_thumb', 'tom1_thumb', 'tom2_thumb', 'tom3_thumb', 'hihat_thumb', 'snare_thumb', 'kick_thumb', 'swing_thumb']
+    sliderIdNames = ['effect_thumb', 'track1_thumb', 'track2_thumb', 'track3_thumb', 'track4_thumb', 'track5_thumb', 'track6_thumb', 'swing_thumb']
     sliderIdNames.map(idName => setMouseDownHandler(idName, handlersMod.handleSliderMouseDown));
     sliderIdNames.map(idName => seDoubleClickHandler(idName, handlersMod.handleSliderDoubleClick));
 
@@ -1259,36 +1259,36 @@ const contextMod = require('./context')
 const beatMod = require('./beat')
 
 
-var kickPitch = snarePitch = hihatPitch = tom1Pitch = tom2Pitch = tom3Pitch = 0;
+var track6Pitch = track5Pitch = track4Pitch = track1Pitch = track2Pitch = track3Pitch = 0;
 
-function setKickPitch(p) {
-  kickPitch = p;
-  exports.kickPitch = kickPitch;
+function settrack6Pitch(p) {
+  track6Pitch = p;
+  exports.track6Pitch = track6Pitch;
 }
 
-function setSnarePitch(p) {
-  snarePitch = p;
-  exports.snarePitch = snarePitch;
+function settrack5Pitch(p) {
+  track5Pitch = p;
+  exports.track5Pitch = track5Pitch;
 }
 
-function setHihatPitch(p) {
-  hihatPitch = p;
-  exports.hihatPitch = hihatPitch;
+function settrack4Pitch(p) {
+  track4Pitch = p;
+  exports.track4Pitch = track4Pitch;
 }
 
-function setTom1Pitch(p) {
-  tom1Pitch = p;
-  exports.tom1Pitch = tom1Pitch;
+function settrack1Pitch(p) {
+  track1Pitch = p;
+  exports.track1Pitch = track1Pitch;
 }
 
-function setTom2Pitch(p) {
-  tom2Pitch = p;
-  exports.tom2Pitch = tom2Pitch;
+function settrack2Pitch(p) {
+  track2Pitch = p;
+  exports.track2Pitch = track2Pitch;
 }
 
-function setTom3Pitch(p) {
-  tom3Pitch = p;
-  exports.tom3Pitch = tom3Pitch;
+function settrack3Pitch(p) {
+  track3Pitch = p;
+  exports.track3Pitch = track3Pitch;
 }
 
 
@@ -1310,7 +1310,7 @@ function setCurrentKit(k) {
 var kNumInstruments = 6;
 var kInitialKitIndex = 10;
 
-var instruments = ['Kick', 'Snare', 'HiHat', 'Tom1', 'Tom2', 'Tom3'];
+var instruments = ['track6', 'track5', 'track4', 'track1', 'track2', 'track3'];
 
 
 var volumes = [0, 0.3, 1];
@@ -1361,9 +1361,9 @@ function Kit(name) {
         return pathName;
     };
 
-    this.kickBuffer = 0;
-    this.snareBuffer = 0;
-    this.hihatBuffer = 0;
+    this.track6Buffer = 0;
+    this.track5Buffer = 0;
+    this.track4Buffer = 0;
 
     this.instrumentCount = kNumInstruments;
     this.instrumentLoadCount = 0;
@@ -1386,28 +1386,28 @@ Kit.prototype.load = function() {
 
     var pathName = this.pathName();
 
-    var kickPath = pathName + "kick.wav";
-    var snarePath = pathName + "snare.wav";
-    var hihatPath = pathName + "hihat.wav";
-    var tom1Path = pathName + "tom1.wav";
-    var tom2Path = pathName + "tom2.wav";
-    var tom3Path = pathName + "tom3.wav";
+    var track6Path = pathName + "track6.wav";
+    var track5Path = pathName + "track5.wav";
+    var track4Path = pathName + "track4.wav";
+    var track1Path = pathName + "track1.wav";
+    var track2Path = pathName + "track2.wav";
+    var track3Path = pathName + "track3.wav";
 
-    this.loadSample(0, kickPath, false);
-    this.loadSample(1, snarePath, false);
-    this.loadSample(2, hihatPath, true);  // we're panning only the hihat
-    this.loadSample(3, tom1Path, false);
-    this.loadSample(4, tom2Path, false);
-    this.loadSample(5, tom3Path, false);
+    this.loadSample(0, track6Path, false);
+    this.loadSample(1, track5Path, false);
+    this.loadSample(2, track4Path, true);  // we're panning only the track4
+    this.loadSample(3, track1Path, false);
+    this.loadSample(4, track2Path, false);
+    this.loadSample(5, track3Path, false);
 }
 
 var decodedFunctions = [
-function (buffer) { this.kickBuffer = buffer; },
-function (buffer) { this.snareBuffer = buffer; },
-function (buffer) { this.hihatBuffer = buffer; },
-function (buffer) { this.tom1 = buffer; },
-function (buffer) { this.tom2 = buffer; },
-function (buffer) { this.tom3 = buffer; } ];
+function (buffer) { this.track6Buffer = buffer; },
+function (buffer) { this.track5Buffer = buffer; },
+function (buffer) { this.track4Buffer = buffer; },
+function (buffer) { this.track1 = buffer; },
+function (buffer) { this.track2 = buffer; },
+function (buffer) { this.track3 = buffer; } ];
 
 Kit.prototype.loadSample = function(sampleID, url, mixToMono) {
     // Load asynchronously
@@ -1445,12 +1445,12 @@ exports.Kit = Kit;
 exports.setKits = setKits;
 exports.setCurrentKit = setCurrentKit;
 
-exports.setKickPitch = setKickPitch;
-exports.setSnarePitch = setSnarePitch;
-exports.setHihatPitch = setHihatPitch;
-exports.setTom1Pitch = setTom1Pitch;
-exports.setTom2Pitch = setTom2Pitch;
-exports.setTom3Pitch = setTom3Pitch;
+exports.settrack6Pitch = settrack6Pitch;
+exports.settrack5Pitch = settrack5Pitch;
+exports.settrack4Pitch = settrack4Pitch;
+exports.settrack1Pitch = settrack1Pitch;
+exports.settrack2Pitch = settrack2Pitch;
+exports.settrack3Pitch = settrack3Pitch;
 
 
 // variables
@@ -1463,12 +1463,12 @@ exports.kitName = kitName;
 exports.kitNamePretty = kitNamePretty;
 exports.kInitialKitIndex = kInitialKitIndex;
 
-exports.kickPitch = kickPitch;
-exports.snarePitch = snarePitch;
-exports.hihatPitch = hihatPitch;
-exports.tom1Pitch = tom1Pitch;
-exports.tom2Pitch = tom2Pitch;
-exports.tom3Pitch = tom3Pitch;
+exports.track6Pitch = track6Pitch;
+exports.track5Pitch = track5Pitch;
+exports.track4Pitch = track4Pitch;
+exports.track1Pitch = track1Pitch;
+exports.track2Pitch = track2Pitch;
+exports.track3Pitch = track3Pitch;
 
 
 //
@@ -1501,7 +1501,7 @@ function setNoteTime (t) {
 
 function advanceNote() {
 
-    newBeat = synthMod.updatePatternFromCode(beatMod.cloneBeat(beatMod.theBeat), beatMod.rhythmIndex);
+    newBeat = synthMod.updatePatternFromCode(beatMod.cloneBeat(beatMod.theBeat), beatMod.trackIndex);
     if (newBeat != null) {
         beatMod.setBeat(newBeat)
         drawMod.redrawAllNotes();
@@ -1509,13 +1509,13 @@ function advanceNote() {
     // Advance time by a 16th note...
     var secondsPerBeat = 60.0 / beatMod.theBeat.tempo;
 
-    beatMod.setRhythmIndex(beatMod.rhythmIndex + 1);
-    if (beatMod.rhythmIndex == beatMod.loopLength) {
-        beatMod.setRhythmIndex(0);
+    beatMod.settrackIndex(beatMod.trackIndex + 1);
+    if (beatMod.trackIndex == beatMod.loopLength) {
+        beatMod.settrackIndex(0);
     }
 
         // apply swing
-    if (beatMod.rhythmIndex % 2) {
+    if (beatMod.trackIndex % 2) {
         noteTime += (0.25 + beatMod.kMaxSwing * beatMod.theBeat.swingFactor) * secondsPerBeat;
     } else {
         noteTime += (0.25 - beatMod.kMaxSwing * beatMod.theBeat.swingFactor) * secondsPerBeat;
@@ -1565,40 +1565,40 @@ function schedule() {
         // Convert noteTime to context time.
         var contextPlayTime = noteTime + beatMod.startTime;
 
-        // Kick
-        if (beatMod.theBeat.rhythm1[beatMod.rhythmIndex] && instrumentActive[0]) {
-            playNote(kitMod.currentKit.kickBuffer, false, 0,0,-2, 0.5, kitMod.volumes[beatMod.theBeat.rhythm1[beatMod.rhythmIndex]] * 1.0, kitMod.kickPitch, contextPlayTime);
+        // track6
+        if (beatMod.theBeat.track1vol[beatMod.trackIndex] && instrumentActive[0]) {
+            playNote(kitMod.currentKit.track6Buffer, false, 0,0,-2, 0.5, kitMod.volumes[beatMod.theBeat.track1vol[beatMod.trackIndex]] * 1.0, kitMod.track6Pitch, contextPlayTime);
         }
 
-        // Snare
-        if (beatMod.theBeat.rhythm2[beatMod.rhythmIndex] && instrumentActive[1]) {
-            playNote(kitMod.currentKit.snareBuffer, false, 0,0,-2, 1, kitMod.volumes[beatMod.theBeat.rhythm2[beatMod.rhythmIndex]] * 0.6, kitMod.snarePitch, contextPlayTime);
+        // track5
+        if (beatMod.theBeat.track2vol[beatMod.trackIndex] && instrumentActive[1]) {
+            playNote(kitMod.currentKit.track5Buffer, false, 0,0,-2, 1, kitMod.volumes[beatMod.theBeat.track2vol[beatMod.trackIndex]] * 0.6, kitMod.track5Pitch, contextPlayTime);
         }
 
-        // Hihat
-        if (beatMod.theBeat.rhythm3[beatMod.rhythmIndex] && instrumentActive[2]) {
-            // Pan the hihat according to sequence position.
-            playNote(kitMod.currentKit.hihatBuffer, true, 0.5*beatMod.rhythmIndex - 4, 0, -1.0, 1, kitMod.volumes[beatMod.theBeat.rhythm3[beatMod.rhythmIndex]] * 0.7, kitMod.hihatPitch, contextPlayTime);
+        // track4
+        if (beatMod.theBeat.track3vol[beatMod.trackIndex] && instrumentActive[2]) {
+            // Pan the track4 according to sequence position.
+            playNote(kitMod.currentKit.track4Buffer, true, 0.5*beatMod.trackIndex - 4, 0, -1.0, 1, kitMod.volumes[beatMod.theBeat.track3vol[beatMod.trackIndex]] * 0.7, kitMod.track4Pitch, contextPlayTime);
         }
 
         // Toms
-        if (beatMod.theBeat.rhythm4[beatMod.rhythmIndex] && instrumentActive[3]) {
-            playNote(kitMod.currentKit.tom1, false, 0,0,-2, 1, kitMod.volumes[beatMod.theBeat.rhythm4[beatMod.rhythmIndex]] * 0.6, kitMod.tom1Pitch, contextPlayTime);
+        if (beatMod.theBeat.track4vol[beatMod.trackIndex] && instrumentActive[3]) {
+            playNote(kitMod.currentKit.track1, false, 0,0,-2, 1, kitMod.volumes[beatMod.theBeat.track4vol[beatMod.trackIndex]] * 0.6, kitMod.track1Pitch, contextPlayTime);
         }
 
-        if (beatMod.theBeat.rhythm5[beatMod.rhythmIndex] && instrumentActive[4]) {
-            playNote(kitMod.currentKit.tom2, false, 0,0,-2, 1, kitMod.volumes[beatMod.theBeat.rhythm5[beatMod.rhythmIndex]] * 0.6, kitMod.tom2Pitch, contextPlayTime);
+        if (beatMod.theBeat.track5vol[beatMod.trackIndex] && instrumentActive[4]) {
+            playNote(kitMod.currentKit.track2, false, 0,0,-2, 1, kitMod.volumes[beatMod.theBeat.track5vol[beatMod.trackIndex]] * 0.6, kitMod.track2Pitch, contextPlayTime);
         }
 
-        if (beatMod.theBeat.rhythm6[beatMod.rhythmIndex] && instrumentActive[5]) {
-            playNote(kitMod.currentKit.tom3, false, 0,0,-2, 1, kitMod.volumes[beatMod.theBeat.rhythm6[beatMod.rhythmIndex]] * 0.6, kitMod.tom3Pitch, contextPlayTime);
+        if (beatMod.theBeat.track6vol[beatMod.trackIndex] && instrumentActive[5]) {
+            playNote(kitMod.currentKit.track3, false, 0,0,-2, 1, kitMod.volumes[beatMod.theBeat.track6vol[beatMod.trackIndex]] * 0.6, kitMod.track3Pitch, contextPlayTime);
         }
 
 
         // Attempt to synchronize drawing time with sound
         if (noteTime != drawMod.lastDrawTime) {
             drawMod.setLastDrawTime(noteTime);
-            drawMod.drawPlayhead((beatMod.rhythmIndex + 15) % 16);
+            drawMod.drawPlayhead((beatMod.trackIndex + 15) % 16);
         }
 
         advanceNote();
@@ -1608,22 +1608,22 @@ function schedule() {
 function playDrum(noteNumber, velocity) {
     switch (noteNumber) {
         case 0x24:
-            playNote(kitMod.currentKit.kickBuffer,  false, 0,0,-2,  0.5, (velocity / 127), kitMod.kickPitch,  0);
+            playNote(kitMod.currentKit.track6Buffer,  false, 0,0,-2,  0.5, (velocity / 127), kitMod.track6Pitch,  0);
             break;
         case 0x26:
-            playNote(kitMod.currentKit.snareBuffer, false, 0,0,-2,  1,   (velocity / 127), kitMod.snarePitch, 0);
+            playNote(kitMod.currentKit.track5Buffer, false, 0,0,-2,  1,   (velocity / 127), kitMod.track5Pitch, 0);
             break;
         case 0x28:
-            playNote(kitMod.currentKit.hihatBuffer, true,  0,0,-1.0,1,   (velocity / 127), kitMod.hihatPitch, 0);
+            playNote(kitMod.currentKit.track4Buffer, true,  0,0,-1.0,1,   (velocity / 127), kitMod.track4Pitch, 0);
             break;
         case 0x2d:
-            playNote(kitMod.currentKit.tom1,        false, 0,0,-2,  1,   (velocity / 127), kitMod.tom1Pitch,  0);
+            playNote(kitMod.currentKit.track1,        false, 0,0,-2,  1,   (velocity / 127), kitMod.track1Pitch,  0);
             break;
         case 0x2f:
-            playNote(kitMod.currentKit.tom2,        false, 0,0,-2,  1,   (velocity / 127), kitMod.tom2Pitch,  0);
+            playNote(kitMod.currentKit.track2,        false, 0,0,-2,  1,   (velocity / 127), kitMod.track2Pitch,  0);
             break;
         case 0x32:
-            playNote(kitMod.currentKit.tom3,        false, 0,0,-2,  1,   (velocity / 127), kitMod.tom3Pitch,  0);
+            playNote(kitMod.currentKit.track3,        false, 0,0,-2,  1,   (velocity / 127), kitMod.track3Pitch,  0);
             break;
         default:
             console.log("note:0x" + noteNumber.toString(16) );
@@ -1661,29 +1661,29 @@ function sliderSetValue(slider, value) {
         beatMod.setBeatEffectMix(value);
         contextMod.setEffectLevel(beatMod.theBeat);
         break;
-    case 'kick_thumb':
-        beatMod.setBeatKickPitchVal(value);
-        kitMod.setKickPitch(pitchRate);
+    case 'track6_thumb':
+        beatMod.setBeattrack6PitchVal(value);
+        kitMod.settrack6Pitch(pitchRate);
         break;
-    case 'snare_thumb':
-        beatMod.setBeatSnarePitchVal(value);
-        kitMod.setSnarePitch(pitchRate);
+    case 'track5_thumb':
+        beatMod.setBeattrack5PitchVal(value);
+        kitMod.settrack5Pitch(pitchRate);
         break;
-    case 'hihat_thumb':
-        beatMod.setBeatHihatPitchVal(value);
-        kitMod.setHihatPitch(pitchRate);
+    case 'track4_thumb':
+        beatMod.setBeattrack4PitchVal(value);
+        kitMod.settrack4Pitch(pitchRate);
         break;
-    case 'tom1_thumb':
-        beatMod.setBeatTom1PitchVal(value);
-        kitMod.setTom1Pitch(pitchRate);
+    case 'track1_thumb':
+        beatMod.setBeattrack1PitchVal(value);
+        kitMod.settrack1Pitch(pitchRate);
         break;
-    case 'tom2_thumb':
-        beatMod.setBeatTom2PitchVal(value);
-        kitMod.setTom2Pitch(pitchRate);
+    case 'track2_thumb':
+        beatMod.setBeattrack2PitchVal(value);
+        kitMod.settrack2Pitch(pitchRate);
         break;
-    case 'tom3_thumb':
-        beatMod.setBeatTom3PitchVal(value);
-        kitMod.setTom3Pitch(pitchRate);
+    case 'track3_thumb':
+        beatMod.setBeattrack3PitchVal(value);
+        kitMod.settrack3Pitch(pitchRate);
         break;
     case 'swing_thumb':
         beatMod.setBeatSwingFactor(value);
@@ -1705,10 +1705,10 @@ function setCMInstance (cm) {
     codeMirrorInstance = cm;
 }
 
-function addLineForPointChange(currentCode,newNoteValue, rhythmIndex, instrumentIndex) {
+function addLineForPointChange(currentCode,newNoteValue, trackIndex, instrumentIndex) {
     //generate new line for changed note
-    newLine = "  b.rhythm" + (instrumentIndex+1) + "[" + rhythmIndex + "] = " + newNoteValue + ";\n"
-    existingLineLoc = currentCode.indexOf("  b.rhythm" + (instrumentIndex+1) + "[" + rhythmIndex + "] =")
+    newLine = "  b.track" + (instrumentIndex+1) + "[" + trackIndex + "] = " + newNoteValue + ";\n"
+    existingLineLoc = currentCode.indexOf("  b.track" + (instrumentIndex+1) + "[" + trackIndex + "] =")
     //if code has a line explicitly changed this point, then we update its value
     if (existingLineLoc >=0) {
         var lineChPos = codeMirrorInstance.posFromIndex(existingLineLoc);
@@ -1724,11 +1724,11 @@ function addLineForPointChange(currentCode,newNoteValue, rhythmIndex, instrument
     return codeMirrorInstance.getValue();
 }
 
-function synthCode(newNoteValue, rhythmIndex, instrumentIndex, theBeat) {
+function synthCode(newNoteValue, trackIndex, instrumentIndex, theBeat) {
     //get current code
     var currentCode = codeMirrorInstance.getValue()
 
-    var updatedCode = addLineForPointChange(currentCode,newNoteValue, rhythmIndex, instrumentIndex)
+    var updatedCode = addLineForPointChange(currentCode,newNoteValue, trackIndex, instrumentIndex)
 
     socket.emit('code', {"code":updatedCode, "beat":theBeat});
     
@@ -1739,15 +1739,15 @@ function synthCode(newNoteValue, rhythmIndex, instrumentIndex, theBeat) {
     });
 }
 
-function updatePatternFromCode(currentBeat, rhythmIndex){
+function updatePatternFromCode(currentBeat, trackIndex){
     //every time we advance a time step, pull latest code and update beat object
     var updatedCode = codeMirrorInstance.getValue()
     try {
         //TODO if(codeChanged) {
-        let f = new Function("theBeat", "rhythmIndex", '"use strict"; ' + updatedCode + ' return (genBeat(theBeat, rhythmIndex));');
-        let newBeat = f(currentBeat, rhythmIndex);
+        let f = new Function("theBeat", "trackIndex", '"use strict"; ' + updatedCode + ' return (genBeat(theBeat, trackIndex));');
+        let newBeat = f(currentBeat, trackIndex);
         for (i = 1; i <= 6; i++) {
-            newBeat['rhythm'+i.toString()] = newBeat['rhythm'+i.toString()].map((note) => {if (Number.isNaN(note)) {return 0;} else {return note}});
+            newBeat['track'+i.toString()] = newBeat['track'+i.toString()].map((note) => {if (Number.isNaN(note)) {return 0;} else {return note}});
         }
         if (isValidBeat(newBeat)) { // && theBeat != newBeat){
             return newBeat;
@@ -1765,8 +1765,8 @@ function isValidBeat(beat) {
     var valid = true;
     for (i = 1; i <= 6; i++) {
         valid = valid &&
-            Array.isArray(beat['rhythm'+i.toString()]) &&
-            beat['rhythm'+i.toString()].every((v) => v <=2 && v >=0);
+            Array.isArray(beat['track'+i.toString()]) &&
+            beat['track'+i.toString()].every((v) => v <=2 && v >=0);
     }
     console.log(valid);
     return valid;

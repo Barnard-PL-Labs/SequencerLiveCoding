@@ -2,36 +2,36 @@ const contextMod = require('./context')
 const beatMod = require('./beat')
 
 
-var kickPitch = snarePitch = hihatPitch = tom1Pitch = tom2Pitch = tom3Pitch = 0;
+var track6Pitch = track5Pitch = track4Pitch = track1Pitch = track2Pitch = track3Pitch = 0;
 
-function setKickPitch(p) {
-  kickPitch = p;
-  exports.kickPitch = kickPitch;
+function settrack6Pitch(p) {
+  track6Pitch = p;
+  exports.track6Pitch = track6Pitch;
 }
 
-function setSnarePitch(p) {
-  snarePitch = p;
-  exports.snarePitch = snarePitch;
+function settrack5Pitch(p) {
+  track5Pitch = p;
+  exports.track5Pitch = track5Pitch;
 }
 
-function setHihatPitch(p) {
-  hihatPitch = p;
-  exports.hihatPitch = hihatPitch;
+function settrack4Pitch(p) {
+  track4Pitch = p;
+  exports.track4Pitch = track4Pitch;
 }
 
-function setTom1Pitch(p) {
-  tom1Pitch = p;
-  exports.tom1Pitch = tom1Pitch;
+function settrack1Pitch(p) {
+  track1Pitch = p;
+  exports.track1Pitch = track1Pitch;
 }
 
-function setTom2Pitch(p) {
-  tom2Pitch = p;
-  exports.tom2Pitch = tom2Pitch;
+function settrack2Pitch(p) {
+  track2Pitch = p;
+  exports.track2Pitch = track2Pitch;
 }
 
-function setTom3Pitch(p) {
-  tom3Pitch = p;
-  exports.tom3Pitch = tom3Pitch;
+function settrack3Pitch(p) {
+  track3Pitch = p;
+  exports.track3Pitch = track3Pitch;
 }
 
 
@@ -53,7 +53,7 @@ function setCurrentKit(k) {
 var kNumInstruments = 6;
 var kInitialKitIndex = 10;
 
-var instruments = ['Kick', 'Snare', 'HiHat', 'Tom1', 'Tom2', 'Tom3'];
+var instruments = ['track6', 'track5', 'track4', 'track1', 'track2', 'track3'];
 
 
 var volumes = [0, 0.3, 1];
@@ -106,9 +106,9 @@ function Kit(name) {
         return pathName;
     };
 
-    this.kickBuffer = 0;
-    this.snareBuffer = 0;
-    this.hihatBuffer = 0;
+    this.track6Buffer = 0;
+    this.track5Buffer = 0;
+    this.track4Buffer = 0;
 
     this.instrumentCount = kNumInstruments;
     this.instrumentLoadCount = 0;
@@ -131,28 +131,28 @@ Kit.prototype.load = function() {
 
     var pathName = this.pathName();
 
-    var kickPath = pathName + "kick.wav";
-    var snarePath = pathName + "snare.wav";
-    var hihatPath = pathName + "hihat.wav";
-    var tom1Path = pathName + "tom1.wav";
-    var tom2Path = pathName + "tom2.wav";
-    var tom3Path = pathName + "tom3.wav";
+    var track6Path = pathName + "kick.wav";
+    var track5Path = pathName + "snare.wav";
+    var track4Path = pathName + "hihat.wav";
+    var track1Path = pathName + "tom1.wav";
+    var track2Path = pathName + "tom2.wav";
+    var track3Path = pathName + "tom3.wav";
 
-    this.loadSample(0, kickPath, false);
-    this.loadSample(1, snarePath, false);
-    this.loadSample(2, hihatPath, true);  // we're panning only the hihat
-    this.loadSample(3, tom1Path, false);
-    this.loadSample(4, tom2Path, false);
-    this.loadSample(5, tom3Path, false);
+    this.loadSample(0, track6Path, false);
+    this.loadSample(1, track5Path, false);
+    this.loadSample(2, track4Path, true);  // we're panning only the track4
+    this.loadSample(3, track1Path, false);
+    this.loadSample(4, track2Path, false);
+    this.loadSample(5, track3Path, false);
 }
 
 var decodedFunctions = [
-function (buffer) { this.kickBuffer = buffer; },
-function (buffer) { this.snareBuffer = buffer; },
-function (buffer) { this.hihatBuffer = buffer; },
-function (buffer) { this.tom1 = buffer; },
-function (buffer) { this.tom2 = buffer; },
-function (buffer) { this.tom3 = buffer; } ];
+function (buffer) { this.track6Buffer = buffer; },
+function (buffer) { this.track5Buffer = buffer; },
+function (buffer) { this.track4Buffer = buffer; },
+function (buffer) { this.track1 = buffer; },
+function (buffer) { this.track2 = buffer; },
+function (buffer) { this.track3 = buffer; } ];
 
 Kit.prototype.loadSample = function(sampleID, url, mixToMono) {
     // Load asynchronously
@@ -190,12 +190,12 @@ exports.Kit = Kit;
 exports.setKits = setKits;
 exports.setCurrentKit = setCurrentKit;
 
-exports.setKickPitch = setKickPitch;
-exports.setSnarePitch = setSnarePitch;
-exports.setHihatPitch = setHihatPitch;
-exports.setTom1Pitch = setTom1Pitch;
-exports.setTom2Pitch = setTom2Pitch;
-exports.setTom3Pitch = setTom3Pitch;
+exports.settrack6Pitch = settrack6Pitch;
+exports.settrack5Pitch = settrack5Pitch;
+exports.settrack4Pitch = settrack4Pitch;
+exports.settrack1Pitch = settrack1Pitch;
+exports.settrack2Pitch = settrack2Pitch;
+exports.settrack3Pitch = settrack3Pitch;
 
 
 // variables
@@ -208,12 +208,12 @@ exports.kitName = kitName;
 exports.kitNamePretty = kitNamePretty;
 exports.kInitialKitIndex = kInitialKitIndex;
 
-exports.kickPitch = kickPitch;
-exports.snarePitch = snarePitch;
-exports.hihatPitch = hihatPitch;
-exports.tom1Pitch = tom1Pitch;
-exports.tom2Pitch = tom2Pitch;
-exports.tom3Pitch = tom3Pitch;
+exports.track6Pitch = track6Pitch;
+exports.track5Pitch = track5Pitch;
+exports.track4Pitch = track4Pitch;
+exports.track1Pitch = track1Pitch;
+exports.track2Pitch = track2Pitch;
+exports.track3Pitch = track3Pitch;
 
 
 //

@@ -238,15 +238,15 @@ function setActiveInstrument(index) {
   if (midiOut&&outputIsLivid)
     midiOut.send( [0x90, keyForInstrument(index), colorForIntrument(index)] );
 
-  var notes = theBeat.rhythm1;
+  var notes = theBeat.track1vol;
 
   switch (currentlyActiveInstrument) {
-      case 0: notes = theBeat.rhythm1; break;
-      case 1: notes = theBeat.rhythm2; break;
-      case 2: notes = theBeat.rhythm3; break;
-      case 3: notes = theBeat.rhythm4; break;
-      case 4: notes = theBeat.rhythm5; break;
-      case 5: notes = theBeat.rhythm6; break;
+      case 0: notes = theBeat.track1vol; break;
+      case 1: notes = theBeat.track2vol; break;
+      case 2: notes = theBeat.track3vol; break;
+      case 3: notes = theBeat.track4vol; break;
+      case 4: notes = theBeat.track5vol; break;
+      case 5: notes = theBeat.track6vol; break;
   }
 
   for (var beat=0; beat<16; beat++)
@@ -262,52 +262,52 @@ function showCorrectNote( index, note ) {
     midiOut.send( [0x90, 32 + index, note * 32] );
 }
 
-function toggleBeat(rhythmIndex) {
-    var notes = theBeat.rhythm1;
+function toggleBeat(trackIndex) {
+    var notes = theBeat.track1vol;
 
     switch (currentlyActiveInstrument) {
-        case 0: notes = theBeat.rhythm1; break;
-        case 1: notes = theBeat.rhythm2; break;
-        case 2: notes = theBeat.rhythm3; break;
-        case 3: notes = theBeat.rhythm4; break;
-        case 4: notes = theBeat.rhythm5; break;
-        case 5: notes = theBeat.rhythm6; break;
+        case 0: notes = theBeat.track1vol; break;
+        case 1: notes = theBeat.track2vol; break;
+        case 2: notes = theBeat.track3vol; break;
+        case 3: notes = theBeat.track4vol; break;
+        case 4: notes = theBeat.track5vol; break;
+        case 5: notes = theBeat.track6vol; break;
     }
 
-    notes[rhythmIndex] = (notes[rhythmIndex] + 1) % 3;
+    notes[trackIndex] = (notes[trackIndex] + 1) % 3;
 
-    drawNote(notes[rhythmIndex], rhythmIndex, currentlyActiveInstrument);
+    drawNote(notes[trackIndex], trackIndex, currentlyActiveInstrument);
 
-    showCorrectNote( rhythmIndex, notes[rhythmIndex] );
+    showCorrectNote( trackIndex, notes[trackIndex] );
 
 /* // not sure if we want to play notes when toggling on MIDI device
-    var note = notes[rhythmIndex];
+    var note = notes[trackIndex];
     
     if (note) {
         switch(instrumentIndex) {
-        case 0:  // Kick
-          playNote(currentKit.kickBuffer, false, 0,0,-2, 0.5 * theBeat.effectMix, volumes[note] * 1.0, kickPitch, 0);
+        case 0:  // track6
+          playNote(currentKit.track6Buffer, false, 0,0,-2, 0.5 * theBeat.effectMix, volumes[note] * 1.0, track6Pitch, 0);
           break;
 
-        case 1:  // Snare
-          playNote(currentKit.snareBuffer, false, 0,0,-2, theBeat.effectMix, volumes[note] * 0.6, snarePitch, 0);
+        case 1:  // track5
+          playNote(currentKit.track5Buffer, false, 0,0,-2, theBeat.effectMix, volumes[note] * 0.6, track5Pitch, 0);
           break;
 
-        case 2:  // Hihat
-          // Pan the hihat according to sequence position.
-          playNote(currentKit.hihatBuffer, true, 0.5*rhythmIndex - 4, 0, -1.0, theBeat.effectMix, volumes[note] * 0.7, hihatPitch, 0);
+        case 2:  // track4
+          // Pan the track4 according to sequence position.
+          playNote(currentKit.track4Buffer, true, 0.5*trackIndex - 4, 0, -1.0, theBeat.effectMix, volumes[note] * 0.7, track4Pitch, 0);
           break;
 
         case 3:  // Tom 1   
-          playNote(currentKit.tom1, false, 0,0,-2, theBeat.effectMix, volumes[note] * 0.6, tom1Pitch, 0);
+          playNote(currentKit.track1, false, 0,0,-2, theBeat.effectMix, volumes[note] * 0.6, track1Pitch, 0);
           break;
 
-        case 4:  // Tom 2   
-          playNote(currentKit.tom2, false, 0,0,-2, theBeat.effectMix, volumes[note] * 0.6, tom2Pitch, 0);
+        case 4:  // track2   
+          playNote(currentKit.track2, false, 0,0,-2, theBeat.effectMix, volumes[note] * 0.6, track2Pitch, 0);
           break;
 
-        case 5:  // Tom 3   
-          playNote(currentKit.tom3, false, 0,0,-2, theBeat.effectMix, volumes[note] * 0.6, tom3Pitch, 0);
+        case 5:  // track3   
+          playNote(currentKit.track3, false, 0,0,-2, theBeat.effectMix, volumes[note] * 0.6, track3Pitch, 0);
           break;
         }
     }
@@ -368,28 +368,28 @@ function controller(number, data) {
       sliderSetValue( 'effect_thumb', data/127);
       updateControls();
       return;
-    case 12:  // Kick pitch
-      sliderSetValue( 'kick_thumb', data/127);
+    case 12:  // track6 pitch
+      sliderSetValue( 'track6_thumb', data/127);
       updateControls();
       return;
-    case 16:  // Snare pitch
-      sliderSetValue( 'snare_thumb', data/127);
+    case 16:  // track5 pitch
+      sliderSetValue( 'track5_thumb', data/127);
       updateControls();
       return;
-    case 20:  // Hi-hat pitch
-      sliderSetValue( 'hihat_thumb', data/127);
+    case 20:  // track4 pitch
+      sliderSetValue( 'track4_thumb', data/127);
       updateControls();
       return;
-    case 24:  // Tom1 pitch
-      sliderSetValue( 'tom1_thumb', data/127);
+    case 24:  // track1 pitch
+      sliderSetValue( 'track1_thumb', data/127);
       updateControls();
       return;
-    case 28:  // Tom2 pitch
-      sliderSetValue( 'tom2_thumb', data/127);
+    case 28:  // track2 pitch
+      sliderSetValue( 'track2_thumb', data/127);
       updateControls();
       return;
-    case 32:  // Tom3 pitch
-      sliderSetValue( 'tom3_thumb', data/127);
+    case 32:  // track3 pitch
+      sliderSetValue( 'track3_thumb', data/127);
       updateControls();
       return;
 

@@ -94,81 +94,81 @@ function handleButtonMouseDown(event) {
         //console.log(init.getStoreState());
         return
     }
-    var notes = beatManager.theBeat.rhythm1;
+    var notes = beatManager.theBeat.track1vol;
 
     var elId = event.target.id;
-    var rhythmIndex = elId.substr(elId.indexOf('_') + 1, 2);
+    var trackIndex = elId.substr(elId.indexOf('_') + 1, 2);
     var instrumentIndex = kit.instruments.indexOf(elId.substr(0, elId.indexOf('_')));
     
     var notes;
     var durations;
     if (instrumentIndex == 0) {
-        durations = beatManager.theBeat.rhythm1duration;
-        notes = beatManager.theBeat.rhythm1;
+        durations = beatManager.theBeat.track1dur;
+        notes = beatManager.theBeat.track1vol;
     }
     else if (instrumentIndex == 1) {
-        durations = beatManager.theBeat.rhythm2duration;
-        notes = beatManager.theBeat.rhythm2; 
+        durations = beatManager.theBeat.track2dur;
+        notes = beatManager.theBeat.track2vol; 
     }
     else if (instrumentIndex == 2) {
-        durations = beatManager.theBeat.rhythm3duration;
-        notes = beatManager.theBeat.rhythm3;
+        durations = beatManager.theBeat.track3dur;
+        notes = beatManager.theBeat.track3vol;
     }
     else if (instrumentIndex == 3) {
-        durations = beatManager.theBeat.rhythm4duration;
-        notes = beatManager.theBeat.rhythm4;
+        durations = beatManager.theBeat.track4dur;
+        notes = beatManager.theBeat.track4vol;
     }
     else if (instrumentIndex == 4) {
-        durations = beatManager.theBeat.rhythm5duration;
-        notes = beatManager.theBeat.rhythm5;
+        durations = beatManager.theBeat.track5dur;
+        notes = beatManager.theBeat.track5vol;
     }
     else if (instrumentIndex == 5) {
-        durations = beatManager.theBeat.rhythm6duration; 
-        notes = beatManager.theBeat.rhythm6;
+        durations = beatManager.theBeat.track6dur; 
+        notes = beatManager.theBeat.track6vol;
     }
 
     if (event.shiftKey) { //if shift, we are modifying duration
-        var newNoteDuration = (durations[rhythmIndex] + 1) % 5;
-        durations[rhythmIndex] = newNoteDuration;
-        synth.synthDurationCode(newNoteDuration, rhythmIndex, instrumentIndex, beatManager.theBeat)
+        var newNoteDuration = (durations[trackIndex] + 1) % 5;
+        durations[trackIndex] = newNoteDuration;
+        synth.synthDurationCode(newNoteDuration, trackIndex, instrumentIndex, beatManager.theBeat)
     }
     else { //else vol
-        var newNoteValue = (notes[rhythmIndex] + 1) % 3;
-        notes[rhythmIndex] = newNoteValue;
-        synth.synthNoteCode(newNoteValue, rhythmIndex, instrumentIndex, beatManager.theBeat)
+        var newNoteValue = (notes[trackIndex] + 1) % 3;
+        notes[trackIndex] = newNoteValue;
+        synth.synthNoteCode(newNoteValue, trackIndex, instrumentIndex, beatManager.theBeat)
 
     }
     if (instrumentIndex == currentlyActiveInstrument)
-        showCorrectNote(rhythmIndex, notes[rhythmIndex]);
+        showCorrectNote(trackIndex, notes[trackIndex]);
 
-    drawer.drawNote(notes[rhythmIndex], durations[rhythmIndex], rhythmIndex, instrumentIndex);
+    drawer.drawNote(notes[trackIndex], durations[trackIndex], trackIndex, instrumentIndex);
 
     //plays the note when you click on it
     if (newNoteValue && false) { //commented out, not sure we want to enable
         switch (instrumentIndex) {
-            case 0:  // Kick
-                play.playNote(kit.currentKit.kickBuffer, false, 0, 0, -2, 0.5 * beatManager.theBeat.effectMix, kit.volumes[newNoteValue] * 1.0, kit.kickPitch, 0, play.getDuration());
+            case 0:  // track6
+                play.playNote(kit.currentKit.track6Buffer, false, 0, 0, -2, 0.5 * beatManager.theBeat.effectMix, kit.volumes[newNoteValue] * 1.0, kit.track6Pitch, 0, play.getDuration());
                 break;
 
-            case 1:  // Snare
-                play.playNote(kit.currentKit.snareBuffer, false, 0, 0, -2, beatManager.theBeat.effectMix, kit.volumes[newNoteValue] * 0.6, kit.snarePitch, 0, play.getDuration());
+            case 1:  // track5
+                play.playNote(kit.currentKit.track5Buffer, false, 0, 0, -2, beatManager.theBeat.effectMix, kit.volumes[newNoteValue] * 0.6, kit.track5Pitch, 0, play.getDuration());
                 break;
 
-            case 2:  // Hihat
-                // Pan the hihat according to sequence position.
-                play.playNote(kit.currentKit.hihatBuffer, true, 0.5 * rhythmIndex - 4, 0, -1.0, beatManager.theBeat.effectMix, kit.volumes[newNoteValue] * 0.7, kit.hihatPitch, 0, play.getDuration());
+            case 2:  // track4
+                // Pan the track4 according to sequence position.
+                play.playNote(kit.currentKit.track4Buffer, true, 0.5 * trackIndex - 4, 0, -1.0, beatManager.theBeat.effectMix, kit.volumes[newNoteValue] * 0.7, kit.track4Pitch, 0, play.getDuration());
                 break;
 
             case 3:  // Tom 1
-                play.playNote(kit.currentKit.tom1, false, 0, 0, -2, beatManager.theBeat.effectMix, kit.volumes[newNoteValue] * 0.6, kit.tom1Pitch, 0, play.getDuration());
+                play.playNote(kit.currentKit.track1, false, 0, 0, -2, beatManager.theBeat.effectMix, kit.volumes[newNoteValue] * 0.6, kit.track1Pitch, 0, play.getDuration());
                 break;
 
-            case 4:  // Tom 2
-                play.playNote(kit.currentKit.tom2, false, 0, 0, -2, beatManager.theBeat.effectMix, kit.volumes[newNoteValue] * 0.6, kit.tom2Pitch, 0, play.getDuration());
+            case 4:  // track2
+                play.playNote(kit.currentKit.track2, false, 0, 0, -2, beatManager.theBeat.effectMix, kit.volumes[newNoteValue] * 0.6, kit.track2Pitch, 0, play.getDuration());
                 break;
 
-            case 5:  // Tom 3
-                play.playNote(kit.currentKit.tom3, false, 0, 0, -2, beatManager.theBeat.effectMix, kit.volumes[newNoteValue] * 0.6, kit.tom3Pitch, 0, play.getDuration());
+            case 5:  // track3
+                play.playNote(kit.currentKit.track3, false, 0, 0, -2, beatManager.theBeat.effectMix, kit.volumes[newNoteValue] * 0.6, kit.track3Pitch, 0, play.getDuration());
                 break;
         }
     }
@@ -252,12 +252,12 @@ function loadBeat(beat) {
 
     // apply values from sliders
     slidersManager.sliderSetValue('effect_thumb', beatManager.theBeat.effectMix);
-    slidersManager.sliderSetValue('kick_thumb', beatManager.theBeat.kickPitchVal);
-    slidersManager.sliderSetValue('snare_thumb', beatManager.theBeat.snarePitchVal);
-    slidersManager.sliderSetValue('hihat_thumb', beatManager.theBeat.hihatPitchVal);
-    slidersManager.sliderSetValue('tom1_thumb', beatManager.theBeat.tom1PitchVal);
-    slidersManager.sliderSetValue('tom2_thumb', beatManager.theBeat.tom2PitchVal);
-    slidersManager.sliderSetValue('tom3_thumb', beatManager.theBeat.tom3PitchVal);
+    slidersManager.sliderSetValue('track6_thumb', beatManager.theBeat.track6PitchVal);
+    slidersManager.sliderSetValue('track5_thumb', beatManager.theBeat.track5PitchVal);
+    slidersManager.sliderSetValue('track4_thumb', beatManager.theBeat.track4PitchVal);
+    slidersManager.sliderSetValue('track1_thumb', beatManager.theBeat.track1PitchVal);
+    slidersManager.sliderSetValue('track2_thumb', beatManager.theBeat.track2PitchVal);
+    slidersManager.sliderSetValue('track3_thumb', beatManager.theBeat.track3PitchVal);
     slidersManager.sliderSetValue('swing_thumb', beatManager.theBeat.swingFactor);
 
     drawer.updateControls();
@@ -311,12 +311,12 @@ function handlePlay(event) {
 function handleStop(event) {
     timerWorker.postMessage("stop");
 
-    var elOld = document.getElementById('LED_' + (beatManager.rhythmIndex + 14) % 16);
+    var elOld = document.getElementById('LED_' + (beatManager.trackIndex + 14) % 16);
     elOld.src = 'images/LED_off.png';
 
-    hideBeat((beatManager.rhythmIndex + 14) % 16);
+    hideBeat((beatManager.trackIndex + 14) % 16);
 
-    beatManager.setRhythmIndex(0);
+    beatManager.settrackIndex(0);
 
     document.getElementById('play').classList.remove('playing');
     document.getElementById('stop').classList.remove('playing');

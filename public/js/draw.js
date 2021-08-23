@@ -19,13 +19,13 @@ function drawNote(volume, duration, xindex, yindex) {
 }
 
 function redrawAllNotes() {
-    for (y = 0; y < 6; y++) { //6 rhythm patterns in theBeat
+    for (y = 0; y < 6; y++) { //6 track patterns in theBeat
         for (x = 0; x < 16; x++)  { //16 beat subdivisions
-            if(x >= beatMod.theBeat['rhythm'+(y+1).toString()].length){
+            if(x >= beatMod.theBeat['track'+(y+1).toString() + 'vol'].length){
                 drawNote(0, 0, x, y);
             }
             else {
-                drawNote(beatMod.theBeat['rhythm'+(y+1).toString()][x], beatMod.theBeat['rhythm'+(y+1).toString()+'duration'][x], x, y);
+                drawNote(beatMod.theBeat['track'+(y+1).toString() + 'vol'][x], beatMod.theBeat['track'+(y+1).toString()+'dur'][x], x, y);
             }
         }
     }
@@ -68,29 +68,29 @@ function updateControls() {
         for (j = 0; j < kitMod.kNumInstruments; j++) {
             //switch (j) {
                 if(j == 0) {
-                notes = beatMod.theBeat.rhythm1; 
-                durations = beatMod.theBeat.rhythm1duration; break;
+                notes = beatMod.theBeat.track1vol; 
+                durations = beatMod.theBeat.track1dur; break;
                 }
                 if(j == 1) {
-                notes = beatMod.theBeat.rhythm2; 
-                durations = beatMod.theBeat.rhythm2duration; break;
+                notes = beatMod.theBeat.track2vol; 
+                durations = beatMod.theBeat.track2dur; break;
                 }
                 if(j == 2) {
-                notes = beatMod.theBeat.rhythm3; 
-                durations = beatMod.theBeat.rhythm3duration; break;
+                notes = beatMod.theBeat.track3vol; 
+                durations = beatMod.theBeat.track3dur; break;
                 }
                 if(j == 3) {
-                notes = beatMod.theBeat.rhythm4; 
-                durations = beatMod.theBeat.rhythm4duration; break;
+                notes = beatMod.theBeat.track4vol; 
+                durations = beatMod.theBeat.track4dur; break;
                 }
                 if(j == 4){
-                notes = beatMod.theBeat.rhythm5; 
-                durations = beatMod.theBeat.rhythm5duration; break;
+                notes = beatMod.theBeat.track5vol; 
+                durations = beatMod.theBeat.track5dur; break;
                 }
                 //case 5:
                 if(j == 5){ 
-                notes = beatMod.theBeat.rhythm6; 
-                durations = beatMod.theBeat.rhythm6duration; break;
+                notes = beatMod.theBeat.track6vol; 
+                durations = beatMod.theBeat.track6dur; break;
                 }
             }
             drawNote(notes[i], durations[i], i, j);
@@ -102,12 +102,12 @@ function updateControls() {
     document.getElementById('tempo').innerHTML = beatMod.theBeat.tempo;
     sliderSetPosition('swing_thumb', beatMod.theBeat.swingFactor);
     sliderSetPosition('effect_thumb', beatMod.theBeat.effectMix);
-    sliderSetPosition('kick_thumb', beatMod.theBeat.kickPitchVal);
-    sliderSetPosition('snare_thumb', beatMod.theBeat.snarePitchVal);
-    sliderSetPosition('hihat_thumb', beatMod.theBeat.hihatPitchVal);
-    sliderSetPosition('tom1_thumb', beatMod.theBeat.tom1PitchVal);
-    sliderSetPosition('tom2_thumb', beatMod.theBeat.tom2PitchVal);
-    sliderSetPosition('tom3_thumb', beatMod.theBeat.tom3PitchVal);
+    sliderSetPosition('track6_thumb', beatMod.theBeat.track6PitchVal);
+    sliderSetPosition('track5_thumb', beatMod.theBeat.track5PitchVal);
+    sliderSetPosition('track4_thumb', beatMod.theBeat.track4PitchVal);
+    sliderSetPosition('track1_thumb', beatMod.theBeat.track1PitchVal);
+    sliderSetPosition('track2_thumb', beatMod.theBeat.track2PitchVal);
+    sliderSetPosition('track3_thumb', beatMod.theBeat.track3PitchVal);
 }
 
 

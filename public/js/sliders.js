@@ -19,29 +19,29 @@ function sliderSetValue(slider, value) {
             beatManager.setBeatEffectMix(value);
             contextMod.setEffectLevel(beatManager.theBeat);
             break;
-        case 'kick_thumb':
-            beatManager.setBeatKickPitchVal(value);
-            kit.setKickPitch(pitchRate);
+        case 'track6_thumb':
+            beatManager.setBeattrack6PitchVal(value);
+            kit.settrack6Pitch(pitchRate);
             break;
-        case 'snare_thumb':
-            beatManager.setBeatSnarePitchVal(value);
-            kit.setSnarePitch(pitchRate);
+        case 'track5_thumb':
+            beatManager.setBeattrack5PitchVal(value);
+            kit.settrack5Pitch(pitchRate);
             break;
-        case 'hihat_thumb':
-            beatManager.setBeatHihatPitchVal(value);
-            kit.setHihatPitch(pitchRate);
+        case 'track4_thumb':
+            beatManager.setBeattrack4PitchVal(value);
+            kit.settrack4Pitch(pitchRate);
             break;
-        case 'tom1_thumb':
-            beatManager.setBeatTom1PitchVal(value);
-            kit.setTom1Pitch(pitchRate);
+        case 'track1_thumb':
+            beatManager.setBeattrack1PitchVal(value);
+            kit.settrack1Pitch(pitchRate);
             break;
-        case 'tom2_thumb':
-            beatManager.setBeatTom2PitchVal(value);
-            kit.setTom2Pitch(pitchRate);
+        case 'track2_thumb':
+            beatManager.setBeattrack2PitchVal(value);
+            kit.settrack2Pitch(pitchRate);
             break;
-        case 'tom3_thumb':
-            beatManager.setBeatTom3PitchVal(value);
-            kit.setTom3Pitch(pitchRate);
+        case 'track3_thumb':
+            beatManager.setBeattrack3PitchVal(value);
+            kit.settrack3Pitch(pitchRate);
             break;
         case 'swing_thumb':
             beatManager.setBeatSwingFactor(value);

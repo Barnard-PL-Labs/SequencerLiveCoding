@@ -266,7 +266,7 @@ function initControls(timerWorker) {
         document.getElementById(elemId).addEventListener('dblclick', handlerFxn, true)
     }
     // sliders
-    sliderIdNames = ['effect_thumb', 'tom1_thumb', 'tom2_thumb', 'tom3_thumb', 'hihat_thumb', 'snare_thumb', 'kick_thumb', 'swing_thumb']
+    sliderIdNames = ['effect_thumb', 'track1_thumb', 'track2_thumb', 'track3_thumb', 'track4_thumb', 'track5_thumb', 'track6_thumb', 'swing_thumb']
     sliderIdNames.map(idName => setMouseDownHandler(idName, handlersMod.handleSliderMouseDown));
     sliderIdNames.map(idName => seDoubleClickHandler(idName, handlersMod.handleSliderDoubleClick));
 
