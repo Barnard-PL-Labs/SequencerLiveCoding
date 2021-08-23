@@ -118,8 +118,7 @@ function pattern(equation){
 }
 
 function setAll(val){
-    if(val>=0 && val<=2)
-        return new Array(16).fill(val);
+    return new Array(16).fill(val);
 }
 
 function p(val){
@@ -156,8 +155,9 @@ function isValidBeat(beat) {
             Array.isArray(beat[currentPattern]) &&
             beat[currentPattern].every((v) => v <= 2 && v >= 0) &&
             Array.isArray(beat[currentPattern + 'duration']) &&
-            beat[currentPattern + 'duration'].every((v) => v <= 4 && v >= 0);
+            beat[currentPattern + 'duration'].every((v) => v <= 4 && v >= 0);   
     }
+    
     return valid;
 }
 

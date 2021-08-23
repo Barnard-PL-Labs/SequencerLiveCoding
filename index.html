@@ -103,26 +103,24 @@
 					<div id="instructionsForAddedFunctions">
 						Instructions for Added Functions:
 						<ul>
-							<li>pattern( ): takes in an equations that is used to map beats.
+							<li>pattern(): takes in an equations that is used to map beats.
 								<ul>
 									<li>The equation must take in the form of "(val,i)=>_____".</li>
-									<li>Exmaple: b.rhythm4 = pattern((val,i)=>1-i%2);</li>
+									<li>Example: b.rhythm4 = pattern((val,i)=>1-i%2);</li>
 								</ul>
 							</li>
 							<div></div>
-							<li>setAll( ): takes in an integer(0, 1, or 2) and sets the value of all beats to that
-								integer.
+							<li>setAll() : creates a 16-length array with the given value
 								<ul>
-									<li>0 is rests, 1 is regular beat, 2 is beat with forte</li>
 									<li>Example: b.rhythm4 = setAll(1);</li>
 								</ul>
 							</li>
-							<li>backBeat( ): takes no parameter, creates a rhythm that sounds on beats 2,4, 6,... etc.
+							<li>backBeat(): takes no parameter, creates a rhythm that sounds on beats 2,4, 6,... etc.
 								<ul>
-									<li>Example: b.rhythm4 = backBeat( );</li>
+									<li>Example: b.rhythm4 = backBeat();</li>
 								</ul>
 							</li>
-							<li>p( ): takes in a String parameter or a numeric value to change the pitch.
+							<li>p(): takes in a String parameter or a numeric value to change the pitch.
 								<ul>
 									<li>Numeric value: should be between 0 to 1(inclusive)</li>
 									<li>String value: should be a letter between A and G(inclusive)</li>
