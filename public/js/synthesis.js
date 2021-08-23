@@ -154,7 +154,7 @@ function isValidBeat(beat) {
         let currentPattern = 'rhythm' + i.toString()
         valid = valid &&
             Array.isArray(beat[currentPattern]) &&
-            beat[currentPattern + 'duration'].every((v) => v <= 2 && v >= 0) &&
+            beat[currentPattern].every((v) => v <= 2 && v >= 0) &&
             Array.isArray(beat[currentPattern + 'duration']) &&
             beat[currentPattern + 'duration'].every((v) => v <= 4 && v >= 0);
     }
