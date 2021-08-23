@@ -63,13 +63,11 @@ function parseCodeLine(line) {
 //check if we have inserted a array index manipulation line of code 
 function hasPatternEdit(parsedCode, whichPattern) {
     const matchesP = (codeLine) => codeLine["instIndex"] == whichPattern-1;
-    console.log(whichPattern-1 + ": " + parsedCode.some(matchesP));
     return parsedCode.some(matchesP);
 }
 
 simplifyCode = async function(codeAndBeat) {
     var code = codeAndBeat["code"]
-    console.log("test")
     var arrayOfLines = code.match(/[^\r\n]+/g);
     //TODO merge multiline commands (e.g. .map w/ fxn over multiple lines) into a single line
 
@@ -89,11 +87,10 @@ simplifyCode = async function(codeAndBeat) {
     //that subseq can then be added with templated code
     //TODO, do this for all patterns & refactor to fxn
     for (whichPattern = 1; whichPattern <= 6; whichPattern++) {
-        console.log(codeAndBeat["beat"]["rhythm" + whichPattern])
         var singleEditInfo = checkForSingleEdit(codeAndBeat["beat"]["rhythm" + whichPattern])
         if (singleEditInfo["hasOneChangedIndex"]) {
             console.log("Pattern " + whichPattern + " has singleEdit");
-            newCode = newCode.replace(new RegExp(".*rhythm"+whichPattern+".*\n", "g"), '')
+            newCode = newCode.replace(new RegExp(".*rhythm"+whichPattern+"(?!duration).*\n", "g"), '')
             newCode += "  b.rhythm" + whichPattern + " = new Array(16).fill(" + singleEditInfo["fillVal"] + ")\n"
             newCode += "  b.rhythm" + whichPattern + "[" + singleEditInfo["editLoc"] + "] = " + singleEditInfo["editVal"] + ";\n"
 
@@ -112,7 +109,7 @@ simplifyCode = async function(codeAndBeat) {
                 var fxnName = sygusSolution.split(" ")[1];
                 var newFxn = fxnDefs[0];
                 var newNewJsFxnBody = astToJs(smt_parser(newFxn));
-                newCode = newCode.replace(new RegExp(".*rhythm"+whichPattern+".*\n", "g"), '')
+                newCode = newCode.replace(new RegExp(".*rhythm"+whichPattern+"(?!duration).*\n", "g"), '')
                 //corresponds to the new .pattern() in synthesis.js
                 newCode += displayPattern(whichPattern,newNewJsFxnBody);
                 newCode += "  b.rhythm" + whichPattern + ".splice(" + subseq['startMaxSubseq'] + "," + subseq['lengthMaxSubseq'] + ",...Array(" + subseq['lengthMaxSubseq'] + ").fill(" + subseq['valMaxSubseq'] + "));\n"

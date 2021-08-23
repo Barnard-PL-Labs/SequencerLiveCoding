@@ -2,7 +2,7 @@
 
 Live Coding for the Novation Circuit
 
-Try it live here: http://161.35.14.211:3000/
+Try it live here: http://161.35.14.211
 
 This is a live programming-by-demonstration system for use with a hardware sequencer (though a in-browser software sequencer is provided for your convenience). Playing a hardware sequencer is similar to live coding in that it constructively builds a piece from a blank loop. However the interface of a sequencer does not allow for algorithmic changes (e.g. shift all notes by one beat, or every other note up a half step). The goal of this project is to augment the direct physical sensation of the hardware interface with the flexibility of code (or, to augment the virtual with the physical).
 
