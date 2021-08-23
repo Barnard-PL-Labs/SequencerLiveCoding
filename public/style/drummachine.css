@@ -153,14 +153,14 @@ li {
   }
 
   #listLabel{
-	position: absolute;
+	position: flex;
 	top: 725px; 
 	left: 17px;
   }
 
   #recordingsList{
 	max-width: 30em;
-	position: absolute;
+	position: flex;
 	top: 750px;
 }
 
@@ -379,6 +379,14 @@ li {
 
 img.preload { display: none; }
 #MIDIPlugin { visibility: hidden; }
+
+#Instructions {
+	padding-top: 2%;
+	color: rgb(176, 176, 176);
+	font-family: 'Droid Sans', Arial, sans-serif;
+	font-weight: lighter;
+	font-size: small;
+}
 
 #instructionsForAddedFunctions {
 	padding-top: 2%;
