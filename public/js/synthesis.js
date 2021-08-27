@@ -103,6 +103,9 @@ function updatePatternFromCode(currentBeat, trackIndex) {
             newBeat['track' + i.toString() + 'vol'] = newBeat['track' + i.toString()  + 'vol'].map((note) => {
                 if (Number.isNaN(note)) { return 0; } else { return note }
             });
+            newBeat['track' + i.toString() + 'dur'] = newBeat['track' + i.toString()  + 'dur'].map((note) => {
+                if (Number.isNaN(note)) { return 0; } else { return note }
+            });
         }
         if (isValidBeat(newBeat) && isValidSliders(newSliders)) { // && theBeat != newBeat){
             console.log(newBeat);
