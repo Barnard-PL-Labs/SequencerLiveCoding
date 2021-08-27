@@ -95,35 +95,33 @@ function schedule() {
         // Convert noteTime to context time.
         var contextPlayTime = noteTime + beatManager.startTime;
 
-        // track6
-        if (beatManager.theBeat.track1vol[beatManager.trackIndex] && instrumentActive[0]) { //track6
-            playNote(kit.currentKit.track6Buffer, false, 0, 0, -2, 0.5, kit.volumes[beatManager.theBeat.track1vol[beatManager.trackIndex]] * 1.0, kit.track6Pitch, contextPlayTime, beatManager.theBeat.track1dur[beatManager.trackIndex]);
+        // Toms
+        if (beatManager.theBeat.track1vol[beatManager.trackIndex] && instrumentActive[0]) {
+            playNote(kit.currentKit.track1, false, 0, 0, -2, 1, kit.volumes[beatManager.theBeat.track1vol[beatManager.trackIndex]] * 0.6, kit.track1Pitch, contextPlayTime, beatManager.theBeat.track1dur[beatManager.trackIndex]);
+        }
+
+        if (beatManager.theBeat.track2vol[beatManager.trackIndex] && instrumentActive[1]) {
+            playNote(kit.currentKit.track2, false, 0, 0, -2, 1, kit.volumes[beatManager.theBeat.track2vol[beatManager.trackIndex]] * 0.6, kit.track2Pitch, contextPlayTime, beatManager.theBeat.track2dur[beatManager.trackIndex]);
+        }
+
+        if (beatManager.theBeat.track3vol[beatManager.trackIndex] && instrumentActive[2]) {
+            playNote(kit.currentKit.track3, false, 0, 0, -2, 1, kit.volumes[beatManager.theBeat.track3vol[beatManager.trackIndex]] * 0.6, kit.track3Pitch, contextPlayTime, beatManager.theBeat.track3dur[beatManager.trackIndex]);
+        }
+        // track4
+        if (beatManager.theBeat.track4vol[beatManager.trackIndex] && instrumentActive[3]) {
+            // Pan the track4 according to sequence position.
+            playNote(kit.currentKit.track4Buffer, true, 0.5 * beatManager.trackIndex - 4, 0, -1.0, 1, kit.volumes[beatManager.theBeat.track4vol[beatManager.trackIndex]] * 0.7, kit.track4Pitch, contextPlayTime, beatManager.theBeat.track3dur[beatManager.trackIndex]);
         }
 
         // track5
-        if (beatManager.theBeat.track2vol[beatManager.trackIndex] && instrumentActive[1]) {
-            playNote(kit.currentKit.track5Buffer, false, 0, 0, -2, 1, kit.volumes[beatManager.theBeat.track2vol[beatManager.trackIndex]] * 0.6, kit.track5Pitch, contextPlayTime, beatManager.theBeat.track2dur[beatManager.trackIndex]);
-        }
-
-        // track4
-        if (beatManager.theBeat.track3vol[beatManager.trackIndex] && instrumentActive[2]) {
-            // Pan the track4 according to sequence position.
-            playNote(kit.currentKit.track4Buffer, true, 0.5 * beatManager.trackIndex - 4, 0, -1.0, 1, kit.volumes[beatManager.theBeat.track3vol[beatManager.trackIndex]] * 0.7, kit.track4Pitch, contextPlayTime, beatManager.theBeat.track3dur[beatManager.trackIndex]);
-        }
-
-        // Toms
-        if (beatManager.theBeat.track4vol[beatManager.trackIndex] && instrumentActive[3]) {
-            playNote(kit.currentKit.track1, false, 0, 0, -2, 1, kit.volumes[beatManager.theBeat.track4vol[beatManager.trackIndex]] * 0.6, kit.track1Pitch, contextPlayTime, beatManager.theBeat.track4dur[beatManager.trackIndex]);
-        }
-
         if (beatManager.theBeat.track5vol[beatManager.trackIndex] && instrumentActive[4]) {
-            playNote(kit.currentKit.track2, false, 0, 0, -2, 1, kit.volumes[beatManager.theBeat.track5vol[beatManager.trackIndex]] * 0.6, kit.track2Pitch, contextPlayTime, beatManager.theBeat.track5dur[beatManager.trackIndex]);
+            playNote(kit.currentKit.track5Buffer, false, 0, 0, -2, 1, kit.volumes[beatManager.theBeat.track5vol[beatManager.trackIndex]] * 0.6, kit.track5Pitch, contextPlayTime, beatManager.theBeat.track5dur[beatManager.trackIndex]);
         }
 
-        if (beatManager.theBeat.track6vol[beatManager.trackIndex] && instrumentActive[5]) {
-            playNote(kit.currentKit.track3, false, 0, 0, -2, 1, kit.volumes[beatManager.theBeat.track6vol[beatManager.trackIndex]] * 0.6, kit.track3Pitch, contextPlayTime, beatManager.theBeat.track6dur[beatManager.trackIndex]);
+        // track6
+        if (beatManager.theBeat.track6vol[beatManager.trackIndex] && instrumentActive[5]) { //track6
+            playNote(kit.currentKit.track6Buffer, false, 0, 0, -2, 0.5, kit.volumes[beatManager.theBeat.track6vol[beatManager.trackIndex]] * 1.0, kit.track6Pitch, contextPlayTime, beatManager.theBeat.track6dur[beatManager.trackIndex]);
         }
-
 
         // Attempt to synchronize drawing time with sound
         if (noteTime != drawer.lastDrawTime) {

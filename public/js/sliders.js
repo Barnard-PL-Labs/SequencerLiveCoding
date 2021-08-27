@@ -19,18 +19,6 @@ function sliderSetValue(slider, value) {
             beatManager.setBeatEffectMix(value);
             contextMod.setEffectLevel(beatManager.theBeat);
             break;
-        case 'track6_thumb':
-            beatManager.setBeattrack6PitchVal(value);
-            kit.settrack6Pitch(pitchRate);
-            break;
-        case 'track5_thumb':
-            beatManager.setBeattrack5PitchVal(value);
-            kit.settrack5Pitch(pitchRate);
-            break;
-        case 'track4_thumb':
-            beatManager.setBeattrack4PitchVal(value);
-            kit.settrack4Pitch(pitchRate);
-            break;
         case 'track1_thumb':
             beatManager.setBeattrack1PitchVal(value);
             kit.settrack1Pitch(pitchRate);
@@ -42,6 +30,18 @@ function sliderSetValue(slider, value) {
         case 'track3_thumb':
             beatManager.setBeattrack3PitchVal(value);
             kit.settrack3Pitch(pitchRate);
+            break;
+        case 'track4_thumb':
+            beatManager.setBeattrack4PitchVal(value);
+            kit.settrack4Pitch(pitchRate);
+            break;
+        case 'track5_thumb':
+            beatManager.setBeattrack5PitchVal(value);
+            kit.settrack5Pitch(pitchRate);
+            break;
+        case 'track6_thumb':
+            beatManager.setBeattrack6PitchVal(value);
+            kit.settrack6Pitch(pitchRate);
             break;
         case 'swing_thumb':
             beatManager.setBeatSwingFactor(value);

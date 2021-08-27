@@ -53,7 +53,7 @@ function setCurrentKit(k) {
 var kNumInstruments = 6;
 var kInitialKitIndex = 10;
 
-var instruments = ['track6', 'track5', 'track4', 'track1', 'track2', 'track3'];
+var instruments = ['track1', 'track2', 'track3', 'track4', 'track5', 'track6' ];
 
 
 var volumes = [0, 0.3, 1];
@@ -131,28 +131,29 @@ Kit.prototype.load = function() {
 
     var pathName = this.pathName();
 
-    var track6Path = pathName + "kick.wav";
-    var track5Path = pathName + "snare.wav";
-    var track4Path = pathName + "hihat.wav";
     var track1Path = pathName + "tom1.wav";
     var track2Path = pathName + "tom2.wav";
     var track3Path = pathName + "tom3.wav";
+    var track4Path = pathName + "hihat.wav";
+    var track5Path = pathName + "snare.wav";
+    var track6Path = pathName + "kick.wav";
 
-    this.loadSample(0, track6Path, false);
-    this.loadSample(1, track5Path, false);
-    this.loadSample(2, track4Path, true);  // we're panning only the track4
-    this.loadSample(3, track1Path, false);
-    this.loadSample(4, track2Path, false);
-    this.loadSample(5, track3Path, false);
+
+    this.loadSample(0, track1Path, false);
+    this.loadSample(1, track2Path, false);
+    this.loadSample(2, track3Path, true);  // we're panning only the track4
+    this.loadSample(3, track4Path, false);
+    this.loadSample(4, track5Path, false);
+    this.loadSample(5, track6Path, false);
 }
 
 var decodedFunctions = [
-function (buffer) { this.track6Buffer = buffer; },
-function (buffer) { this.track5Buffer = buffer; },
-function (buffer) { this.track4Buffer = buffer; },
 function (buffer) { this.track1 = buffer; },
 function (buffer) { this.track2 = buffer; },
-function (buffer) { this.track3 = buffer; } ];
+function (buffer) { this.track3 = buffer; },
+function (buffer) { this.track4Buffer = buffer; },
+function (buffer) { this.track5Buffer = buffer; },
+function (buffer) { this.track6Buffer = buffer; } ];
 
 Kit.prototype.loadSample = function(sampleID, url, mixToMono) {
     // Load asynchronously
