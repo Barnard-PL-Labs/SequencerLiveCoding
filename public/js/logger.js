@@ -3,8 +3,9 @@ var logData = [];
 const logMouseEvent = function (e) { 
 
     // push("key " + Date.now()) }
-    logData.push("mouse, " + e.timeStamp + ", " + e.target);
+    logData.push("mouse, " + e.timeStamp + ", " + e.target); //adding stuff to logData
     //console.log(logData);
+    socket.emit('log', { "log": logData }); //sends info to server every time there is a mouseEvent
 }
 
 const logKeyEvent = function (e) { 
