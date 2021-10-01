@@ -70,4 +70,5 @@ io.on('connection', (socket) => {
   
 http.listen(3000, () => {
   console.log('listening on *:3000');
+  console.log('Open your browser and go to localhost:3000 to start live coding!');
 });
