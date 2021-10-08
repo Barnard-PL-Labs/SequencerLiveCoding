@@ -76,7 +76,8 @@ var kitName = [ //backend
     "acoustic-kit",
     "4OP-FM",
     "TheCheebacabra1",
-    "TheCheebacabra2"
+    "TheCheebacabra2",
+    "vocal_cymatics"
     ];
 
 var kitNamePretty = [ //interface
@@ -95,7 +96,8 @@ var kitNamePretty = [ //interface
     "Acoustic Kit",
     "4OP-FM",
     "The Cheebacabra 1",
-    "The Cheebacabra 2"
+    "The Cheebacabra 2",
+    "vocal_cymatics"
     ];
 
 function Kit(name) {
