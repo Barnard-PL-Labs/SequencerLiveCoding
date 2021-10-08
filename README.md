@@ -19,25 +19,25 @@ First clone this repo:
     git clone https://github.com/santolucito/SequencerLiveCoding
     cd SequencerLiveCoding
 
-The app uses node, you will need to install that
+The app uses node, you will need to install that using the following command (on linux, if you are on mac you will use a different install process)
 
     sudo apt install nodejs
 
 We use browserify to "compile" the node code so that it can run client-side. This way,
 even if you lose your connection to the internet in the middle of a set, the system doesnt completely crash and still can play the beat.
 
-    npm install -g browserify
+    sudo npm install -g browserify
     browserify public/js/main.js -o public/js/compiled.js
 
-Synthesis uses the SMT solver CVC4 (which is a crazy optimized behemoth of C code), so needs to run server side. You can download the binary from the CVC4 website. Be sure to chmod u+x to change permissions of the executbale. Make sure the cvc4 executable is in the root directory of this repo.
+Synthesis uses the SMT solver CVC4 (which is a crazy optimized behemoth of C code), so needs to run server side. You can download the binary from the CVC4 website (https://cvc4.github.io/downloads.html). Be sure to chmod u+x to change permissions of the executbale. Make sure the cvc4 executable is in the root directory of this repo.
 
-    mv cvc4-2020-08-09-x86_64-linux-opt cvc4
+    mv cvc4-2020-08-09-x86_64-linux-opt cvc4 # the name of your download might be different!
     chmod u+x cvc4
 
 Then install everything and get playing!
 
     npm install
-    node app.js # or, on a server, nohup node app.js &
+    node app.js # or, on a server, 'nohup node app.js &' to leave it running
 
 # TODOs
 

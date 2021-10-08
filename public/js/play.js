@@ -14,8 +14,8 @@ function setNoteTime(t) {
 }
 
 function secondsPerBeat() {
-     var secondsPerBeat = 60.0 / beatManager.theBeat.tempo;
-     return secondsPerBeat;
+    var secondsPerBeat = 60.0 / beatManager.theBeat.tempo;
+    return secondsPerBeat;
 }
 
 function advanceNote() {
@@ -43,7 +43,7 @@ function advanceNote() {
     }
 }
 
-function playNote(buffer, pan, x, y, z, sendGain, mainGain, playbackRate, noteTime, durationVal) { 
+function playNote(buffer, pan, x, y, z, sendGain, mainGain, playbackRate, noteTime, durationVal) {
     // Create the note
     var voice = context.context.createBufferSource();
     voice.buffer = buffer;
@@ -73,13 +73,13 @@ function playNote(buffer, pan, x, y, z, sendGain, mainGain, playbackRate, noteTi
     finalNode.connect(wetGainNode);
     context.connectNodes(wetGainNode, context.convolver);
 
-    voice.start(noteTime); 
+    voice.start(noteTime);
     voice.stop(noteTime + (durationVal * secondsPerBeat() * 0.25));
 }
 
 var durationTrue;
 
-function getDuration(){
+function getDuration() {
     return 1;
 }
 

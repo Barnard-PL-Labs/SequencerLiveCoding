@@ -9,6 +9,7 @@ const { fork } = require('child_process');
 const { simplifyCode } = require('./serverSide/synthesizer');
 const { response } = require('express');
 const { mkdir } = require('fs');
+const fs = require('fs');
 
 var mostRecentToken;
 
@@ -57,10 +58,17 @@ io.on('connection', (socket) => {
     }
   })
 
+  socket.on('log', (c) => { // telling the app what to do if 'log' message is sent to server (see logger line 8)
+    //console.log(c["log"]); // print out whatever was sent over to the server
+    fs.writeFile('logs/' + uuid + "/" + "log.txt", "" + c["log"], (err) => {
+      if (err) throw err;
+    })
+  })
 
 });
 
   
 http.listen(3000, () => {
   console.log('listening on *:3000');
+  console.log('Open your browser and go to localhost:3000 to start live coding!');
 });

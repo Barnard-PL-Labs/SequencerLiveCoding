@@ -27,7 +27,7 @@ function synthCode(isNewDuration, newValue, trackIndex, instrumentIndex, theBeat
 }
 
 function initiateServerSideSynthesis(updatedCode, theBeat) {
-    socket.emit('code', { "code": updatedCode, "beat": theBeat });
+    socket.emit('code', { "code": updatedCode, "beat": theBeat});
     // currently, if we get new code any time, we replace code with synthesized code
     // TODO we need something a bit more tasteful - e.g. put new code in a "proposed change" box 
     socket.on('newCode', function (c) {
