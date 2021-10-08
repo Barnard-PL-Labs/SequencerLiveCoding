@@ -20,12 +20,12 @@ function drawNote(volume, duration, xindex, yindex) {
 
 function redrawAllNotes() {
     for (y = 0; y < 6; y++) { //6 track patterns in theBeat
-        for (x = 0; x < 16; x++)  { //16 beat subdivisions
-            if(x >= beatMod.theBeat['track'+(y+1).toString() + 'vol'].length){
-                drawNote(0, 0, x, y);
+        for (x = 0; x < 16; x++) { //16 beat subdivisions
+            if (x >= beatMod.theBeat['track' + (y + 1).toString() + 'vol'].length) {
+                drawNote(0, 1, x, y);
             }
             else {
-                drawNote(beatMod.theBeat['track'+(y+1).toString() + 'vol'][x], beatMod.theBeat['track'+(y+1).toString()+'dur'][x], x, y);
+                drawNote(beatMod.theBeat['track' + (y + 1).toString() + 'vol'][x], beatMod.theBeat['track' + (y + 1).toString() + 'dur'][x], x, y);
             }
         }
     }
@@ -40,8 +40,8 @@ function drawPlayhead(xindex) {
     elNew.src = 'images/LED_on.png';
     elOld.src = 'images/LED_off.png';
 
-    hideBeat( lastIndex );
-    showBeat( xindex );
+    hideBeat(lastIndex);
+    showBeat(xindex);
 }
 
 function sliderSetPosition(slider, value) {
@@ -67,33 +67,33 @@ function updateControls() {
     for (i = 0; i < beatMod.loopLength; ++i) {
         for (j = 0; j < kitMod.kNumInstruments; j++) {
             //switch (j) {
-                if(j == 0) {
-                notes = beatMod.theBeat.track1vol; 
+            if (j == 0) {
+                notes = beatMod.theBeat.track1vol;
                 durations = beatMod.theBeat.track1dur; break;
-                }
-                if(j == 1) {
-                notes = beatMod.theBeat.track2vol; 
-                durations = beatMod.theBeat.track2dur; break;
-                }
-                if(j == 2) {
-                notes = beatMod.theBeat.track3vol; 
-                durations = beatMod.theBeat.track3dur; break;
-                }
-                if(j == 3) {
-                notes = beatMod.theBeat.track4vol; 
-                durations = beatMod.theBeat.track4dur; break;
-                }
-                if(j == 4){
-                notes = beatMod.theBeat.track5vol; 
-                durations = beatMod.theBeat.track5dur; break;
-                }
-                //case 5:
-                if(j == 5){ 
-                notes = beatMod.theBeat.track6vol; 
-                durations = beatMod.theBeat.track6dur; break;
-                }
             }
-            drawNote(notes[i], durations[i], i, j);
+            if (j == 1) {
+                notes = beatMod.theBeat.track2vol;
+                durations = beatMod.theBeat.track2dur; break;
+            }
+            if (j == 2) {
+                notes = beatMod.theBeat.track3vol;
+                durations = beatMod.theBeat.track3dur; break;
+            }
+            if (j == 3) {
+                notes = beatMod.theBeat.track4vol;
+                durations = beatMod.theBeat.track4dur; break;
+            }
+            if (j == 4) {
+                notes = beatMod.theBeat.track5vol;
+                durations = beatMod.theBeat.track5dur; break;
+            }
+            //case 5:
+            if (j == 5) {
+                notes = beatMod.theBeat.track6vol;
+                durations = beatMod.theBeat.track6dur; break;
+            }
+        }
+        drawNote(notes[i], durations[i], i, j);
         //}
     }
 

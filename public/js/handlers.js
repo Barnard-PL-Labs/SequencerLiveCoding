@@ -90,7 +90,7 @@ function handleMouseUp() {
 }
 
 function handleButtonMouseDown(event) {
-    if(init.getStoreState() == 'liveCodingView'){
+    if (init.getStoreState() == 'liveCodingView') {
         //console.log(init.getStoreState());
         return
     }
@@ -99,7 +99,7 @@ function handleButtonMouseDown(event) {
     var elId = event.target.id;
     var trackIndex = elId.substr(elId.indexOf('_') + 1, 2);
     var instrumentIndex = kit.instruments.indexOf(elId.substr(0, elId.indexOf('_')));
-    
+
     var notes;
     var durations;
     if (instrumentIndex == 0) {
@@ -108,7 +108,7 @@ function handleButtonMouseDown(event) {
     }
     else if (instrumentIndex == 1) {
         durations = beatManager.theBeat.track2dur;
-        notes = beatManager.theBeat.track2vol; 
+        notes = beatManager.theBeat.track2vol;
     }
     else if (instrumentIndex == 2) {
         durations = beatManager.theBeat.track3dur;
@@ -123,12 +123,12 @@ function handleButtonMouseDown(event) {
         notes = beatManager.theBeat.track5vol;
     }
     else if (instrumentIndex == 5) {
-        durations = beatManager.theBeat.track6dur; 
+        durations = beatManager.theBeat.track6dur;
         notes = beatManager.theBeat.track6vol;
     }
 
     if (event.shiftKey) { //if shift, we are modifying duration
-        var newNoteDuration = (durations[trackIndex] + 1) % 5;
+        var newNoteDuration = ((durations[trackIndex]) % 4) + 1;
         durations[trackIndex] = newNoteDuration;
         synth.synthDurationCode(newNoteDuration, trackIndex, instrumentIndex, beatManager.theBeat)
     }
