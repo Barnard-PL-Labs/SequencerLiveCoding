@@ -8,6 +8,8 @@ const sliders = require('./sliders')
 
 var noteTime = 0.0;
 
+var globalTime = 0;
+
 function setNoteTime(t) {
     noteTime = t;
     exports.noteTime = noteTime;
@@ -22,7 +24,8 @@ function advanceNote() {
 
     //TODO should we be passing beat reset here instead so that we ensure the code window always reflects the gui?
     //does doing this mean we cannot have a gui that has state that the code does not?
-    newData = synth.updatePatternFromCode(beatManager.cloneBeat(beatManager.theBeat), beatManager.trackIndex);
+    newData = synth.updatePatternFromCode(beatManager.cloneBeat(beatManager.theBeat), beatManager.trackIndex, globalTime);
+    globalTime += 1;
     if (newData != null) {
         sliders.updateSliderVals(newData.sliders);
         beatManager.setBeat(newData.beat)

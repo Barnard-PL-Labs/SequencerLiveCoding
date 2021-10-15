@@ -6,10 +6,10 @@ function setCMInstance(cm) {
 }
 
 function synthNoteCode(newValue, trackIndex, instrumentIndex, theBeat) {
-    synthCode(false, newValue, trackIndex, instrumentIndex, theBeat) 
+    synthCode(false, newValue, trackIndex, instrumentIndex, theBeat)
 }
 function synthDurationCode(newDurationValue, trackIndex, instrumentIndex, theBeat) {
-    synthCode(true, newDurationValue, trackIndex, instrumentIndex, theBeat) 
+    synthCode(true, newDurationValue, trackIndex, instrumentIndex, theBeat)
 }
 
 function synthCode(isNewDuration, newValue, trackIndex, instrumentIndex, theBeat) {
@@ -27,7 +27,7 @@ function synthCode(isNewDuration, newValue, trackIndex, instrumentIndex, theBeat
 }
 
 function initiateServerSideSynthesis(updatedCode, theBeat) {
-    socket.emit('code', { "code": updatedCode, "beat": theBeat});
+    socket.emit('code', { "code": updatedCode, "beat": theBeat });
     // currently, if we get new code any time, we replace code with synthesized code
     // TODO we need something a bit more tasteful - e.g. put new code in a "proposed change" box 
     socket.on('newCode', function (c) {
@@ -88,22 +88,22 @@ function synthSliderCode(sliderTarget, value) {
     }
 }
 
-function updatePatternFromCode(currentBeat, trackIndex) {
+function updatePatternFromCode(currentBeat, trackIndex, globalTime) {
     //every time we advance a time step, pull latest code and update beat object
     let updatedCode = codeMirrorInstance.getValue()
     let dsl = pattern.toString() + setAll.toString() + backBeat.toString() + p.toString()
-    let fxnText = '"use strict"; ' + dsl + updatedCode + ' return (genBeat(theBeat, {}, trackIndex));'
+    let fxnText = '"use strict"; ' + dsl + updatedCode + ' return (genBeat(theBeat, {}, trackIndex, globalTime));'
     try {
         //TODO if(codeChanged) {
-        let f = new Function("theBeat", "trackIndex", fxnText);
-        let newData = f(currentBeat, trackIndex);
+        let f = new Function("theBeat", "trackIndex", "globalTime", fxnText);
+        let newData = f(currentBeat, trackIndex, globalTime);
         let newBeat = newData.beat;
         let newSliders = newData.sliders;
         for (i = 1; i <= 6; i++) {
-            newBeat['track' + i.toString() + 'vol'] = newBeat['track' + i.toString()  + 'vol'].map((note) => {
+            newBeat['track' + i.toString() + 'vol'] = newBeat['track' + i.toString() + 'vol'].map((note) => {
                 if (Number.isNaN(note)) { return 0; } else { return note }
             });
-            newBeat['track' + i.toString() + 'dur'] = newBeat['track' + i.toString()  + 'dur'].map((note) => {
+            newBeat['track' + i.toString() + 'dur'] = newBeat['track' + i.toString() + 'dur'].map((note) => {
                 if (Number.isNaN(note)) { return 0; } else { return note }
             });
         }
@@ -120,15 +120,15 @@ function updatePatternFromCode(currentBeat, trackIndex) {
 }
 
 //function that creates new beat with equation as only input
-function pattern(equation){
-     return new Array(16).fill(0).map(equation);
+function pattern(equation) {
+    return new Array(16).fill(0).map(equation);
 }
 
-function setAll(val){
+function setAll(val) {
     return new Array(16).fill(val);
 }
 
-function p(val){
+function p(val) {
     const notes = {
         "C": 0,
         "D": 0.167,
@@ -138,20 +138,20 @@ function p(val){
         "A": 0.833,
         "B": 1
     };
-    if(isNaN(val)){
-        if(val.match(/[A-G]/g))
+    if (isNaN(val)) {
+        if (val.match(/[A-G]/g))
             val = notes[val];
         else
             val = 0;
-    }else{
-        val = val%1;
-    }   
+    } else {
+        val = val % 1;
+    }
     return val;
 }
 
 
-function backBeat(){
-    return new Array(16).fill(0).map((val,i) => i%2);
+function backBeat() {
+    return new Array(16).fill(0).map((val, i) => i % 2);
 }
 
 function isValidBeat(beat) {
@@ -162,7 +162,7 @@ function isValidBeat(beat) {
             Array.isArray(beat[currentPattern + 'vol']) &&
             beat[currentPattern + 'vol'].every((v) => v <= 2 && v >= 0) &&
             Array.isArray(beat[currentPattern + 'dur']) &&
-            beat[currentPattern + 'dur'].every((v) => v <= 4 && v >= 0);   
+            beat[currentPattern + 'dur'].every((v) => v <= 4 && v >= 0);
     }
     if (!valid) {
         console.log("invalid beat")
