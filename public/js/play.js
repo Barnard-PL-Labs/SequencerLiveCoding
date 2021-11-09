@@ -24,11 +24,15 @@ function advanceNote() {
 
     //TODO should we be passing beat reset here instead so that we ensure the code window always reflects the gui?
     //does doing this mean we cannot have a gui that has state that the code does not?
-    newData = synth.updatePatternFromCode(beatManager.cloneBeat(beatManager.theBeat), beatManager.trackIndex, globalTime);
+    newData = synth.updatePatternFromCode(beatManager.cloneBeat(beatManager.beatReset), beatManager.trackIndex, globalTime);
     globalTime += 1;
     if (newData != null) {
+        //TODO merge all updates
         sliders.updateSliderVals(newData.sliders);
         beatManager.setBeat(newData.beat)
+        beatManager.setBeatKitIndex(newData.beat.kitIndex)
+        kit.setCurrentKit(kit.kits[newData.beat.kitIndex]);
+
         drawer.redrawAllNotes();
     }
 
@@ -47,6 +51,7 @@ function advanceNote() {
 }
 
 function playNote(buffer, pan, x, y, z, sendGain, mainGain, playbackRate, noteTime, durationVal) {
+
     // Create the note
     var voice = context.context.createBufferSource();
     voice.buffer = buffer;
@@ -94,6 +99,7 @@ function schedule() {
     // The sequence starts at startTime, so normalize currentTime so that it's 0 at the start of the sequence.
     currentTime -= beatManager.startTime;
 
+    console.log(kit.currentKit)
     while (noteTime < currentTime + 0.120) {
         // Convert noteTime to context time.
         var contextPlayTime = noteTime + beatManager.startTime;

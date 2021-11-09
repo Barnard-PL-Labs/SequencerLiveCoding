@@ -12,6 +12,11 @@ const init = require('./init')
 var mouseCapture = null;
 var mouseCaptureOffset = 0;
 
+var codeMirrorInstance = null
+
+function setCMInstanceHandlers(cm) {
+    codeMirrorInstance = cm;
+}
 
 function handleSliderMouseDown(event) {
     mouseCapture = event.target.id;
@@ -238,31 +243,10 @@ function handleEffectMouseDown(event) {
     }
 }
 
-function loadBeat(beat) {
-    // Check that assets are loaded.
-    if (beat != beatManager.beatReset && !beat.isLoaded())
-        return false;
+function loadBeat(beatCode) {
 
-    handleStop();
-
-    beatManager.setBeat(beatManager.cloneBeat(beat));
-    kit.setCurrentKit(kit.kits[beatManager.theBeat.kitIndex]);
-    impulse.setEffect(beatManager.theBeat.effectIndex);
-    drawer.updateControls();
-
-    // apply values from sliders
-    slidersManager.sliderSetValue('effect_thumb', beatManager.theBeat.effectMix);
-    slidersManager.sliderSetValue('track6_thumb', beatManager.theBeat.track6PitchVal);
-    slidersManager.sliderSetValue('track5_thumb', beatManager.theBeat.track5PitchVal);
-    slidersManager.sliderSetValue('track4_thumb', beatManager.theBeat.track4PitchVal);
-    slidersManager.sliderSetValue('track1_thumb', beatManager.theBeat.track1PitchVal);
-    slidersManager.sliderSetValue('track2_thumb', beatManager.theBeat.track2PitchVal);
-    slidersManager.sliderSetValue('track3_thumb', beatManager.theBeat.track3PitchVal);
-    slidersManager.sliderSetValue('swing_thumb', beatManager.theBeat.swingFactor);
-
-    drawer.updateControls();
-    console.log("thebeat handlers", beatManager.theBeat);
-    setActiveInstrument(0);
+    //all we need to do to load a beat, is load the code into our textbox and execute play for at least one step
+    codeMirrorInstance.replaceRange(beatCode, { line: 2, ch: 0 }, { line: codeMirrorInstance.lineCount() - 2, ch: 0 });
 
     return true;
 }
@@ -342,8 +326,10 @@ exports.handleEffectComboMouseDown = handleEffectComboMouseDown;
 exports.handleEffectMouseDown = handleEffectMouseDown;
 exports.handleDemoMouseDown = handleDemoMouseDown;
 exports.handlePlay = handlePlay;
+exports.setCMInstanceHandlers = setCMInstanceHandlers;
 exports.handleStop = handleStop;
-exports.loadBeat = loadBeat;
+
+
 
 
 //

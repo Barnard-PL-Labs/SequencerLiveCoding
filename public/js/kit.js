@@ -2,7 +2,7 @@ const contextMod = require('./context')
 const beatMod = require('./beat')
 
 
-var track6Pitch = track5Pitch = track4Pitch = track1Pitch = track2Pitch = track3Pitch = 0;
+var track6Pitch = track5Pitch = track4Pitch = track1Pitch = track2Pitch = track3Pitch = 1;
 
 function settrack6Pitch(p) {
   track6Pitch = p;
@@ -34,8 +34,6 @@ function settrack3Pitch(p) {
   exports.track3Pitch = track3Pitch;
 }
 
-
-
 var kits;
 
 function setKits(k) {
@@ -61,6 +59,7 @@ var volumes = [0, 0.3, 1];
 // var kitCount = 0;
 
 var kitName = [ //backend
+    "vocal_cymatics",
     "astrobeats",
     "R8",
     "CR78",
@@ -76,11 +75,11 @@ var kitName = [ //backend
     "acoustic-kit",
     "4OP-FM",
     "TheCheebacabra1",
-    "TheCheebacabra2",
-    "vocal_cymatics"
+    "TheCheebacabra2"
     ];
 
 var kitNamePretty = [ //interface
+    "vocal_cymatics",
     "astrobeats",
     "Roland R-8",
     "Roland CR-78",
@@ -96,8 +95,7 @@ var kitNamePretty = [ //interface
     "Acoustic Kit",
     "4OP-FM",
     "The Cheebacabra 1",
-    "The Cheebacabra 2",
-    "vocal_cymatics"
+    "The Cheebacabra 2"
     ];
 
 function Kit(name) {
@@ -147,6 +145,7 @@ Kit.prototype.load = function() {
     this.loadSample(3, track4Path, false);
     this.loadSample(4, track5Path, false);
     this.loadSample(5, track6Path, false);
+
 }
 
 var decodedFunctions = [
@@ -157,34 +156,17 @@ function (buffer) { this.track4Buffer = buffer; },
 function (buffer) { this.track5Buffer = buffer; },
 function (buffer) { this.track6Buffer = buffer; } ];
 
-Kit.prototype.loadSample = function(sampleID, url, mixToMono) {
-    // Load asynchronously
+  
+Kit.prototype.loadSample = async function(sampleID, url, mixToMono) {
 
-    var request = new XMLHttpRequest();
-    request.open("GET", url, true);
-    request.responseType = "arraybuffer";
+    //better to have a try/catch block here, but for simplicity...
 
-    var kit = this;
-
-    request.onload = function() {
-        contextMod.context.decodeAudioData(request.response, decodedFunctions[sampleID].bind(kit));
-
-        kit.instrumentLoadCount++;
-        if (kit.instrumentLoadCount == kit.instrumentCount) {
-            kit.isLoaded = true;
-
-            if (kit.demoIndex != -1) {
-                beatMod.beatDemo[kit.demoIndex].setKitLoaded();
-            }
-        }
-    }
-
-    request.send();
+    const response = await fetch(url);
+    const buff = await response.arrayBuffer();
+    const audioBuffer = await contextMod.context.decodeAudioData(buff, decodedFunctions[sampleID].bind(this));
+    return true;
+    
 }
-
-
-
-
 
 // classes
 exports.Kit = Kit;

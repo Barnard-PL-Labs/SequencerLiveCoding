@@ -60,9 +60,6 @@ function loadedImpulseResponse(buffer) {
     this.buffer = buffer;
     this.isLoaded_ = true;
 
-    if (this.demoIndex != -1) {
-        beatMod.beatDemo[this.demoIndex].setEffectLoaded();
-    }
 }
 
 ImpulseResponse.prototype.load = function() {

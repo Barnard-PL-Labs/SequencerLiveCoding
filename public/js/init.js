@@ -26,20 +26,6 @@ function startLoadingAssets() {
     }
     kitMod.setKits(tmp)
 
-    // Start loading the assets used by the presets first, in order of the presets.
-    for (var demoIndex = 0; demoIndex < 5; ++demoIndex) {
-        var effect = impulseMod.impulseResponseList[beatMod.beatDemo[demoIndex].effectIndex];
-        var kit = kitMod.kits[beatMod.beatDemo[demoIndex].kitIndex];
-
-        // These effects and kits will keep track of a particular demo, so we can change
-        // the loading status in the UI.
-        effect.setDemoIndex(demoIndex);
-        kit.setDemoIndex(demoIndex);
-
-        effect.load();
-        kit.load();
-    }
-
     // Then load the remaining assets.
     // Note that any assets which have previously started loading will be skipped over.
     for (var i = 0; i < numKits; i++) {
@@ -51,75 +37,20 @@ function startLoadingAssets() {
         impulseMod.impulseResponseList[i].load();
     }
 
+    
     // Setup initial drumkit
     kitMod.setCurrentKit(kitMod.kits[kitMod.kInitialKitIndex]);
+    beatMod.setBeat(beatMod.cloneBeat(beatMod.beatReset));
+    console.log("here")
 }
 
-function demoButtonURL(demoIndex) {
-    var n = demoIndex + 1;
-    var demoName = "demo" + n;
-    var url = "images/btn_" + demoName + ".png";
-    return url;
-}
-
-// This gets rid of the loading spinner in each of the demo buttons.
-function showDemoAvailable(demoIndex /* zero-based */) {
-    var url = demoButtonURL(demoIndex);
-    var n = demoIndex + 1;
-    var demoName = "demo" + n;
-    var demo = document.getElementById(demoName);
-    demo.src = url;
-
-    // Enable play button and assign it to demo 2.
-    if (demoIndex == 1) {
-        showPlayAvailable();
-        handlersMod.loadBeat(beatMod.beatDemo[1]);
-
-        // Uncomment to allow autoplay
-        //     handlePlay();
-    }
-}
-
-// This gets rid of the loading spinner on the play button.
-function showPlayAvailable() {
-    var play = document.getElementById("play");
-    play.src = "images/btn_play.png";
-}
 exports.initDrums = function (cmInstance) {
 
-    // Let the beat demos know when all of their assets have been loaded.
-    // Add some new methods to support this.
-    for (var i = 0; i < beatMod.beatDemo.length; ++i) {
-        beatMod.beatDemo[i].index = i;
-        beatMod.beatDemo[i].isKitLoaded = false;
-        beatMod.beatDemo[i].isEffectLoaded = false;
-
-        beatMod.beatDemo[i].setKitLoaded = function () {
-            this.isKitLoaded = true;
-            this.checkIsLoaded();
-        };
-
-        beatMod.beatDemo[i].setEffectLoaded = function () {
-            this.isEffectLoaded = true;
-            this.checkIsLoaded();
-        };
-
-        beatMod.beatDemo[i].checkIsLoaded = function () {
-            if (this.isLoaded()) {
-                showDemoAvailable(this.index);
-            }
-        };
-
-        beatMod.beatDemo[i].isLoaded = function () {
-            return this.isKitLoaded && this.isEffectLoaded;
-        };
-    }
-
-    startLoadingAssets();
 
     // NOTE: THIS NOW RELIES ON THE MONKEYPATCH LIBRARY TO LOAD
     // IN CHROME AND SAFARI (until they release unprefixed)
     contextMod.setContext(new AudioContext());
+    startLoadingAssets();
 
     var finalMixNode;
     if (contextMod.context.createDynamicsCompressor) {

@@ -18,12 +18,13 @@ function synthCode(isNewDuration, newValue, trackIndex, instrumentIndex, theBeat
 
     if (isNewDuration) {
         var updatedCode = addLineForPointChangeDuration(currentCode, newValue, trackIndex, instrumentIndex)
+        //TODO initiateServerSideSynthesis(updatedCode, theBeat)
     }
     else {
         var updatedCode = addLineForPointChangeVolume(currentCode, newValue, trackIndex, instrumentIndex)
         initiateServerSideSynthesis(updatedCode, theBeat)
     }
-
+    
 }
 
 function initiateServerSideSynthesis(updatedCode, theBeat) {
@@ -108,7 +109,7 @@ function updatePatternFromCode(currentBeat, trackIndex, globalTime) {
             });
         }
         if (isValidBeat(newBeat) && isValidSliders(newSliders)) { // && theBeat != newBeat){
-            console.log(newBeat);
+            //console.log(newBeat);
             return { beat: newBeat, sliders: newSliders };
         }
     }
