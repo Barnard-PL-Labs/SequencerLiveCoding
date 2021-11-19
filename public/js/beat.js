@@ -54,16 +54,43 @@ var beatDemo = [
   b.kitIndex = 4;
 `
     ,
-`  b.track1vol = new Array(16).fill(0)
-  b.track1vol[0] = 1;
+`  b.track3vol = pattern((val,i) => 1 - (i % 2));
+  b.track1vol.splice(7,9,...Array(9).fill(1));
+  b.track2dur[9] = 1;
+  b.track4dur[10] = 2;
+  b.track6dur[4] = 2;
+  b.track3vol = pattern((val,i) => 1 % (2 - (i % 3)));
+  b.track3vol.splice(11,3,...Array(3).fill(0));
+  b.track3dur[12] = 2;
+  b.track2vol = pattern((val,i) => 1 % (4 - (i % 6)));
+  //b.track3vol.splice(9,7,...Array(7).fill(0));
+  b.kitIndex = 0;
 `
     ,
-`  b.track1vol = new Array(16).fill(0)
-  b.track1vol[0] = 1;
+`  b.track1vol = pattern((val,i) => 1 - (i % 5));
+  b.track1vol.splice(7,9,...Array(9).fill(1));
+  b.track1dur[9] = 1;
+  b.track4dur[10] = 2;
+  b.track5dur[4] = 2;
+  b.track5vol = pattern((val,i) => 1 % (2 - (i % 2)));
+  b.track5vol.splice(12,3,...Array(3).fill(0));
+  b.track5dur[12] = 2;
+  b.track5vol = pattern((val,i) => 1 % (4 - (i % 3)));
+  //b.track3vol.splice(9,7,...Array(7).fill(0));
+  b.kitIndex = 5;
 `
     ,
-`  b.track1vol = new Array(16).fill(0)
-  b.track1vol[0] = 1;
+`  b.track1vol = pattern((val,i) => 1 - (i % 6));
+  b.track1vol.splice(2,9,...Array(9).fill(1));
+  b.track1dur[9] = 2;
+  b.track4dur[10] = 1;
+  b.track4dur[4] = 1;
+  b.track4vol = pattern((val,i) => 1 % (2 - (i % 3)));
+  b.track4vol.splice(12,3,...Array(3).fill(0));
+  b.track4dur[12] = 2;
+  b.track5vol = pattern((val,i) => 1 % (4 - (i % 3)));
+  //b.track3vol.splice(9,7,...Array(7).fill(0));
+  b.kitIndex = 6;
 `
     ,
 ];
