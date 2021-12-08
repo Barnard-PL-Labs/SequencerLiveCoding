@@ -36,22 +36,18 @@ var beatReset = {
 };
 var beatDemo = [
 
-`  b.track1vol = new Array(16).fill(1)
+`  b.track1vol = new Array(16).fill(1);
   b.track1vol[0] = 2;
   b.kitIndex = 3;
 `
     ,
-`  b.track1vol = pattern((val,i) => 1 - (i % 3));
-  b.track1vol.splice(7,9,...Array(9).fill(1));
-  b.track1dur[9] = 1;
-  b.track1dur[10] = 2;
-  b.track6dur[4] = 2;
-  b.track6vol = pattern((val,i) => 1 % (2 - (i % 2)));
-  b.track6vol.splice(13,3,...Array(3).fill(0));
-  b.track6dur[12] = 2;
-  b.track3vol = pattern((val,i) => 1 % (4 - (i % 4)));
-  //b.track3vol.splice(9,7,...Array(7).fill(0));
-  b.kitIndex = 4;
+`  b.track1vol = pattern((val,i) => 1 % (2 - (i % 4)));
+  b.track1vol.splice(13,3,...Array(3).fill(0));
+  b.track4vol = new Array(16).fill(0)
+  b.track4vol[4] = 1;
+  b.track4vol[12] = 1;
+  b.track3vol = pattern((val,i) => 3 % (i % 4));
+  b.track3vol.splice(11,3,...Array(3).fill(0));
 `
     ,
 `  b.track3vol = pattern((val,i) => 1 - (i % 2));
