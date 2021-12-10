@@ -70,7 +70,7 @@ var beatDemo = [
   b.kitIndex = 0;
 `
     ,
-`  b.track1vol = pattern((val,i) => 1 - (i % 6));
+`   b.track1vol = pattern((val,i) => 1 - (i % 6));
   b.track1vol.splice(2,9,...Array(9).fill(1));
   b.track1dur[9] = 2;
   b.track4dur[10] = 1;
@@ -79,7 +79,19 @@ var beatDemo = [
   b.track4vol.splice(12,3,...Array(3).fill(0));
   b.track4dur[12] = 2;
   b.track5vol = pattern((val,i) => 1 % (4 - (i % 3)));
-  //b.track3vol.splice(9,7,...Array(7).fill(0));
+  b.kitIndex = 0;
+  b.track6dur[2] = 2;
+  b.track6dur[4] = 3;
+  b.track6dur[6] = 4;
+  b.track6dur[10] = 2;
+  b.track6dur[12] = 3;
+  b.track6vol = pattern((val,i) => 1 - (i % 2));
+  b.track6vol.splice(15,1,...Array(1).fill(0));
+  b.track6dur[14] = 4;
+  b.track4vol[1] = 2;
+  b.track4vol[5] = 2;
+  b.track4vol[9] = 2;
+  b.track4vol[13] = 2;
   b.kitIndex = 0;
 `
 ];
