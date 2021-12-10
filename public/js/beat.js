@@ -63,25 +63,12 @@ var beatDemo = [
     ,
 `  b.track1vol = pattern((val,i) => (i - 1) % 3);
   b.track1vol.splice(3,13,...Array(13).fill(0));
-  b.track4vol = backBeat();
   b.track1vol[4] = 2;
   b.track1vol[6] = 1;
   b.track1vol[8] = 2;
   b.track1vol[10] = 1;
   b.track1vol[12] = 2;
   b.track1vol[14] = 1;
-  b.track4vol[1] = 1;
-  b.track4vol[3] = 1;
-  b.track4vol[5] = 1;
-  b.track4vol[7] = 1;
-  b.track4vol[9] = 1;
-  b.track4vol[11] = 1;
-  b.track4vol[13] = 1;
-  b.track4vol[15] = 1;
-  b.track4dur[1] = 2;
-  b.track4dur[5] = 2;
-  b.track4dur[9] = 2;
-  b.track4dur[13] = 2;
   b.kitIndex = 0;
 `
     ,
