@@ -70,28 +70,24 @@ var beatDemo = [
   b.kitIndex = 0;
 `
     ,
-`   b.track1vol = pattern((val,i) => 1 - (i % 6));
-  b.track1vol.splice(2,9,...Array(9).fill(1));
-  b.track1dur[9] = 2;
-  b.track4dur[10] = 1;
-  b.track4dur[4] = 1;
-  b.track4vol = pattern((val,i) => 1 % (2 - (i % 3)));
-  b.track4vol.splice(12,3,...Array(3).fill(0));
-  b.track4dur[12] = 2;
-  b.track5vol = pattern((val,i) => 1 % (4 - (i % 3)));
-  b.kitIndex = 0;
-  b.track6dur[2] = 2;
-  b.track6dur[4] = 3;
-  b.track6dur[6] = 4;
-  b.track6dur[10] = 2;
-  b.track6dur[12] = 3;
-  b.track6vol = pattern((val,i) => 1 - (i % 2));
-  b.track6vol.splice(15,1,...Array(1).fill(0));
-  b.track6dur[14] = 4;
-  b.track4vol[1] = 2;
-  b.track4vol[5] = 2;
-  b.track4vol[9] = 2;
-  b.track4vol[13] = 2;
+`     b.track4vol = backBeat();
+  b.track4dur[3] = 2;
+  b.track4dur[5] = 3;
+  b.track4dur[7] = 4;
+  b.track4dur[11] = 2;
+  b.track4dur[13] = 3;
+  b.track4dur[15] = 4;
+  b.track1vol = setAll(1);
+  b.track1vol[0] = 2;
+  b.track1vol[2] = 2;
+  b.track1vol[4] = 2;
+  b.track1vol[6] = 2;
+  b.track1vol[8] = 2;
+  b.track1vol[10] = 2;
+  b.track1vol[12] = 2;
+  b.track1vol[14] = 2;
+  b.track3vol[3] = 1;
+  b.track3vol[10] = 1;
   b.kitIndex = 0;
 `
 ];
