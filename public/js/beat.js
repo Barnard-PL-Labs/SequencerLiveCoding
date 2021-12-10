@@ -61,14 +61,11 @@ var beatDemo = [
   b.kitIndex = 3;
 `
     ,
-`  b.track1vol = pattern((val,i) => (i - 1) % 3);
-  b.track1vol.splice(3,13,...Array(13).fill(0));
-  b.track1vol[4] = 2;
-  b.track1vol[6] = 1;
-  b.track1vol[8] = 2;
-  b.track1vol[10] = 1;
-  b.track1vol[12] = 2;
-  b.track1vol[14] = 1;
+`  b.track1dur[2] = 2;
+  b.track1dur[6] = 2;
+  b.track1vol = pattern((val,i) => 1 - (i % 2));
+  b.track1vol.splice(8,3,...Array(3).fill(1));
+  b.track1dur[10] = 2;
   b.kitIndex = 0;
 `
     ,
