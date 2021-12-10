@@ -36,8 +36,10 @@ var beatReset = {
 };
 var beatDemo = [
 
-`  b.track1vol = new Array(16).fill(1);
-  b.track1vol[0] = 2;
+`  b.track1vol = pattern((val,i) => 1 % (i - 2));
+  b.track1vol.splice(5,11,...Array(11).fill(0));
+  b.track1vol[8] = 1;
+  b.track1vol[12] = 1;
   b.kitIndex = 3;
 `
     ,
@@ -48,32 +50,26 @@ var beatDemo = [
   b.track4vol[12] = 1;
   b.track3vol = pattern((val,i) => 3 % (i % 4));
   b.track3vol.splice(11,3,...Array(3).fill(0));
+  b.kitIndex = 3;
 `
     ,
-`  b.track3vol = pattern((val,i) => 1 - (i % 2));
-  b.track1vol.splice(7,9,...Array(9).fill(1));
-  b.track2dur[9] = 1;
-  b.track4dur[10] = 2;
-  b.track6dur[4] = 2;
-  b.track3vol = pattern((val,i) => 1 % (2 - (i % 3)));
-  b.track3vol.splice(11,3,...Array(3).fill(0));
-  b.track3dur[12] = 2;
-  b.track2vol = pattern((val,i) => 1 % (4 - (i % 6)));
-  //b.track3vol.splice(9,7,...Array(7).fill(0));
+`  b.track1vol = pattern((val,i) => 1 % (2 - (i % 3)));
+  b.track1vol.splice(13,3,...Array(3).fill(0));
+  b.track3vol = new Array(16).fill(0)
+  b.track3vol[4] = 1;
+  b.track3vol[12] = 1;
+  b.kitIndex = 3;
+`
+    ,
+`  b.track1vol = pattern((val,i) => (i - 1) % 3);
+  b.track1vol.splice(3,13,...Array(13).fill(0));
+  b.track1vol[4] = 2;
+  b.track1vol[6] = 1;
+  b.track1vol[8] = 2;
+  b.track1vol[10] = 1;
+  b.track1vol[12] = 2;
+  b.track1vol[14] = 1;
   b.kitIndex = 0;
-`
-    ,
-`  b.track1vol = pattern((val,i) => 1 - (i % 5));
-  b.track1vol.splice(7,9,...Array(9).fill(1));
-  b.track1dur[9] = 1;
-  b.track4dur[10] = 2;
-  b.track5dur[4] = 2;
-  b.track5vol = pattern((val,i) => 1 % (2 - (i % 2)));
-  b.track5vol.splice(12,3,...Array(3).fill(0));
-  b.track5dur[12] = 2;
-  b.track5vol = pattern((val,i) => 1 % (4 - (i % 3)));
-  //b.track3vol.splice(9,7,...Array(7).fill(0));
-  b.kitIndex = 5;
 `
     ,
 `  b.track1vol = pattern((val,i) => 1 - (i % 6));
@@ -86,9 +82,8 @@ var beatDemo = [
   b.track4dur[12] = 2;
   b.track5vol = pattern((val,i) => 1 % (4 - (i % 3)));
   //b.track3vol.splice(9,7,...Array(7).fill(0));
-  b.kitIndex = 6;
+  b.kitIndex = 0;
 `
-    ,
 ];
 
 
