@@ -66,6 +66,7 @@ var beatDemo = [
   b.track1vol = pattern((val,i) => 1 - (i % 2));
   b.track1vol.splice(8,3,...Array(3).fill(1));
   b.track1dur[10] = 2;
+  b.track4vol = backBeat();
   b.kitIndex = 0;
 `
     ,
