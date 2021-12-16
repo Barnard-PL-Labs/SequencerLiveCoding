@@ -10,7 +10,7 @@ const logMouseEvent = function (e) {
 
 const logKeyEvent = function (e) { 
     // push("key " + Date.now()) }
-    logData.push(e);
+    logData.push("key stroke", e);
     //console.log(logData);
 }
 

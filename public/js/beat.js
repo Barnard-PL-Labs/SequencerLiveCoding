@@ -12,7 +12,7 @@ function setStartTime(t) {
 }
 
 
-var loopLength = 16;
+var loopLength = 12;
 var trackIndex = 0;
 function settrackIndex(idx) {
     trackIndex = idx;
