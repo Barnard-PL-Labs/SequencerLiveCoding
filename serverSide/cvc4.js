@@ -53,17 +53,29 @@ function generateSygus(examples) {
 exports.callPBE = function (examples) { //examples :: [[Int]]
   //console.log(examples);
   cvc4Query = generateSygus(examples);
-  fs.writeFile('logs/' + Date.now() + '.sl', cvc4Query, (err) => {
+
+  var sygusOutput = ""
+
+  //if (cvc4Query in database) {
+  //  sygusOutput = lookupResult(cvc4Query)
+  //}
+  //else {
+  //  callCVC4 
+  //}
+
+  /*fs.writeFile('logs/' + Date.now() + '.sl', cvc4Query, (err) => {
     if (err) throw err;
-  })
+  })*/
   //for this to work on mac, might need timeout like https://github.com/santolucito/liveprogramming/blob/ba690f1354abe2580fb5e0ce7484eb1379a3ed6a/lib/javascript/eval_pbe_helpers.js#L46
-  timeoutLength = 3;
+  timeoutLength = 1;
   var cvc4Command = 'doalarm () { perl -e \'alarm shift; exec @ARGV\' "$@"; }\n doalarm ' + timeoutLength + ' bash -c \"echo \\"' + cvc4Query + '\\" | /usr/local/bin/cvc4 --lang sygus2\"';
   try {
-    var sygusOutput = execSync(cvc4Command).toString();
+    console.log("starting new process")
+    sygusOutput = execSync(cvc4Command, { timeout: timeoutLength * (1000), detached: true, killSignal: 'SIGKILL' }).toString();
   }
   catch (e) {
     console.error("CVC4 call failed (probably timeout)");
+    //console.error(e)
     return "unknown";
   }
   if (sygusOutput.trim() == "unknown") {

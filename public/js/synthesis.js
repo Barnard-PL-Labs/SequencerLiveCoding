@@ -22,13 +22,13 @@ function synthCode(isNewDuration, newValue, trackIndex, instrumentIndex, theBeat
     }
     else {
         var updatedCode = addLineForPointChangeVolume(currentCode, newValue, trackIndex, instrumentIndex)
-        initiateServerSideSynthesis(updatedCode, theBeat)
+        initiateServerSideSynthesis(currentCode, updatedCode, theBeat)
     }
-    
+
 }
 
-function initiateServerSideSynthesis(updatedCode, theBeat) {
-    socket.emit('code', { "code": updatedCode, "beat": theBeat });
+function initiateServerSideSynthesis(currentCode, updatedCode, theBeat) {
+    socket.emit('code', { "oldCode": currentCode, "code": updatedCode, "beat": theBeat });
     // currently, if we get new code any time, we replace code with synthesized code
     // TODO we need something a bit more tasteful - e.g. put new code in a "proposed change" box 
     socket.on('newCode', function (c) {
@@ -98,6 +98,7 @@ function updatePatternFromCode(currentBeat, trackIndex, globalTime) {
         //TODO if(codeChanged) {
         let f = new Function("theBeat", "trackIndex", "globalTime", fxnText);
         let newData = f(currentBeat, trackIndex, globalTime);
+        document.getElementById("errorMessageBox").innerText = "Code looks good!";
         let newBeat = newData.beat;
         let newSliders = newData.sliders;
         for (i = 1; i <= 6; i++) {
@@ -112,10 +113,12 @@ function updatePatternFromCode(currentBeat, trackIndex, globalTime) {
             //console.log(newBeat);
             return { beat: newBeat, sliders: newSliders };
         }
+
     }
     catch (err) {
         console.log("updatePatternFromCode error, skipping beat state update")
         console.log(err)
+        document.getElementById("errorMessageBox").innerText = err;
     }
     return null;
 }
