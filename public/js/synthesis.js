@@ -183,9 +183,10 @@ function bembeBassDrum(){
 
 function bembeCrossStick(){
     let arr = new Array(16).fill(0).map((val,i) => 1 % (i % 3));
-    arr[7] = 0;
-    arr[10] = 0;
-    arr[11] = 0;
+    arr.splice(6,10,...Array(10).fill(0))
+    arr[7] = 1;
+    arr[10] = 1;
+    arr[11] = 1;
     return arr;
 }
 
