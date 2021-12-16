@@ -92,7 +92,7 @@ function synthSliderCode(sliderTarget, value) {
 function updatePatternFromCode(currentBeat, trackIndex, globalTime) {
     //every time we advance a time step, pull latest code and update beat object
     let updatedCode = codeMirrorInstance.getValue()
-    let dsl = pattern.toString() + setAll.toString() + backBeat.toString() + p.toString() + bembe.toString();
+    let dsl = pattern.toString() + setAll.toString() + backBeat.toString() + p.toString() + bembeBell.toString() + bembeHiHat.toString() + bembeBassDrum.toString() + bembeCrossStick.toString();
     let fxnText = '"use strict"; ' + dsl + updatedCode + ' return (genBeat(theBeat, {}, trackIndex, globalTime));'
     try {
         //TODO if(codeChanged) {
@@ -158,12 +158,35 @@ function backBeat() {
     return new Array(16).fill(0).map((val, i) => i % 2);
 }
 
-function bembe(){
+function bembeBell(){
     let arr = new Array(16).fill(0).map((val,i) => 1 - (i % 5) % 2); //splice(11, 12,. 0, 1)
     arr.splice(10, 11, 0, 1)
     return arr;
     //index 10 0
     //index 11 1
+}
+
+function bembeHiHat(){
+    let arr = new Array(16).fill(0).map((val,i) => 1 % (2 - (i % 3)));
+    arr.splice(11, 15);
+    return arr;
+}
+
+function bembeBassDrum(){
+    let arr = new Array(16).fill(0)
+    arr[8] = 0;
+    arr[14] = 0;
+    arr[0] = 1;
+    arr[11] = 1;
+    return arr;
+}
+
+function bembeCrossStick(){
+    let arr = new Array(16).fill(0).map((val,i) => 1 % (i % 3));
+    arr[7] = 0;
+    arr[10] = 0;
+    arr[11] = 0;
+    return arr;
 }
 
 function isValidBeat(beat) {
