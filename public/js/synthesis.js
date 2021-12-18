@@ -92,7 +92,7 @@ function synthSliderCode(sliderTarget, value) {
 function updatePatternFromCode(currentBeat, trackIndex, globalTime) {
     //every time we advance a time step, pull latest code and update beat object
     let updatedCode = codeMirrorInstance.getValue()
-    let dsl = pattern.toString() + setAll.toString() + backBeat.toString() + p.toString() + bembeBell.toString() + bembeHiHat.toString() + bembeBassDrum.toString() + bembeCrossStick.toString();
+    let dsl = pattern.toString() + setAll.toString() + backBeat.toString() + p.toString() + bembeBell.toString() + bembeHiHat.toString() + bembeBassDrum.toString() + bembeCrossStick.toString() + Additive.toString();
     let fxnText = '"use strict"; ' + dsl + updatedCode + ' return (genBeat(theBeat, {}, trackIndex, globalTime));'
     try {
         //TODO if(codeChanged) {
@@ -189,6 +189,37 @@ function bembeCrossStick(){
     arr[11] = 1;
     return arr;
 }
+
+function Additive(){
+    var audioCtx;
+    var gainNode;
+    var oscnum = 5;
+    var osc = {};
+
+    audioCtx = new (window.AudioContext || window.webkitAudioContext)
+    gainNode = audioCtx.createGain();
+
+    var val;
+    
+    //additive synthesis
+    //create the 5 oscilators
+    var wave = 'sawtooth';
+    var count = 1;
+            for(let i = 0; i < oscnum; i++){
+                osc[i] = audioCtx.createOscillator();
+                osc[i].type = wave;
+                osc[i].connect(gainNode);
+                osc[i].start();
+            }
+
+    gainNode.connect(audioCtx.destination);
+    gainNode.gain.value = 0;
+    
+    let arr = new Array(16).fill(0).map((val,i) => 1 - (i % 5) % 2); //splice(11, 12,. 0, 1)
+    arr.splice(10, 11, 0, 1)
+    return arr;
+}
+
 
 function isValidBeat(beat) {
     var valid = true;
