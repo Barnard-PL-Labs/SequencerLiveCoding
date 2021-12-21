@@ -12,7 +12,7 @@ function setStartTime(t) {
 }
 
 
-var loopLength = 16;
+var loopLength = 12;
 var trackIndex = 0;
 function settrackIndex(idx) {
     trackIndex = idx;
@@ -70,16 +70,24 @@ var beatDemo = [
   b.kitIndex = 0;
 `
     ,
-`  b.track1vol = pattern((val,i) => 1 - (i % 6));
-  b.track1vol.splice(2,9,...Array(9).fill(1));
-  b.track1dur[9] = 2;
-  b.track4dur[10] = 1;
-  b.track4dur[4] = 1;
-  b.track4vol = pattern((val,i) => 1 % (2 - (i % 3)));
-  b.track4vol.splice(12,3,...Array(3).fill(0));
-  b.track4dur[12] = 2;
-  b.track5vol = pattern((val,i) => 1 % (4 - (i % 3)));
-  //b.track3vol.splice(9,7,...Array(7).fill(0));
+`     b.track4vol = backBeat();
+  b.track4dur[3] = 2;
+  b.track4dur[5] = 3;
+  b.track4dur[7] = 4;
+  b.track4dur[11] = 2;
+  b.track4dur[13] = 3;
+  b.track4dur[15] = 4;
+  b.track1vol = setAll(1);
+  b.track1vol[0] = 2;
+  b.track1vol[2] = 2;
+  b.track1vol[4] = 2;
+  b.track1vol[6] = 2;
+  b.track1vol[8] = 2;
+  b.track1vol[10] = 2;
+  b.track1vol[12] = 2;
+  b.track1vol[14] = 2;
+  b.track3vol[3] = 1;
+  b.track3vol[10] = 1;
   b.kitIndex = 0;
 `
 ];
