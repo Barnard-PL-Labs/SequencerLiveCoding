@@ -1,13 +1,16 @@
-(set-logic SLIA)
-
-(synth-fun f ((z String)(z1 String)) String
-    ((Start String) (ntString String) (ntInt Int))
-    ((Start String (ntString))
-    (ntString String (z z1 (str.++ ntString ntString)(str.substr ntString ntInt ntInt)))
-    (ntInt Int (0 (+ ntInt ntInt) (str.indexof ntString ntString ntInt)))))
-
-(constraint (= (f "driinki" "n") "driindriindriindriin"))
-(constraint (= (f "singsong" "g") "singsingsing"))
-(constraint (= (f "greatapplez" "p") "greatapgreatapgreatapgreatapgreatapgreatap"))
-(constraint (= (f "grow" "w") "growgrowgrow"))
+(set-logic NIA)
+(synth-fun patternGen ((i Int)) Int
+  ((I Int) (B Bool))
+(  (I Int (i 0 1 2 3 4 5 6
+    (+ I I) (- I I) (* I I) (mod I I)
+  ))
+  (B Bool (
+    (<= I I) (< I I) (>= I I) (> I I)
+  ))
+)
+)
+(declare-var i Int)
+(constraint (= (patternGen 0) 1))
+(constraint (= (patternGen 1) 1))
+(constraint (= (patternGen 2) 1))
 (check-synth)

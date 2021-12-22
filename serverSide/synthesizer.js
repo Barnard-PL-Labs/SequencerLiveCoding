@@ -106,7 +106,7 @@ simplifyCode = async function (codeAndBeat) {
         }
         else if (hasPatternEdit(parsedCode, parsedOldCode, whichPattern)) {
             console.log("Pattern " + whichPattern + " has patternEdit");
-            var synthSolution = sygusOnePattern(codeAndBeat, whichPattern);
+            var synthSolution = await sygusOnePattern(codeAndBeat, whichPattern);
             var sygusSolution = synthSolution["code"]
             var subseq = synthSolution["subseq"]
             //turn sygus sol'n to JS code
@@ -115,6 +115,7 @@ simplifyCode = async function (codeAndBeat) {
                 var fxnDefs = sygusSolution.split("\n").slice(1);
                 var extractDef = new RegExp(/\(.*?\)\) [^ ]* /);
                 fxnDefs = fxnDefs.map(f => f.replace(extractDef, "").slice(0, -1));
+                console.log(sygusSolution.split(" "))
                 var fxnName = sygusSolution.split(" ")[1];
                 var newFxn = fxnDefs[0];
                 var newNewJsFxnBody = astToJs(smt_parser(newFxn));
@@ -140,11 +141,11 @@ function displayPattern(whichPattern, newNewJsFxnBody) {
     return "  b.track" + whichPattern + "vol = pattern((val,i) => " + equation + ");\n";
 }
 
-function sygusOnePattern(codeAndBeat, whichPattern) {
+async function sygusOnePattern(codeAndBeat, whichPattern) {
     var arrayToSynth = zipWithIndex(codeAndBeat["beat"]["track" + whichPattern + "vol"]);
     var subseq = findMaxSubseq(codeAndBeat["beat"]["track" + whichPattern + "vol"]);
     arrayToSynth.splice(subseq['startMaxSubseq'], subseq['lengthMaxSubseq']);
 
-    var sygusSolution = callPBE(arrayToSynth);
+    var sygusSolution = await callPBE(arrayToSynth);
     return { "code": sygusSolution, "subseq": subseq };
 }
