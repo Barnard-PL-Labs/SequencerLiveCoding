@@ -5,12 +5,12 @@ var io = require('socket.io')(http);
 
 const { fork } = require('child_process');
 
-
 const { simplifyCode } = require('./serverSide/synthesizer');
 const { response } = require('express');
 const { mkdir } = require('fs');
 const fs = require('fs');
 
+require('dotenv').config();
 
 app.use(express.static('public'))
 
@@ -63,6 +63,7 @@ io.on('connection', (socket) => {
 
 });
 
+console.log(process.env.NODE_ENV)
 if (process.env.NODE_ENV === "production") {
   http.listen(80, () => {
     console.log('Starting server in prod mode');

@@ -5,6 +5,7 @@
     "dependencies": {
         "aws-sdk": "^2.1048.0",
         "codemirror": "^5.55.0",
+        "dotenv": "^10.0.0",
         "express": "^4.17.1",
         "socket.io": "^4.0.1",
         "uuid": "^8.3.2"

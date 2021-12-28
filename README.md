@@ -37,7 +37,9 @@ if you do want to call the serverless function, you will need the credentials - 
    sudo npm install aws-sdk 
 
 We use browserify to "compile" the node code so that it can run client-side. This way,
-even if you lose your connection to the internet in the middle of a set, the system doesnt completely crash and still can play the beat.
+even if you lose your connection to the internet in the middle of a set, the system doesn't completely crash and still can play the beat.
+Note that any time you change the client side code you need to RERUN this command (if "client side" doesn't mean anything to you, just do this every time you change anything).
+Think of this as compiling your code.
 
     sudo npm install -g browserify
     browserify public/js/main.js -o public/js/compiled.js
@@ -51,16 +53,10 @@ Then install everything
 
     npm install
 
-To deploy (either locally, or on a server), first run the setup.sh script.
-Passing dev will setup to serve on port 3000
-Passing prod will server on por 80 (along with suppressing some logging info)
-Passing serverless as a second option wlll use aws lambda for CVC5 
-any other second option (e.g. local) will use a local install of CVC5
+create a .env file in the root directory to configure options
 
-    ./setup.sh #to deploy locally
-    ./setup.sh prod #to deploy on a production server 
-    ./setup.sh dev serverless #to deploy locally with serverless CVC5
-    ./setup.sh prod serverless #to deploy on prod with serverless CVC5 (prod always runs serverless)
+    NODE_ENV=[development/production]
+    NODE_ENV=[local/serverless]
 
 # TODOs
 
