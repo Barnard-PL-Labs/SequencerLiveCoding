@@ -53,12 +53,13 @@ exports.callPBE = async function (examples) { //examples :: [[Int]]
   //for this to work on mac, might need timeout like https://github.com/santolucito/liveprogramming/blob/ba690f1354abe2580fb5e0ce7484eb1379a3ed6a/lib/javascript/eval_pbe_helpers.js#L46
   
   try {
-    if (true){ //call serverless
+    if (process.env.NODE_ENV === "production") {
+      //call serverless in prod
       sygusOutput = await serverlessCallCVC5(cvc4Query)
       sygusOutput = JSON.parse(JSON.parse(sygusOutput["Payload"])["body"])
       console.log(sygusOutput)
     }
-    else { //call locally
+    else if (process.env.NODE_ENV === "development" || true) { // || true because i dont know what other values could be here
       timeoutLength = 1;
       var cvc4Command = 'doalarm () { perl -e \'alarm shift; exec @ARGV\' "$@"; }\n doalarm ' + timeoutLength + ' bash -c \"echo \\"' + cvc4Query + '\\" | /usr/local/bin/cvc5 --lang sygus2\"';
       console.log("starting new process")

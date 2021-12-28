@@ -67,8 +67,16 @@ io.on('connection', (socket) => {
 
 });
 
-  
-http.listen(3000, () => {
-  console.log('listening on *:3000');
-  console.log('Open your browser and go to localhost:3000 to start live coding!');
-});
+if (process.env.NODE_ENV === "production") {
+  http.listen(80, () => {
+    console.log('Starting server in prod mode');
+    console.log('listening on *:80');
+    console.log('Open your browser and go to localhost:3000 to start live coding!');
+  });
+} else {
+  http.listen(3000, () => {
+    console.log('Starting server in dev mode');
+    console.log('listening on *:3000');
+    console.log('Open your browser and go to localhost:3000 to start live coding!');
+  });
+}

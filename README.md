@@ -30,6 +30,12 @@ The app uses node, you will need to install that using the following command (on
 
     sudo apt install nodejs
 
+you will also need the awk-sdk npm package installed, as on prod at least, we call a serverless function on aws to run cvc5.
+If you don't want to use this - just ignore it.
+if you do want to call the serverless function, you will need the credentials - reach out to @santolucito for that.
+  
+   sudo npm install aws-sdk 
+
 We use browserify to "compile" the node code so that it can run client-side. This way,
 even if you lose your connection to the internet in the middle of a set, the system doesnt completely crash and still can play the beat.
 
@@ -41,10 +47,14 @@ Synthesis uses the SMT solver CVC5 (which is a crazy optimized behemoth of C cod
     sudo mv cvc5Linux /usr/local/bin/cvc5 # the name of your download might be different!
     sudo chmod a+x /usr/local/bin/cvc5
 
-Then install everything and get playing!
+Then install everything
 
     npm install
-    node app.js # or, on a server, 'nohup node app.js &' to leave it running
+
+To deploy (either locally, or on a server). Locally will use a local install of CVC5, and serve on port 3000. prod deploy will use aws lambda for CVC5 and serve on port 80
+
+    ./deploy.sh #to deploy locally
+    ./deploy.sh prod #to deploy on a production server 
 
 # TODOs
 
