@@ -11,7 +11,6 @@ const { response } = require('express');
 const { mkdir } = require('fs');
 const fs = require('fs');
 
-var mostRecentToken;
 
 app.use(express.static('public'))
 
@@ -19,13 +18,11 @@ app.get('/', (req, res) => {
   res.sendFile(__dirname + '/index.html');
 });
 
-
-
-
+//spawn a new thread for synthesis
+//one thread runs the server, one thread handles all synthesis requests
+const synth = fork('serverSide/synthesizer.js');
 io.on('connection', (socket) => {
-  //spawn a new cvc4 fork for each user
-  //TODO, maybe use worker threads instead, currently only one cvc4 query can run at a time
-  const synth = fork('serverSide/synthesizer.js');
+  var mostRecentToken;
 
   console.log('a user connected');
   const uuid = ""+Date.now()
@@ -35,7 +32,6 @@ io.on('connection', (socket) => {
 
   socket.on('disconnect', () => {
       console.log('user disconnected');
-      synth.disconnect();
     });
   
   //When a client asks for new code, we run synthesis and send the result back
@@ -52,7 +48,7 @@ io.on('connection', (socket) => {
       socket.emit('newCode', response["newCode"]);
     }
     else {
-      console.log("Took too long and got new user input");
+      console.log("Token mismatch - either took too long and got new user input, or this result was for someone else");
       console.log(mostRecentToken);
       console.log(response["localToken"])
     }
@@ -71,7 +67,7 @@ if (process.env.NODE_ENV === "production") {
   http.listen(80, () => {
     console.log('Starting server in prod mode');
     console.log('listening on *:80');
-    console.log('Open your browser and go to localhost:3000 to start live coding!');
+    console.log('Open your browser and go to localhost:80 to start live coding!');
   });
 } else {
   http.listen(3000, () => {

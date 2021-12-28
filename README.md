@@ -31,7 +31,7 @@ The app uses node, you will need to install that using the following command (on
     sudo apt install nodejs
 
 you will also need the awk-sdk npm package installed, as on prod at least, we call a serverless function on aws to run cvc5.
-If you don't want to use this - just ignore it.
+If you don't want to use this you still need to install it, but dont need to do anything else.
 if you do want to call the serverless function, you will need the credentials - reach out to @santolucito for that.
   
    sudo npm install aws-sdk 
@@ -51,10 +51,16 @@ Then install everything
 
     npm install
 
-To deploy (either locally, or on a server). Locally will use a local install of CVC5, and serve on port 3000. prod deploy will use aws lambda for CVC5 and serve on port 80
+To deploy (either locally, or on a server), first run the setup.sh script.
+Passing dev will setup to serve on port 3000
+Passing prod will server on por 80 (along with suppressing some logging info)
+Passing serverless as a second option wlll use aws lambda for CVC5 
+any other second option (e.g. local) will use a local install of CVC5
 
-    ./deploy.sh #to deploy locally
-    ./deploy.sh prod #to deploy on a production server 
+    ./setup.sh #to deploy locally
+    ./setup.sh prod #to deploy on a production server 
+    ./setup.sh dev serverless #to deploy locally with serverless CVC5
+    ./setup.sh prod serverless #to deploy on prod with serverless CVC5 (prod always runs serverless)
 
 # TODOs
 

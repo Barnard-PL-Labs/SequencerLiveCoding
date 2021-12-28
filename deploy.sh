@@ -3,9 +3,12 @@
 browserify public/js/main.js -o public/js/compiled.js
 
 if [ "$1" == "prod" ]; then
-NODE_ENV=production node app.js
-nohup node app.js &
+export NODE_ENV=production
 else
-NODE_ENV=development node app.js
-node app.js
+export NODE_ENV=development
 fi
+
+if [ "$2" == "serverless" ]; then
+export CVC5MODE=serverless
+fi
+

@@ -53,7 +53,7 @@ exports.callPBE = async function (examples) { //examples :: [[Int]]
   //for this to work on mac, might need timeout like https://github.com/santolucito/liveprogramming/blob/ba690f1354abe2580fb5e0ce7484eb1379a3ed6a/lib/javascript/eval_pbe_helpers.js#L46
   
   try {
-    if (process.env.NODE_ENV === "production") {
+    if (process.env.NODE_ENV === "production" || process.env.CVC5MODE === "serverless") {
       //call serverless in prod
       sygusOutput = await serverlessCallCVC5(cvc4Query)
       sygusOutput = JSON.parse(JSON.parse(sygusOutput["Payload"])["body"])
