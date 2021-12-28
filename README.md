@@ -36,6 +36,10 @@ if you do want to call the serverless function, you will need the credentials - 
   
    sudo npm install aws-sdk 
 
+We also need dotenv
+
+   sudo npm install dotenv
+
 We use browserify to "compile" the node code so that it can run client-side. This way,
 even if you lose your connection to the internet in the middle of a set, the system doesn't completely crash and still can play the beat.
 Note that any time you change the client side code you need to RERUN this command (if "client side" doesn't mean anything to you, just do this every time you change anything).
@@ -56,7 +60,7 @@ Then install everything
 create a .env file in the root directory to configure options
 
     NODE_ENV=[development/production]
-    NODE_ENV=[local/serverless]
+    CVC5MODE=[local/serverless]
 
 # TODOs
 
