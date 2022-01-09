@@ -65,25 +65,34 @@ def timeAnalysis():
   with open(path + '/' + folder + '/log.txt') as f:
    substringClick = " clickEvent"
    timeList = []
+   count = 0
    for lines in f:
-     sorted_line = lines.split(',')
-     line1 = f.readline()
-     sorted_line1 = line1.split(',')
-     line2 = f.readline()
-     sorted_line2 = line2.split(',')
-     #print('current_line' + str(sorted_line2))
-     #print ('prev_line' + str(sorted_line1))
-     if sorted_line1[2] == substringClick and sorted_line2[2] == substringClick:
+     count += 1
+     print(count)
+     print(folder)
+
+     #sorted_line is not used anywhere but allows us to use the for loop
+     line1 = lines.split(',')
+     l2 = f.readline()
+     line2 = l2.split(',')
+     #print('current_line' + str(line2))
+     #print ('prev_line' + str(line1))
+     if not l2.strip(): 
+      break
+     elif line1[2] == substringClick and line2[2] == substringClick:
       #print('current_line' + str(sorted_line2))
       #print ('prev_line' + str(sorted_line1))
-      timeNext = int(float(sorted_line2[4]))
+      timeNext = int(float(line2[4]))
       roundTimeNext = round(timeNext)
-      timeCurr = int(float(sorted_line1[4]))
+      timeCurr = int(float(line1[4]))
       roundTimeCurr = round(timeCurr)
       average_time = roundTimeNext - roundTimeCurr
       #print(str(roundTimeCurr) + " " + str(roundTimeNext) + " " + str(average_time))
       timeList.append(average_time)
+      size = len(timeList)
       print("av time = " + str(average_time))
+      print(size)
+     
       
 
 def eventEvolv():
