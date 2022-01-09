@@ -56,6 +56,8 @@ def keyAnalysis():
                     v ={s_line[3]: valCol }
                     keyDict.update(v)
   print(keyDict)
+  size = len(keyDict)
+  print(size)
   data = {'KeyEvent':keyDict.keys(), 'Count' : keyDict.values()}
   df1 = pd.DataFrame(data, columns=['KeyEvent','Count'])
   df1 = df1.sort_values(by=['Count'], ascending=False)
@@ -109,7 +111,8 @@ def timeAnalysis():
         
           #add time difference to a set to remove duplicates then add to a dictionary using indices as keys
           timeSet.add(roundTime)
-          timeGenDict = {k: v for v, k in enumerate(timeSet)}
+          #timeGenDict = {k: v for v, k in enumerate(timeSet)}
+          timeGenDict = {i : 1 for i in timeSet }
 
           # add time difference to a dictionary, if dictionary already contains the key, update value
           if (roundTime in timeDict):
@@ -152,8 +155,8 @@ def eventEvolv():
       sort_line = line.split(',')
 
 #countEvents()
-#keyAnalysis()
-timeAnalysis()
+keyAnalysis()
+#timeAnalysis()
       
 
 
