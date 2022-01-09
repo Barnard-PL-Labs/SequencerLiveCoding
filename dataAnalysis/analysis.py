@@ -145,18 +145,47 @@ def timeAnalysis():
  plt.show()
 
 def eventEvolv():
- countClick = 0
- countKey = 0
+ clickOnly = 0
+ keyOnly = 0
+ both = 0
+ count = 0
+ events = []
  for folder in my_list:
-  with open(path + '/' + folder + '/log.txt') as f: 
-    substringKey = " keyEvent"
-    substringClick = " clickEvent"
-    for line in f:
-      sort_line = line.split(',')
+    with open(path + '/' + folder + '/log.txt') as f: 
+      countClick = 0
+      countKey = 0
+      count+=1
+      for line in f:
+        #print(count)
+        #print(folder)
+        countClick += line.count('clickEvent')
+        countKey += line.count('keyEvent')
+      #print('clicks' + " " + str(countClick))
+      #print('keys' + " " + str(countKey))
+      if countClick == 0:
+        keyOnly+=1
+      elif countKey == 0:
+        clickOnly+=1
+      else : both+=1
+ print('key' + " " + str(keyOnly))
+ print('click' + " " + str(clickOnly))
+ print('both' + " " + str(both))
+ events.insert(0, keyOnly)
+ events.insert(1, clickOnly)
+ events.insert(2, both)
+ my_labels = 'keyOnly','clickOnly','Both'
+ plt.pie(events,labels=my_labels,autopct='%1.1f%%')
+ plt.title('Events per single user')
+ plt.axis('equal')
+ plt.savefig('./Documents/Github/SequencerLiveCoding/dataAnalysis/Data analysis reports/userEvents.png')
+ plt.show()
+
 
 #countEvents()
-keyAnalysis()
+#keyAnalysis()
 #timeAnalysis()
+eventEvolv()
+
       
 
 
