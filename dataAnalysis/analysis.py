@@ -4,8 +4,6 @@ import os
 import plotly.figure_factory as ff
 import pandas as pd
 
-
-
 path = './Documents/Github/SequencerLiveCoding/dataAnalysis/csc_workshop_12_4_2021/logs/TBR'
 my_list = os.listdir(path)
 
@@ -58,6 +56,18 @@ def keyAnalysis():
                     v ={s_line[3]: valCol }
                     keyDict.update(v)
   print(keyDict)
+  data = {'KeyEvent':keyDict.keys(), 'Count' : keyDict.values()}
+  df1 = pd.DataFrame(data, columns=['KeyEvent','Count'])
+  df1 = df1.sort_values(by=['Count'], ascending=False)
+  print(df1)
+  fig = ff.create_table(df1)
+  fig.update_layout(
+    autosize=False,
+    width=500,
+    height=1000,
+  )
+  fig.write_image("Key_Freq.png", scale=2)
+  fig.show()
   fig = plt.bar(list(keyDict.keys()), keyDict.values(), color='g')
   plt.xticks(rotation = 90)
   plt.savefig('./Documents/Github/SequencerLiveCoding/dataAnalysis/keyAnalysis.png')
@@ -111,11 +121,11 @@ def timeAnalysis():
           else:
             v ={roundTime: valTime }
             timeDict.update(v)
-
  #print(timeDict)
  #print (timeGenDict)
  data = {'Time(sec)':timeDict.keys(), 'Count' : timeDict.values()}
  df1 = pd.DataFrame(data, columns=['Time(sec)','Count'])
+ df1 = df1.sort_values(by=['Count'], ascending=False)
  print(df1)
  fig = ff.create_table(df1)
  fig.update_layout(
@@ -125,22 +135,19 @@ def timeAnalysis():
   )
  fig.write_image("table_plotly.png", scale=2)
  fig.show()
- #fig2 = plt.bar(list(timeGenDict.keys()), timeGenDict.values(), color='g')
- #plt.xticks(rotation = 90)
- #plt.savefig('./Documents/Github/SequencerLiveCoding/dataAnalysis/Data analysis reports/generalTime.png')
- #plt.xlim([0,200])
+ fig2 = plt.bar(list(timeGenDict.keys()), timeGenDict.values(), color='g')
+ plt.xticks(rotation = 90)
+ plt.xlim([0,200])
+ plt.savefig('./Documents/Github/SequencerLiveCoding/dataAnalysis/Data analysis reports/generalTime.png')
  plt.show()
-
-      
-     
-     
-      
 
 def eventEvolv():
  countClick = 0
  countKey = 0
  for folder in my_list:
   with open(path + '/' + folder + '/log.txt') as f: 
+    substringKey = " keyEvent"
+    substringClick = " clickEvent"
     for line in f:
       sort_line = line.split(',')
 
