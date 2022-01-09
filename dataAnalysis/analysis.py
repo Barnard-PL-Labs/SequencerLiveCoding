@@ -1,6 +1,10 @@
 #print("start here")
 import matplotlib.pyplot as plt
 import os
+import plotly.figure_factory as ff
+import pandas as pd
+
+
 
 path = './Documents/Github/SequencerLiveCoding/dataAnalysis/csc_workshop_12_4_2021/logs/TBR'
 my_list = os.listdir(path)
@@ -59,39 +63,76 @@ def keyAnalysis():
   plt.savefig('./Documents/Github/SequencerLiveCoding/dataAnalysis/keyAnalysis.png')
   plt.show()
 
-#a function to analyse time between click events
+#a function to analyse time between click events, using timeGenDict, a 'set' of time calculated between click events and timeDict, a dictionary recording the 
+#time with frequency
 def timeAnalysis():
+ #count = 0
+ timeSet = set()
+ timeGenDict = {}
+ timeDict = {}
+ valTime = 1
  for folder in my_list:
-  with open(path + '/' + folder + '/log.txt') as f:
-   substringClick = " clickEvent"
-   timeList = []
-   count = 0
-   for lines in f:
-     count += 1
-     print(count)
-     print(folder)
+    with open(path + '/' + folder + '/log.txt') as f:
+      substringClick = " clickEvent"
+      #count += 1
+      for lines in f:
+        #general checks to see if the functions reads through all folders - should total 111
+        #print(count)
+        #print(folder)
 
-     #sorted_line is not used anywhere but allows us to use the for loop
-     line1 = lines.split(',')
-     l2 = f.readline()
-     line2 = l2.split(',')
-     #print('current_line' + str(line2))
-     #print ('prev_line' + str(line1))
-     if not l2.strip(): 
-      break
-     elif line1[2] == substringClick and line2[2] == substringClick:
-      #print('current_line' + str(sorted_line2))
-      #print ('prev_line' + str(sorted_line1))
-      timeNext = int(float(line2[4]))
-      roundTimeNext = round(timeNext)
-      timeCurr = int(float(line1[4]))
-      roundTimeCurr = round(timeCurr)
-      average_time = roundTimeNext - roundTimeCurr
-      #print(str(roundTimeCurr) + " " + str(roundTimeNext) + " " + str(average_time))
-      timeList.append(average_time)
-      size = len(timeList)
-      print("av time = " + str(average_time))
-      print(size)
+        line1 = lines.split(',')
+        l2 = f.readline()
+        line2 = l2.split(',')
+        #print('current_line' + str(line2))
+        #print ('prev_line' + str(line1))
+        if not l2.strip(): 
+          break
+        elif line1[2] == substringClick and line2[2] == substringClick:
+          timeNext = int(float(line2[4]))
+          roundTimeNext = round(timeNext)
+          timeCurr = int(float(line1[4]))
+          roundTimeCurr = round(timeCurr)
+          average_time = roundTimeNext - roundTimeCurr
+          avTimeSec = average_time/1000
+          roundTime = round(avTimeSec)
+          #print("av time = " + str(roundTime))
+        
+          #add time difference to a set to remove duplicates then add to a dictionary using indices as keys
+          timeSet.add(roundTime)
+          timeGenDict = {k: v for v, k in enumerate(timeSet)}
+
+          # add time difference to a dictionary, if dictionary already contains the key, update value
+          if (roundTime in timeDict):
+            val = timeDict[roundTime]
+            newVal = val + 1 
+            v ={roundTime: newVal }
+            timeDict.update(v)
+          #else create a new value and assign key 1
+          else:
+            v ={roundTime: valTime }
+            timeDict.update(v)
+
+ #print(timeDict)
+ #print (timeGenDict)
+ data = {'Time(sec)':timeDict.keys(), 'Count' : timeDict.values()}
+ df1 = pd.DataFrame(data, columns=['Time(sec)','Count'])
+ print(df1)
+ fig = ff.create_table(df1)
+ fig.update_layout(
+    autosize=False,
+    width=500,
+    height=800,
+  )
+ fig.write_image("table_plotly.png", scale=2)
+ fig.show()
+ #fig2 = plt.bar(list(timeGenDict.keys()), timeGenDict.values(), color='g')
+ #plt.xticks(rotation = 90)
+ #plt.savefig('./Documents/Github/SequencerLiveCoding/dataAnalysis/Data analysis reports/generalTime.png')
+ #plt.xlim([0,200])
+ plt.show()
+
+      
+     
      
       
 
