@@ -33,10 +33,15 @@ callPBEserverless = function (cvc4Query) { //examples :: String (in sygus format
 }
 
 exports.handler = async (event) => {
-
+  console.log(event);
+  data = event.query;
+  if (data == undefined) {
+    console.log("trying to read as API call")
+    data = JSON.parse(event.body).query;
+  }
   const response = {
       statusCode: 200,
-      body: JSON.stringify(callPBEserverless(event.query)),
+      body: JSON.stringify(callPBEserverless(data)),
   };
   return response;
 };

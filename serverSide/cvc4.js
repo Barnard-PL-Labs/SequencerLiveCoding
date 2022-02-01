@@ -40,13 +40,6 @@ exports.callPBE = async function (examples) { //examples :: [[Int]]
 
   var sygusOutput = ""
 
-  //if (cvc4Query in database) {
-  //  sygusOutput = lookupResult(cvc4Query)
-  //}
-  //else {
-  //  callCVC4 
-  //}
-
   /*fs.writeFile('logs/' + Date.now() + '.sl', cvc4Query, (err) => {
     if (err) throw err;
   })*/
@@ -56,7 +49,6 @@ exports.callPBE = async function (examples) { //examples :: [[Int]]
     if (process.env.NODE_ENV === "production" || process.env.CVC5MODE === "serverless") {
       //call serverless in prod
       sygusOutput = await serverlessCallCVC5(cvc4Query)
-      sygusOutput = JSON.parse(JSON.parse(sygusOutput["Payload"])["body"])
       console.log(sygusOutput)
     }
     else if (process.env.NODE_ENV === "development" || true) { // || true because i dont know what other values could be here

@@ -1,24 +1,21 @@
 const AWS = require("aws-sdk");
 const lambda = new AWS.Lambda({ region: 'us-east-1'});
+const axios = require('axios');
 
 exports.serverlessCallCVC5 = async function(query){
 
-    console.log(query)
-    const params = {
-        FunctionName: "cvc5",
-        InvocationType: "RequestResponse",
-        Payload: JSON.stringify({ "query": query })
-      };
-    
+    console.log(query);
+    const bodyVal = { "query": query };
+
     try {
-        var result = await lambda.invoke(params).promise();
-        console.log(result)
+        var result = await axios.post('https://ffjjhx2ybe.execute-api.us-east-1.amazonaws.com/cvc5', bodyVal);
+        console.log(result.data)
     }
     catch (e) {
         console.log("failed aws call")
         console.log(e)
         return "unknown"
     }
-    return result;
+    return result.data;
 
 }
