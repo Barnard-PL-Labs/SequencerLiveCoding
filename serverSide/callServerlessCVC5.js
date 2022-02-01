@@ -1,5 +1,3 @@
-const AWS = require("aws-sdk");
-const lambda = new AWS.Lambda({ region: 'us-east-1'});
 const axios = require('axios');
 
 exports.serverlessCallCVC5 = async function(query){

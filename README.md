@@ -30,16 +30,6 @@ The app uses node, you will need to install that using the following command (on
 
     sudo apt install nodejs
 
-you will also need the awk-sdk npm package installed, as on prod at least, we call a serverless function on aws to run cvc5.
-If you don't want to use this you still need to install it, but dont need to do anything else.
-if you do want to call the serverless function, you will need the credentials - reach out to @santolucito for that.
-  
-   sudo npm install aws-sdk 
-
-We also need dotenv
-
-   sudo npm install dotenv
-
 We use browserify to "compile" the node code so that it can run client-side. This way,
 even if you lose your connection to the internet in the middle of a set, the system doesn't completely crash and still can play the beat.
 Note that any time you change the client side code you need to RERUN this command (if "client side" doesn't mean anything to you, just do this every time you change anything).
@@ -61,6 +51,10 @@ create a .env file in the root directory to configure options
 
     NODE_ENV=[development/production]
     CVC5MODE=[local/serverless]
+
+to deploy
+
+    node app.js
 
 # TODOs
 
