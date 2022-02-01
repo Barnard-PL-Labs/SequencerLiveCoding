@@ -41,7 +41,6 @@ function startLoadingAssets() {
     // Setup initial drumkit
     kitMod.setCurrentKit(kitMod.kits[kitMod.kInitialKitIndex]);
     beatMod.setBeat(beatMod.cloneBeat(beatMod.beatReset));
-    console.log("here")
 }
 
 exports.initDrums = function (cmInstance) {

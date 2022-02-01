@@ -22,7 +22,8 @@ app.get('/', (req, res) => {
 //one thread runs the server, one thread handles all synthesis requests
 const synth = fork('serverSide/synthesizer.js');
 io.on('connection', (socket) => {
-  var mostRecentToken;
+  let mostRecentToken;
+  let logData;
 
   console.log('a user connected');
   const uuid = ""+Date.now()
@@ -31,7 +32,10 @@ io.on('connection', (socket) => {
   })
 
   socket.on('disconnect', () => {
-      console.log('user disconnected');
+      console.log('user disconnected, trying to save logs');
+      fs.writeFile('logs/' + uuid + "/" + "log.txt", "" + logData, (err) => {
+        if (err) throw err;
+      })
     });
   
   //When a client asks for new code, we run synthesis and send the result back
@@ -55,10 +59,7 @@ io.on('connection', (socket) => {
   })
 
   socket.on('log', (c) => { // telling the app what to do if 'log' message is sent to server (see logger line 8)
-    //console.log(c["log"]); // print out whatever was sent over to the server
-    fs.writeFile('logs/' + uuid + "/" + "log.txt", "" + c["log"], (err) => {
-      if (err) throw err;
-    })
+    logData = (c["log"]); // print out whatever was sent over to the server
   })
 
 });
