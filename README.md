@@ -1,10 +1,17 @@
-# Live Coding Sequencers
-
-Live Coding for the Novation Circuit
+#Synthesis Enabled Live Coding
 
 Try it live here: http://161.35.14.211
 
-This is a live programming-by-demonstration system for use with a hardware sequencer (though a in-browser software sequencer is provided for your convenience). Playing a hardware sequencer is similar to live coding in that it constructively builds a piece from a blank loop. However the interface of a sequencer does not allow for algorithmic changes (e.g. shift all notes by one beat, or every other note up a half step). The goal of this project is to augment the direct physical sensation of the hardware interface with the flexibility of code (or, to augment the virtual with the physical).
+This is a live programming-by-demonstration system for live coding music.
+
+Read the papers here:
+
+- [Human-in-the-Loop Program Synthesis for Live Coding](http://www.marksantolucito.com/papers/farm2021.pdf)
+- [Demo: Synthesis-Enabled Live Coding on the Web](http://www.marksantolucito.com/papers/plie2021.pdf)
+
+#Hardware
+
+One goal is to use this with a hardware sequencer (though a in-browser software sequencer is provided for your convenience). Playing a hardware sequencer is similar to live coding in that it constructively builds a piece from a blank loop. However the interface of a sequencer does not allow for algorithmic changes (e.g. shift all notes by one beat, or every other note up a half step). The goal of this project is to augment the direct physical sensation of the hardware interface with the flexibility of code (or, to augment the virtual with the physical).
 
 The overall flow is that as a performer can construct a loop on the sequencer manually, and the system continuously synthesizes code that generates the current pattern. The performer can edit this code and push the changes back to the hardware sequencer, which then changes its pattern to reflect the code. As the pattern changes on the physical device, the code is again synthesized and automatically updated.
 
@@ -24,21 +31,31 @@ The app uses node, you will need to install that using the following command (on
     sudo apt install nodejs
 
 We use browserify to "compile" the node code so that it can run client-side. This way,
-even if you lose your connection to the internet in the middle of a set, the system doesnt completely crash and still can play the beat.
+even if you lose your connection to the internet in the middle of a set, the system doesn't completely crash and still can play the beat.
+Note that any time you change the client side code you need to RERUN this command (if "client side" doesn't mean anything to you, just do this every time you change anything).
+Think of this as compiling your code.
 
     sudo npm install -g browserify
     browserify public/js/main.js -o public/js/compiled.js
 
-Synthesis uses the SMT solver CVC4 (which is a crazy optimized behemoth of C code), so needs to run server side. You can download the binary from the CVC4 website (https://cvc4.github.io/downloads.html). Be sure to chmod u+x to change permissions of the executbale. Make sure the cvc4 executable is in the root directory of this repo.
+Synthesis uses the SMT solver CVC5 (which is a crazy optimized behemoth of C code), so needs to run server side. You can download the binary from the CVC5 github page https://github.com/cvc5/cvc5/releases/). The tool expects the executable to be named cvc5 and be in /usr/local/bin/. You will also need chmod a+x to change permissions of the executable. If you are working on a Mac, this instructions will be a bit different.
 
-    mv cvc4-2020-08-09-x86_64-linux-opt cvc4 # the name of your download might be different!
-    chmod u+x cvc4
+    sudo mv cvc5Linux /usr/local/bin/cvc5 # the name of your download might be different!
+    sudo chmod a+x /usr/local/bin/cvc5
 
-Then install everything and get playing!
+Then install everything
 
     npm install
-    node app.js # or, on a server, 'nohup node app.js &' to leave it running
+
+create a .env file in the root directory to configure options
+
+    NODE_ENV=[development/production]
+    CVC5MODE=[local/serverless]
+
+to deploy
+
+    node app.js
 
 # TODOs
 
-CVC4 moduluo (http://smtlib.cs.uiowa.edu/theories-Ints.shtml) and js modulo differ (https://stackoverflow.com/a/17323608)
+see issues on github

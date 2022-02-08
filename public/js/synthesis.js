@@ -92,7 +92,7 @@ function synthSliderCode(sliderTarget, value) {
 function updatePatternFromCode(currentBeat, trackIndex, globalTime) {
     //every time we advance a time step, pull latest code and update beat object
     let updatedCode = codeMirrorInstance.getValue()
-    let dsl = pattern.toString() + setAll.toString() + backBeat.toString() + p.toString()
+    let dsl = pattern.toString() + setAll.toString() + backBeat.toString() + p.toString() + bembe.toString();
     let fxnText = '"use strict"; ' + dsl + updatedCode + ' return (genBeat(theBeat, {}, trackIndex, globalTime));'
     try {
         //TODO if(codeChanged) {
@@ -156,6 +156,14 @@ function p(val) {
 
 function backBeat() {
     return new Array(16).fill(0).map((val, i) => i % 2);
+}
+
+function bembe(){
+    let arr = new Array(16).fill(0).map((val,i) => 1 - (i % 5) % 2); //splice(11, 12,. 0, 1)
+    arr.splice(10, 11, 0, 1)
+    return arr;
+    //index 10 0
+    //index 11 1
 }
 
 function isValidBeat(beat) {

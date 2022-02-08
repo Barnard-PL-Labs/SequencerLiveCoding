@@ -1,5 +1,7 @@
 const { exec, execSync } = require('child_process');
+const { response } = require('express');
 const fs = require('fs');
+const { serverlessCallCVC5 } = require("./callServerlessCVC5.js");
 
 function genOneConstraint(ex) {
   var inputVal = ex[0];
@@ -16,28 +18,10 @@ function generateSygus(examples) {
   return (
     "(set-logic NIA)\n" +
     "(synth-fun patternGen ((i Int)) Int\n" +
-    "  ((I Int) (ITE Int) (B Bool))\n" +
+    "  ((I Int) (B Bool))\n" +
     "" +
     "(  (I Int (i 0 1 2 3 4 5 6\n" +
     "    (+ I I) (- I I) (* I I) (mod I I) \n" +
-    "  ))\n" +
-    " (ITE Int (\n" +
-    "            (ite (<= i 0) I I)\n" +
-    "            (ite (<= i 1) I I)\n" +
-    "            (ite (<= i 2) I I)\n" +
-    "            (ite (<= i 3) I I)\n" +
-    "            (ite (<= i 4) I I)\n" +
-    "            (ite (<= i 5) I I)\n" +
-    "            (ite (<= i 6) I I)\n" +
-    "            (ite (<= i 7) I I)\n" +
-    "            (ite (<= i 8) I I)\n" +
-    "            (ite (<= i 9) I I)\n" +
-    "            (ite (<= i 10) I I)\n" +
-    "            (ite (<= i 11) I I)\n" +
-    "            (ite (<= i 12) I I)\n" +
-    "            (ite (<= i 13) I I)\n" +
-    "            (ite (<= i 14) I I)\n" +
-    "            (ite (<= i 15) I I)\n" +
     "  ))\n" +
     "  (B Bool (\n" +
     "    (<= I I) (< I I) (>= I I) (> I I)\n" +
@@ -50,39 +34,41 @@ function generateSygus(examples) {
 
 }
 
-exports.callPBE = function (examples) { //examples :: [[Int]]
+exports.callPBE = async function (examples) { //examples :: [[Int]]
   //console.log(examples);
   cvc4Query = generateSygus(examples);
 
   var sygusOutput = ""
 
-  //if (cvc4Query in database) {
-  //  sygusOutput = lookupResult(cvc4Query)
-  //}
-  //else {
-  //  callCVC4 
-  //}
-
   /*fs.writeFile('logs/' + Date.now() + '.sl', cvc4Query, (err) => {
     if (err) throw err;
   })*/
   //for this to work on mac, might need timeout like https://github.com/santolucito/liveprogramming/blob/ba690f1354abe2580fb5e0ce7484eb1379a3ed6a/lib/javascript/eval_pbe_helpers.js#L46
-  timeoutLength = 1;
-  var cvc4Command = 'doalarm () { perl -e \'alarm shift; exec @ARGV\' "$@"; }\n doalarm ' + timeoutLength + ' bash -c \"echo \\"' + cvc4Query + '\\" | /usr/local/bin/cvc4 --lang sygus2\"';
+  
   try {
-    console.log("starting new process")
-    sygusOutput = execSync(cvc4Command, { timeout: timeoutLength * (1000), detached: true, killSignal: 'SIGKILL' }).toString();
+    if (process.env.NODE_ENV === "production" || process.env.CVC5MODE === "serverless") {
+      //call serverless in prod
+      sygusOutput = await serverlessCallCVC5(cvc4Query)
+      console.log(sygusOutput)
+    }
+    else if (process.env.NODE_ENV === "development" || true) { // || true because i dont know what other values could be here
+      timeoutLength = 1;
+      var cvc4Command = 'doalarm () { perl -e \'alarm shift; exec @ARGV\' "$@"; }\n doalarm ' + timeoutLength + ' bash -c \"echo \\"' + cvc4Query + '\\" | /usr/local/bin/cvc5 --lang sygus2\"';
+      console.log("starting new process")
+      sygusOutput = execSync(cvc4Command, { timeout: timeoutLength * (1000), detached: true, killSignal: 'SIGKILL' }).toString();
+      console.log(sygusOutput)
+    }
   }
   catch (e) {
     console.error("CVC4 call failed (probably timeout)");
-    //console.error(e)
+    console.error(e)
     return "unknown";
   }
-  if (sygusOutput.trim() == "unknown") {
-    console.log("couldnt find a repair");
-    return "unknown";
-  }
-  return sygusOutput;
+  if (sygusOutput.trim() == "unknown" || sygusOutput.trim() == "\"unknown\"") {
+      console.log("couldnt find a repair");
+      return "unknown";
+    }
+    return sygusOutput;  
 
 
 }
