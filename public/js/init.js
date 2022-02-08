@@ -86,9 +86,9 @@ exports.initDrums = function (cmInstance) {
         }
     });
 
-    playButton.addEventListener('click', function () {
-        recordedAudio.play()
-    });
+    //playButton.addEventListener('click', function () {
+        //recordedAudio.play()
+    //});
 
     playButton.addEventListener('keyup', event => {
       if (event.key === ' ' && event.target === document.body) {
