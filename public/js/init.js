@@ -91,7 +91,8 @@ exports.initDrums = function (cmInstance) {
     });
 
     playButton.addEventListener('keyup', event => {
-      if (event.code === 'Space') {
+      if (event.key === ' ' && event.target === document.body) {
+        event.preventDefault();
         recordedAudio.play()
         console.log('Space pressed')
       }
