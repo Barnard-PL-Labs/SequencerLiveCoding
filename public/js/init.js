@@ -37,7 +37,7 @@ function startLoadingAssets() {
         impulseMod.impulseResponseList[i].load();
     }
 
-    
+
     // Setup initial drumkit
     kitMod.setCurrentKit(kitMod.kits[kitMod.kInitialKitIndex]);
     beatMod.setBeat(beatMod.cloneBeat(beatMod.beatReset));
@@ -89,6 +89,13 @@ exports.initDrums = function (cmInstance) {
 
     playButton.addEventListener('click', function () {
         recordedAudio.play()
+    });
+
+    playButton.addEventListener('keyup', event => {
+      if (event.code === 'Space') {
+        recordedAudio.play()
+        console.log('Space pressed')
+      }
     });
 
     saveButton.addEventListener('click', function () {
