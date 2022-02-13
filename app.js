@@ -18,6 +18,9 @@ app.get('/', (req, res) => {
   res.sendFile(__dirname + '/index.html');
 });
 
+var logger = require('./public/js/logger.js');
+logger.makeLog();
+
 //spawn a new thread for synthesis
 //one thread runs the server, one thread handles all synthesis requests
 const synth = fork('serverSide/synthesizer.js');
