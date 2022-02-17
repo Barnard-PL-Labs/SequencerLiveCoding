@@ -1,24 +1,5 @@
 const fs = require('fs');
-const path = require('path');
-
-//directory path
-const dir = './logs'
-
-
 var logData = [];
-
-function makeLog(){
-  try {
-    if (!fs.existsSync(dir)) {
-        fs.mkdirSync(dir);
-        console.log("logs directory is created.");
-    } else {
-        console.log("logs directory already exists.");
-    }
-  } catch (err) {
-    console.log(err);
-  }
-}
 
 function uuidv4() {
   return 'xxxxxxxxxxxxxxxxxxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
