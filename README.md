@@ -37,6 +37,10 @@ Think of this as compiling your code.
 
     sudo npm install -g browserify
     browserify public/js/main.js -o public/js/compiled.js
+    
+We also need axios to perform network requests from node and the browser.
+
+    npm install axios
 
 Synthesis uses the SMT solver CVC5 (which is a crazy optimized behemoth of C code), so needs to run server side. You can download the binary from the CVC5 github page https://github.com/cvc5/cvc5/releases/). The tool expects the executable to be named cvc5 and be in /usr/local/bin/. You will also need chmod a+x to change permissions of the executable. If you are working on a Mac, this instructions will be a bit different.
 
