@@ -18,17 +18,17 @@ function synthCode(isNewDuration, newValue, trackIndex, instrumentIndex, theBeat
 
     if (isNewDuration) {
         var updatedCode = addLineForPointChangeDuration(currentCode, newValue, trackIndex, instrumentIndex)
-        //TODO initiateServerSideSynthesis(updatedCode, theBeat)
+        initiateServerSideSynthesis(currentCode, updatedCode, theBeat, "dur")
     }
     else {
         var updatedCode = addLineForPointChangeVolume(currentCode, newValue, trackIndex, instrumentIndex)
-        initiateServerSideSynthesis(currentCode, updatedCode, theBeat)
+        initiateServerSideSynthesis(currentCode, updatedCode, theBeat, "vol")
     }
 
 }
 
-function initiateServerSideSynthesis(currentCode, updatedCode, theBeat) {
-    socket.emit('code', { "oldCode": currentCode, "code": updatedCode, "beat": theBeat });
+function initiateServerSideSynthesis(currentCode, updatedCode, theBeat, durOrVol) {
+    socket.emit('code', { "oldCode": currentCode, "code": updatedCode, "beat": theBeat, "durOrVol": durOrVol });
     // currently, if we get new code any time, we replace code with synthesized code
     // TODO we need something a bit more tasteful - e.g. put new code in a "proposed change" box 
     socket.on('newCode', function (c) {
@@ -158,8 +158,8 @@ function backBeat() {
     return new Array(16).fill(0).map((val, i) => i % 2);
 }
 
-function bembe(){
-    let arr = new Array(16).fill(0).map((val,i) => 1 - (i % 5) % 2); //splice(11, 12,. 0, 1)
+function bembe() {
+    let arr = new Array(16).fill(0).map((val, i) => 1 - (i % 5) % 2); //splice(11, 12,. 0, 1)
     arr.splice(10, 11, 0, 1)
     return arr;
     //index 10 0
