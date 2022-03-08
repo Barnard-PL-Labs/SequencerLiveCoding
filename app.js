@@ -9,6 +9,8 @@ const { simplifyCode } = require('./serverSide/synthesizer');
 const { response } = require('express');
 const { mkdir } = require('fs');
 const fs = require('fs');
+const path = require('path');
+const dir = './logs'
 
 require('dotenv').config();
 
@@ -17,6 +19,20 @@ app.use(express.static('public'))
 app.get('/', (req, res) => {
   res.sendFile(__dirname + '/index.html');
 });
+
+function makeLog(){
+  try {
+    if (!fs.existsSync(dir)) {
+        fs.mkdirSync(dir);
+        console.log("logs directory is created");
+    } else {
+        console.log("logs directory exists");
+    }
+  } catch (err) {
+    console.log(err);
+  }
+}
+var logger = makeLog();
 
 //spawn a new thread for synthesis
 //one thread runs the server, one thread handles all synthesis requests

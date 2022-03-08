@@ -39,12 +39,20 @@ process.on('message', (data) => {
     });
 })
 
-function parseCodeLine(line) {
-    var indexOperation = new RegExp(/b\.track([1-6])vol\[(1?[0-9])\] ?= ?([0-2])[;,\n]/);
-    //TODO, relax assumption that all maps are of the form "b.track1vol = b.track1vol.map"
-    var mapOperation = new RegExp(/(b\.track([1-6])vol(\s?))=(\s?)pattern\((.*)=>(.*)\);/g);
-    //g-tag: matches only contain results that match the COMPLETE regExp
+function parseCodeLine(line, durOrVol) {
+    if (durOrVol == "vol") {
+        var indexOperation = new RegExp(/b\.track([1-6])vol\[(1?[0-9])\] ?= ?([0-2])[;,\n]/);
+        //TODO, relax assumption that all maps are of the form "b.track1vol = b.track1vol.map"
+        var mapOperation = new RegExp(/(b\.track([1-6])vol(\s?))=(\s?)pattern\((.*)=>(.*)\);/g);
+        //g-tag: matches only contain results that match the COMPLETE regExp
+    }
 
+    else {
+        var indexOperation = new RegExp(/b\.track([1-6])dur\[(1?[0-9])\] ?= ?([1-4])[;,\n]/);
+        //TODO, relax assumption that all maps are of the form "b.track1vol = b.track1vol.map"
+        var mapOperation = new RegExp(/(b\.track([1-6])dur(\s?))=(\s?)pattern\((.*)=>(.*)\);/g);
+        //g-tag: matches only contain results that match the COMPLETE regExp
+    }
     //if line has match with indexOp
     if (indexOperation.test(line)) {
         matches = line.match(indexOperation);
@@ -68,11 +76,11 @@ function hasPatternEdit(parsedCode, parsedOldCode, whichPattern) {
     return (arrayEditsNew > 0 && arrayEditsNew != arrayEditsOld)
 }
 
-function parseIntoLines(c) {
+function parseIntoLines(c, durOrVol) {
     var parsedCode = []
     c.match(/[^\r\n]+/g).forEach(line => {
         try {
-            var parsed = parseCodeLine(line)
+            var parsed = parseCodeLine(line, durOrVol)
             parsedCode.push(parsed);
         } catch (error) {
             //these errors are non-synthesized lines, don't do anything
@@ -84,10 +92,11 @@ function parseIntoLines(c) {
 simplifyCode = async function (codeAndBeat) {
     var code = codeAndBeat["code"]
     var oldCode = codeAndBeat["oldCode"]
+    var durOrVol = codeAndBeat["durOrVol"]
 
     //TODO merge multiline commands (e.g. .map w/ fxn over multiple lines) into a single line
-    var parsedCode = parseIntoLines(code);
-    var parsedOldCode = parseIntoLines(oldCode);
+    var parsedCode = parseIntoLines(code, durOrVol);
+    var parsedOldCode = parseIntoLines(oldCode, durOrVol);
     var arrayOfLines = code.match(/[^\r\n]+/g);
 
     var newCode = arrayOfLines.slice(1, -2).join("\n") + "\n";
@@ -96,17 +105,17 @@ simplifyCode = async function (codeAndBeat) {
     //that subseq can then be added with templated code
     //TODO, do this for all patterns & refactor to fxn
     for (whichPattern = 1; whichPattern <= 6; whichPattern++) {
-        var singleEditInfo = checkForSingleEdit(codeAndBeat["beat"]["track" + whichPattern + "vol"])
+        var singleEditInfo = checkForSingleEdit(codeAndBeat["beat"]["track" + whichPattern + durOrVol])
         if (singleEditInfo["hasOneChangedIndex"]) {
             console.log("Pattern " + whichPattern + " has singleEdit");
-            newCode = newCode.replace(new RegExp(".*track" + whichPattern + "vol.*\n", "g"), '')
-            newCode += "  b.track" + whichPattern + "vol = new Array(16).fill(" + singleEditInfo["fillVal"] + ")\n"
-            newCode += "  b.track" + whichPattern + "vol[" + singleEditInfo["editLoc"] + "] = " + singleEditInfo["editVal"] + ";\n"
+            newCode = newCode.replace(new RegExp(".*track" + whichPattern + durOrVol + ".*\n", "g"), '')
+            newCode += "  b.track" + whichPattern + durOrVol + " = new Array(16).fill(" + singleEditInfo["fillVal"] + ")\n"
+            newCode += "  b.track" + whichPattern + durOrVol + "[" + singleEditInfo["editLoc"] + "] = " + singleEditInfo["editVal"] + ";\n"
 
         }
         else if (hasPatternEdit(parsedCode, parsedOldCode, whichPattern)) {
             console.log("Pattern " + whichPattern + " has patternEdit");
-            var synthSolution = await sygusOnePattern(codeAndBeat, whichPattern);
+            var synthSolution = await sygusOnePattern(codeAndBeat, whichPattern, durOrVol);
             var sygusSolution = synthSolution["code"]
             var subseq = synthSolution["subseq"]
             //turn sygus sol'n to JS code
@@ -119,10 +128,10 @@ simplifyCode = async function (codeAndBeat) {
                 var fxnName = sygusSolution.split(" ")[1];
                 var newFxn = fxnDefs[0];
                 var newNewJsFxnBody = astToJs(smt_parser(newFxn));
-                newCode = newCode.replace(new RegExp(".*track" + whichPattern + "vol.*\n", "g"), '')
+                newCode = newCode.replace(new RegExp(".*track" + whichPattern + durOrVol + ".*\n", "g"), '')
                 //corresponds to the new .pattern() in synthesis.js
-                newCode += displayPattern(whichPattern, newNewJsFxnBody);
-                newCode += "  b.track" + whichPattern + "vol.splice(" + subseq['startMaxSubseq'] + "," + subseq['lengthMaxSubseq'] + ",...Array(" + subseq['lengthMaxSubseq'] + ").fill(" + subseq['valMaxSubseq'] + "));\n"
+                newCode += displayPattern(whichPattern, newNewJsFxnBody, durOrVol);
+                newCode += "  b.track" + whichPattern + durOrVol + ".splice(" + subseq['startMaxSubseq'] + "," + subseq['lengthMaxSubseq'] + ",...Array(" + subseq['lengthMaxSubseq'] + ").fill(" + subseq['valMaxSubseq'] + "));\n"
             }
         }
     }
@@ -133,17 +142,17 @@ simplifyCode = async function (codeAndBeat) {
 }
 
 //function that displays the .pattern() keyword in place of "new Array(16).fill(0)..."
-function displayPattern(whichPattern, newNewJsFxnBody) {
+function displayPattern(whichPattern, newNewJsFxnBody, durOrVol) {
     console.log("newFxn: " + newNewJsFxnBody);
     var equation = newNewJsFxnBody.replace('return', '').replace(';', '').trim();
     console.log("new .pattern() added");
     //    return "  " + instrument[whichPattern] + " = pattern((val,i) => " + equation+");\n";
-    return "  b.track" + whichPattern + "vol = pattern((val,i) => " + equation + ");\n";
+    return "  b.track" + whichPattern + durOrVol + " = pattern((val,i) => " + equation + ");\n";
 }
 
-async function sygusOnePattern(codeAndBeat, whichPattern) {
-    var arrayToSynth = zipWithIndex(codeAndBeat["beat"]["track" + whichPattern + "vol"]);
-    var subseq = findMaxSubseq(codeAndBeat["beat"]["track" + whichPattern + "vol"]);
+async function sygusOnePattern(codeAndBeat, whichPattern, durOrVol) {
+    var arrayToSynth = zipWithIndex(codeAndBeat["beat"]["track" + whichPattern + durOrVol]);
+    var subseq = findMaxSubseq(codeAndBeat["beat"]["track" + whichPattern + durOrVol]);
     arrayToSynth.splice(subseq['startMaxSubseq'], subseq['lengthMaxSubseq']);
 
     var sygusSolution = await callPBE(arrayToSynth);

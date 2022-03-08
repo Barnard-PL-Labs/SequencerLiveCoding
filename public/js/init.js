@@ -90,7 +90,7 @@ exports.initDrums = function (cmInstance) {
         //recordedAudio.play()
     //});
 
-    playButton.addEventListener('keyup', event => {
+    document.addEventListener('keyup', event => {
       if (event.key === ' ' && event.target === document.body) {
         event.preventDefault();
         recordedAudio.play()

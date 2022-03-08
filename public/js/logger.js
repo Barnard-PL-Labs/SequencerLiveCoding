@@ -1,3 +1,4 @@
+const fs = require('fs');
 var logData = [];
 
 function uuidv4() {
