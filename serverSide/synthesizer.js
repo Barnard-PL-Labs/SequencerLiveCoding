@@ -99,7 +99,7 @@ simplifyCode = async function (codeAndBeat) {
     var parsedOldCode = parseIntoLines(oldCode, durOrVol);
     var arrayOfLines = code.match(/[^\r\n]+/g);
 
-    var newCode = arrayOfLines.slice(1, -2).join("\n") + "\n";
+    var newCode = arrayOfLines.join("\n") + "\n";
 
     //remove large subsequences of common vals to make synthesis a bit easier
     //that subseq can then be added with templated code
@@ -109,8 +109,8 @@ simplifyCode = async function (codeAndBeat) {
         if (singleEditInfo["hasOneChangedIndex"]) {
             console.log("Pattern " + whichPattern + " has singleEdit");
             newCode = newCode.replace(new RegExp(".*track" + whichPattern + durOrVol + ".*\n", "g"), '')
-            newCode += "  b.track" + whichPattern + durOrVol + " = new Array(16).fill(" + singleEditInfo["fillVal"] + ")\n"
-            newCode += "  b.track" + whichPattern + durOrVol + "[" + singleEditInfo["editLoc"] + "] = " + singleEditInfo["editVal"] + ";\n"
+            newCode += "b.track" + whichPattern + durOrVol + " = new Array(16).fill(" + singleEditInfo["fillVal"] + ")\n"
+            newCode += "b.track" + whichPattern + durOrVol + "[" + singleEditInfo["editLoc"] + "] = " + singleEditInfo["editVal"] + ";\n"
 
         }
         else if (hasPatternEdit(parsedCode, parsedOldCode, whichPattern)) {
@@ -131,7 +131,7 @@ simplifyCode = async function (codeAndBeat) {
                 newCode = newCode.replace(new RegExp(".*track" + whichPattern + durOrVol + ".*\n", "g"), '')
                 //corresponds to the new .pattern() in synthesis.js
                 newCode += displayPattern(whichPattern, newNewJsFxnBody, durOrVol);
-                newCode += "  b.track" + whichPattern + durOrVol + ".splice(" + subseq['startMaxSubseq'] + "," + subseq['lengthMaxSubseq'] + ",...Array(" + subseq['lengthMaxSubseq'] + ").fill(" + subseq['valMaxSubseq'] + "));\n"
+                newCode += "b.track" + whichPattern + durOrVol + ".splice(" + subseq['startMaxSubseq'] + "," + subseq['lengthMaxSubseq'] + ",...Array(" + subseq['lengthMaxSubseq'] + ").fill(" + subseq['valMaxSubseq'] + "));\n"
             }
         }
     }
@@ -147,7 +147,7 @@ function displayPattern(whichPattern, newNewJsFxnBody, durOrVol) {
     var equation = newNewJsFxnBody.replace('return', '').replace(';', '').trim();
     console.log("new .pattern() added");
     //    return "  " + instrument[whichPattern] + " = pattern((val,i) => " + equation+");\n";
-    return "  b.track" + whichPattern + durOrVol + " = pattern((val,i) => " + equation + ");\n";
+    return "b.track" + whichPattern + durOrVol + " = pattern((val,i) => " + equation + ");\n";
 }
 
 async function sygusOnePattern(codeAndBeat, whichPattern, durOrVol) {

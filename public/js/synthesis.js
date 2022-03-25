@@ -32,23 +32,23 @@ function initiateServerSideSynthesis(currentCode, updatedCode, theBeat, durOrVol
     // currently, if we get new code any time, we replace code with synthesized code
     // TODO we need something a bit more tasteful - e.g. put new code in a "proposed change" box 
     socket.on('newCode', function (c) {
-        codeMirrorInstance.replaceRange(c, { line: 2, ch: 0 }, { line: codeMirrorInstance.lineCount() - 2, ch: 0 });
+        codeMirrorInstance.replaceRange(c, { line: 0, ch: 0 }, { line: codeMirrorInstance.lineCount(), ch: 0 });
     });
 }
 
 function addLineForPointChangeDuration(currentCode, newDurationValue, trackIndex, instrumentIndex) {
     //generate new line for changed note
     //TODO this is currently whitespace dependent - make this a regex to give a bit of flexibility at least
-    newLine = "  b.track" + (instrumentIndex + 1) + "dur[" + trackIndex + "] = " + newDurationValue + ";\n"
-    existingLineLoc = currentCode.indexOf("  b.track" + (instrumentIndex + 1) + "dur[" + trackIndex + "] =")
+    newLine = "b.track" + (instrumentIndex + 1) + "dur[" + trackIndex + "] = " + newDurationValue + ";\n"
+    existingLineLoc = currentCode.indexOf("b.track" + (instrumentIndex + 1) + "dur[" + trackIndex + "] =")
     return replaceCode(existingLineLoc, newLine);
 }
 
 function addLineForPointChangeVolume(currentCode, newNoteValue, trackIndex, instrumentIndex) {
     //generate new line for changed note
     //TODO also whitespace dependent as in addLineForPointChangeDuration
-    newLine = "  b.track" + (instrumentIndex + 1) + "vol[" + trackIndex + "] = " + newNoteValue + ";\n"
-    existingLineLoc = currentCode.indexOf("  b.track" + (instrumentIndex + 1) + "vol[" + trackIndex + "] =")
+    newLine = "b.track" + (instrumentIndex + 1) + "vol[" + trackIndex + "] = " + newNoteValue + ";\n"
+    existingLineLoc = currentCode.indexOf("b.track" + (instrumentIndex + 1) + "vol[" + trackIndex + "] =")
     //if code has a line explicitly changed this point, then we update its value
     return replaceCode(existingLineLoc, newLine);
 
@@ -65,7 +65,7 @@ function replaceCode(existingLineLoc, newLine) {
     }
     //else code currently has no effect on manually changed pattern, so we can just add a line
     else {
-        codeMirrorInstance.replaceRange(newLine, { line: codeMirrorInstance.lineCount() - 2, ch: 0 });
+        codeMirrorInstance.replaceRange(newLine, { line: codeMirrorInstance.lineCount(), ch: 0 });
     }
     return codeMirrorInstance.getValue();
 }
@@ -73,8 +73,8 @@ function replaceCode(existingLineLoc, newLine) {
 function synthSliderCode(sliderTarget, value) {
     var currentCode = codeMirrorInstance.getValue()
     //generate new line for changed note
-    newLine = "  s." + sliderTarget + " = " + "p(" + Math.round((value + Number.EPSILON) * 100) / 100 + ");\n"
-    existingLineLoc = currentCode.indexOf("  s." + sliderTarget)
+    newLine = "s." + sliderTarget + " = " + "p(" + Math.round((value + Number.EPSILON) * 100) / 100 + ");\n"
+    existingLineLoc = currentCode.indexOf("s." + sliderTarget)
     //if code has a line explicitly changed this point, then we update its value
     if (existingLineLoc >= 0) {
         var lineChPos = codeMirrorInstance.posFromIndex(existingLineLoc);
@@ -85,7 +85,7 @@ function synthSliderCode(sliderTarget, value) {
     }
     //else code currently has no effect on manually changed pattern, so we can just add a line
     else {
-        codeMirrorInstance.replaceRange(newLine, { line: codeMirrorInstance.lineCount() - 2, ch: 0 })
+        codeMirrorInstance.replaceRange(newLine, { line: codeMirrorInstance.lineCount(), ch: 0 })
     }
 }
 
@@ -93,7 +93,9 @@ function updatePatternFromCode(currentBeat, trackIndex, globalTime) {
     //every time we advance a time step, pull latest code and update beat object
     let updatedCode = codeMirrorInstance.getValue()
     let dsl = pattern.toString() + setAll.toString() + backBeat.toString() + p.toString() + bembe.toString();
-    let fxnText = '"use strict"; ' + dsl + updatedCode + ' return (genBeat(theBeat, {}, trackIndex, globalTime));'
+    let fxnDef = 'function genBeat(b, s, currentTimestep, globalTime){\n\n ';
+    let returnStatement = 'return {beat:b, sliders:s};\n};';
+    let fxnText = '"use strict"; ' + dsl + fxnDef +  updatedCode + returnStatement + ' return (genBeat(theBeat, {}, trackIndex, globalTime));'
     try {
         //TODO if(codeChanged) {
         let f = new Function("theBeat", "trackIndex", "globalTime", fxnText);
@@ -103,10 +105,10 @@ function updatePatternFromCode(currentBeat, trackIndex, globalTime) {
         let newSliders = newData.sliders;
         for (i = 1; i <= 6; i++) {
             newBeat['track' + i.toString() + 'vol'] = newBeat['track' + i.toString() + 'vol'].map((note) => {
-                if (Number.isNaN(note)) { return 0; } else { return note }
+                if (Number.isNaN(note)) { return 0; } else { return Math.floor(note) }
             });
             newBeat['track' + i.toString() + 'dur'] = newBeat['track' + i.toString() + 'dur'].map((note) => {
-                if (Number.isNaN(note)) { return 0; } else { return note }
+                if (Number.isNaN(note)) { return 0; } else { return Math.floor(note) }
             });
         }
         if (isValidBeat(newBeat) && isValidSliders(newSliders)) { // && theBeat != newBeat){

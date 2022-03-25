@@ -8,7 +8,7 @@ exports.bootCodeMirror = function () {
 			mode: "javascript"
 		});
 	//TODO fix function header and return statement outside code window so user cannot change it, but still sees it
-	myCodeMirror.setValue('function genBeat(b, s, currentTimestep, globalTime){\n\n  return {beat:b, sliders:s};\n};');
+	myCodeMirror.setValue('//write your code here');
 	return myCodeMirror;
 };
 

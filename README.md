@@ -38,27 +38,27 @@ Think of this as compiling your code.
     sudo npm install -g browserify
     browserify public/js/main.js -o public/js/compiled.js
     
-We also need axios to perform network requests from node and the browser.
+We use the npm express framework
 
-    npm install axios
+    npm install express
 
-Synthesis uses the SMT solver CVC5 (which is a crazy optimized behemoth of C code), so needs to run server side. You can download the binary from the CVC5 github page https://github.com/cvc5/cvc5/releases/). The tool expects the executable to be named cvc5 and be in /usr/local/bin/. You will also need chmod a+x to change permissions of the executable. If you are working on a Mac, this instructions will be a bit different.
+then to deploy
 
-    sudo mv cvc5Linux /usr/local/bin/cvc5 # the name of your download might be different!
-    sudo chmod a+x /usr/local/bin/cvc5
+    node app.js
 
-Then install everything
+## advanced
 
-    npm install
 
-create a .env file in the root directory to configure options
+there is an .env file in the root directory. use the following configure options
 
     NODE_ENV=[development/production]
     CVC5MODE=[local/serverless]
 
-to deploy
+If you want ro run synthesis locally, you will need to install CVC5.
+Synthesis uses the SMT solver CVC5 (which is a crazy optimized behemoth of C code), so needs to run server side. You can download the binary from the CVC5 github page https://github.com/cvc5/cvc5/releases/). The tool expects the executable to be named cvc5 and be in /usr/local/bin/. You will also need chmod a+x to change permissions of the executable. If you are working on a Mac, this instructions will be a bit different.
 
-    node app.js
+    sudo mv cvc5Linux /usr/local/bin/cvc5 # the name of your download might be different!
+    sudo chmod a+x /usr/local/bin/cvc5
 
 # TODOs
 
