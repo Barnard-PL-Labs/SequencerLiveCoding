@@ -60,6 +60,14 @@ Synthesis uses the SMT solver CVC5 (which is a crazy optimized behemoth of C cod
     sudo mv cvc5Linux /usr/local/bin/cvc5 # the name of your download might be different!
     sudo chmod a+x /usr/local/bin/cvc5
 
+to update the serverless side of things,
+
+   cd serverless
+   zip -r serverless.zip *
+
+then upload that zip to aws lambda.
+The lambda expects there to be a dynamodb table to cache results
+
 # TODOs
 
 see issues on github
