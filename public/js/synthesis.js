@@ -96,11 +96,11 @@ function updatePatternFromCode(currentBeat, trackIndex, globalTime) {
     let fxnDef = 'function genBeat(b, s, currentTimestep, globalTime){\n\n ';
     let returnStatement = 'return {beat:b, sliders:s};\n};';
     let fxnText = '"use strict"; ' + dsl + fxnDef +  updatedCode + returnStatement + ' return (genBeat(theBeat, {}, trackIndex, globalTime));'
-    var message = document.getElementById("errorMessageBox");
     try {
         //TODO if(codeChanged) {
         let f = new Function("theBeat", "trackIndex", "globalTime", fxnText);
         let newData = f(currentBeat, trackIndex, globalTime);
+        var message = document.getElementById("errorMessageBox");
         if (message.innerText = "Code looks good!"){
             message.style.color = "green";
         }
@@ -123,6 +123,7 @@ function updatePatternFromCode(currentBeat, trackIndex, globalTime) {
     catch (err) {
         console.log("updatePatternFromCode error, skipping beat state update");
         console.log(err);
+        var message = document.getElementById("errorMessageBox");
         if (message.innerText = err){
             message.style.color = "red";
         }
