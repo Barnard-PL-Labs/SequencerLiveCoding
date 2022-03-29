@@ -103,9 +103,7 @@ function updatePatternFromCode(currentBeat, trackIndex, globalTime) {
         var message = document.getElementById("errorMessageBox");
         if (message.innerText = "Code looks good!"){
             message.style.color = "green";
-        } else {
-            message.style.color = "red";
-        };
+        }
         let newBeat = newData.beat;
         let newSliders = newData.sliders;
         for (i = 1; i <= 6; i++) {
@@ -123,9 +121,11 @@ function updatePatternFromCode(currentBeat, trackIndex, globalTime) {
 
     }
     catch (err) {
-        console.log("updatePatternFromCode error, skipping beat state update")
-        console.log(err)
-        document.getElementById("errorMessageBox").innerText = err;
+        console.log("updatePatternFromCode error, skipping beat state update");
+        console.log(err);
+        if (message.innerText = err){
+            message.style.color = "red";
+        }
     }
     return null;
 }
