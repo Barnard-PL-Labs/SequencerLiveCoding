@@ -100,7 +100,12 @@ function updatePatternFromCode(currentBeat, trackIndex, globalTime) {
         //TODO if(codeChanged) {
         let f = new Function("theBeat", "trackIndex", "globalTime", fxnText);
         let newData = f(currentBeat, trackIndex, globalTime);
-        document.getElementById("errorMessageBox").innerText = "Code looks good!";
+        var message = document.getElementById("errorMessageBox");
+        if (message.innerText = "Code looks good!"){
+            message.style.color = "green";
+        } else {
+            message.style.color = "red";
+        };
         let newBeat = newData.beat;
         let newSliders = newData.sliders;
         for (i = 1; i <= 6; i++) {
