@@ -62,7 +62,7 @@ Synthesis uses the SMT solver CVC5 (which is a crazy optimized behemoth of C cod
 
 to update the serverless side of things,
 
-   cd serverless
+   cd serverless/cvc5
    zip -r serverless.zip *
 
 then upload that zip to aws lambda.
